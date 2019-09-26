@@ -1,0 +1,20 @@
+--- ui.js.bak	2019-09-26 16:55:26.816459927 +0000
++++ ui.js	2019-09-26 16:57:06.149994873 +0000
+@@ -82,7 +82,7 @@
+     UI.initSetting('shared', true);
+     UI.initSetting('view_only', false);
+     UI.initSetting('connectTimeout', 2);
+-    UI.initSetting('path', 'websockify');
++    console.log('1', UI.getSetting('path')); console.log(); UI.initSetting('path', window.location.pathname.replace(/[^/]*$/, '').substring(1) + 'websockify'); console.log('2', UI.getSetting('path'));
+     UI.initSetting('repeaterID', '');
+ 
+     UI.rfb = RFB({'target': $D('noVNC_canvas'),
+@@ -90,7 +90,7 @@
+                   'onClipboard': UI.clipReceive,
+                   'onDesktopName': UI.updateDocumentTitle});
+ 
+-    autoconnect = WebUtil.getQueryVar('autoconnect', false);
++    autoconnect = WebUtil.getQueryVar('autoconnect', true);
+     if (autoconnect === 'true' || autoconnect == '1') {
+         autoconnect = true;
+         UI.connect();
