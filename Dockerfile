@@ -28,6 +28,10 @@ RUN /opt/conda/bin/pip install https://github.com/manics/jupyter-server-proxy/ar
 RUN conda install -y -q -c manics/label/testing websockify
 ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
 
+# There may be a discrepency between the interface vncserver listens on
+# (127.0.0.1) and the interface jupyter-server-proxy connects to (localhost)
+# https://bugzilla.redhat.com/show_bug.cgi?id=895582
+RUN sed -i.bak s/localhost/127.0.0.1/g /opt/conda/lib/python3.7/site-packages/jupyter_server_proxy/handlers.py
 
 # Both these should work:
 # http://localhost:5901/vnc.html
