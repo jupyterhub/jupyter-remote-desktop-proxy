@@ -4,28 +4,30 @@ USER root
 RUN apt-get update -y -q && \
     apt-get install -y -q \
         curl \
-        lxde \
-        net-tools \
         novnc \
-        tigervnc-standalone-server
-
-RUN apt-get install -y -q python-pip
-# Force an upgrade https://github.com/novnc/noVNC/issues/1276
-RUN /usr/bin/pip install -U websockify==0.9.0
-# pip doesn't rebuild rebind.so though so use the old version
-RUN ln -s /usr/lib/websockify/rebind.so /usr/local/lib/
+        patch \
+        tigervnc-standalone-server \
+        vim
+RUN apt-get install -y -q \
+        lxde
 
 # Patch novnc to automatically connect
+# Download missing fonts
 ADD websocket-path-ui-js.patch /usr/share/novnc/include
 RUN cd /usr/share/novnc/include/ && \
-    patch -p0 < websocket-path-ui-js.patch
+    patch -p0 < websocket-path-ui-js.patch && \
+    curl -sSfLO https://raw.githubusercontent.com/novnc/noVNC/v1.1.0/app/styles/Orbitron700.ttf && \
+    curl -sSfLO https://raw.githubusercontent.com/novnc/noVNC/v1.1.0/app/styles/Orbitron700.woff
+
+# Force remove websockify and install a more recent version
+RUN dpkg -r --force-depends websockify
 
 USER jovyan
 # Custom jupyter-server-proxy to load vnc.html instead of /
 RUN /opt/conda/bin/pip install https://github.com/manics/jupyter-server-proxy/archive/indexpage.zip
-ADD jupyter_notebook_config.py /home/jovyan/.jupyter/
+RUN conda install -y -q -c manics/label/testing websockify
+ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
 
-# websockify --web /usr/share/novnc 5901 -- vncserver -verbose -xstartup startlxde -SecurityTypes None -geometry 1024x768 -fg :1
 
 # Both these should work:
 # http://localhost:5901/vnc.html
