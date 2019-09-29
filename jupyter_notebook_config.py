@@ -10,10 +10,9 @@ else:
 c.ServerProxy.servers = {
     'desktop': {
         'command': [
-            # '/usr/local/bin/websockify',
             '/opt/conda/bin/websockify',
             '-v',
-            '--web', '/usr/share/novnc',
+            '--web', '/opt/noVNC-1.1.0',
             '5901',
             '--',
             'vncserver',
@@ -27,6 +26,6 @@ c.ServerProxy.servers = {
         'absolute_url': False,
         'port': 5901,
         'timeout': 30,
-        'indexpage': 'vnc.html?autoconnect=true',
+        'indexpage': 'vnc_lite.html',
     }
 }

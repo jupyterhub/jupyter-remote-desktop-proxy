@@ -8,27 +8,30 @@ RUN apt-get update -y -q && \
         tigervnc-standalone-server \
         vim
 
-# Desktop environment
+# Desktop environment, keep in sync with jupyter_notebook_config.py
 # ENV DESKTOP_PACKAGE lxde
 ENV DESKTOP_PACKAGE xfce4
 RUN apt-get install -y -q ${DESKTOP_PACKAGE}
 
 # Novnc: just want web files, we'll install our own newer websockify
-RUN apt-get download -q novnc && \
-    dpkg --force-all -i novnc*.deb && \
-    rm novnc*.deb
-# Patch novnc to automatically connect
-# Download missing fonts
-ADD websocket-path-ui-js.patch /usr/share/novnc/include
-RUN cd /usr/share/novnc/include/ && \
-    patch -p0 < websocket-path-ui-js.patch && \
-    curl -sSfLO https://raw.githubusercontent.com/novnc/noVNC/v1.1.0/app/styles/Orbitron700.ttf && \
-    curl -sSfLO https://raw.githubusercontent.com/novnc/noVNC/v1.1.0/app/styles/Orbitron700.woff
+RUN cd /opt && \
+    curl -sSfL https://github.com/novnc/noVNC/archive/v1.1.0.tar.gz | tar -zxf -
+
+# Patch novnc to use correct path to websockify (defaults to /)
+# Note if you use vnc.html you will need to patch ui.js to use the correct path
+# and also to override localstorage which may store an incorrect path from a
+# different session
+# Also resize server instead of scaling client
+RUN sed -i.bak \
+    -e "s%\('path', 'websockify'\)%'path', window.location.pathname.replace(/[^/]*$/, '').substring(1) + 'websockify'); console.log('websockify path:' + path%" \
+    -re "s%rfb.scaleViewport = .+%rfb.resizeSession = readQueryVariable('resize', true);%" \
+    /opt/noVNC-1.1.0/vnc_lite.html
 
 USER jovyan
-# Custom jupyter-server-proxy to load vnc.html instead of /
+
+# Custom jupyter-server-proxy to load vnc_lite.html instead of /
 RUN /opt/conda/bin/pip install https://github.com/manics/jupyter-server-proxy/archive/indexpage.zip
-RUN conda install -y -q -c manics/label/testing websockify
+RUN conda install -y -q -c manics websockify=0.9.0
 ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
 
 # There may be a discrepency between the interface vncserver listens on
