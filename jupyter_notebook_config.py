@@ -1,5 +1,14 @@
+import os
+
+if os.getenv('DESKTOP_PACKAGE') == 'lxde':
+    xstartup = 'startlxde'
+elif os.getenv('DESKTOP_PACKAGE') == 'xfce4':
+    xstartup = 'xfce4-session'
+else:
+    xstartup = 'xterm'
+
 c.ServerProxy.servers = {
-    'lxde': {
+    'desktop': {
         'command': [
             # '/usr/local/bin/websockify',
             '/opt/conda/bin/websockify',
@@ -9,7 +18,7 @@ c.ServerProxy.servers = {
             '--',
             'vncserver',
             '-verbose',
-            '-xstartup', 'startlxde',
+            '-xstartup', xstartup,
             '-geometry', '1024x768',
             '-SecurityTypes', 'None',
             '-fg',

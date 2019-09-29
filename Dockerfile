@@ -7,9 +7,11 @@ RUN apt-get update -y -q && \
         patch \
         tigervnc-standalone-server \
         vim
-RUN apt-get install -y -q \
-        lxde
 
+# Desktop environment
+# ENV DESKTOP_PACKAGE lxde
+ENV DESKTOP_PACKAGE xfce4
+RUN apt-get install -y -q ${DESKTOP_PACKAGE}
 
 # Novnc: just want web files, we'll install our own newer websockify
 RUN apt-get download -q novnc && \
@@ -34,6 +36,8 @@ ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
 # https://bugzilla.redhat.com/show_bug.cgi?id=895582
 RUN sed -i.bak s/localhost/127.0.0.1/g /opt/conda/lib/python3.7/site-packages/jupyter_server_proxy/handlers.py
 
+WORKDIR ${HOME}
+
 # Both these should work:
+# http://127.0.0.1:8888/desktop
 # http://localhost:5901/vnc.html
-# http://127.0.0.1:8888/lxde
