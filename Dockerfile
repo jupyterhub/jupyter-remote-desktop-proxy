@@ -4,13 +4,17 @@ USER root
 RUN apt-get update -y -q && \
     apt-get install -y -q \
         curl \
-        novnc \
         patch \
         tigervnc-standalone-server \
         vim
 RUN apt-get install -y -q \
         lxde
 
+
+# Novnc: just want web files, we'll install our own newer websockify
+RUN apt-get download -q novnc && \
+    dpkg --force-all -i novnc*.deb && \
+    rm novnc*.deb
 # Patch novnc to automatically connect
 # Download missing fonts
 ADD websocket-path-ui-js.patch /usr/share/novnc/include
@@ -18,9 +22,6 @@ RUN cd /usr/share/novnc/include/ && \
     patch -p0 < websocket-path-ui-js.patch && \
     curl -sSfLO https://raw.githubusercontent.com/novnc/noVNC/v1.1.0/app/styles/Orbitron700.ttf && \
     curl -sSfLO https://raw.githubusercontent.com/novnc/noVNC/v1.1.0/app/styles/Orbitron700.woff
-
-# Force remove websockify and install a more recent version
-RUN dpkg -r --force-depends websockify
 
 USER jovyan
 # Custom jupyter-server-proxy to load vnc.html instead of /
