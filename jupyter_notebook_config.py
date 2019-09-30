@@ -13,6 +13,7 @@ c.ServerProxy.servers = {
             '/opt/conda/bin/websockify',
             '-v',
             '--web', '/opt/noVNC-1.1.0',
+            '--heartbeat', '30',
             '5901',
             '--',
             'vncserver',

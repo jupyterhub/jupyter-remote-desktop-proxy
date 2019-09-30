@@ -1,19 +1,24 @@
 FROM jupyter/base-notebook
 
 USER root
+# Useful tools for debugging connection problems
 RUN apt-get update -y -q && \
     apt-get install -y -q \
         curl \
-        patch \
-        tigervnc-standalone-server \
+        net-tools \
         vim
 
 # Desktop environment, keep in sync with jupyter_notebook_config.py
 # ENV DESKTOP_PACKAGE lxde
 ENV DESKTOP_PACKAGE xfce4
-RUN apt-get install -y -q ${DESKTOP_PACKAGE}
+RUN apt-get install -y -q \
+    xterm \
+    ${DESKTOP_PACKAGE}
 
-# Novnc: just want web files, we'll install our own newer websockify
+# Don't install distro versions of tigervnc and websockify, instead install
+# upstream versions
+
+# Novnc: just want web files
 RUN cd /opt && \
     curl -sSfL https://github.com/novnc/noVNC/archive/v1.1.0.tar.gz | tar -zxf -
 
@@ -26,6 +31,9 @@ RUN sed -i.bak \
     -e "s%\('path', 'websockify'\)%'path', window.location.pathname.replace(/[^/]*$/, '').substring(1) + 'websockify'); console.log('websockify path:' + path%" \
     -re "s%rfb.scaleViewport = .+%rfb.resizeSession = readQueryVariable('resize', true);%" \
     /opt/noVNC-1.1.0/vnc_lite.html
+
+# Install tigervnc to /usr/local
+RUN curl -sSfL 'https://bintray.com/tigervnc/stable/download_file?file_path=tigervnc-1.9.0.x86_64.tar.gz' | tar -zxf - -C /usr/local --strip=2
 
 USER jovyan
 
