@@ -3,6 +3,8 @@
 
 Example of running a Linux desktop or window manager with noVNC inside Jupyter.
 
+This is based on https://github.com/ryanlovett/nbnovnc
+
 ```
 docker build -t jupyter-desktop .
 docker run -it --rm -p 8888:8888 jupyter-desktop jupyter notebook --debug
