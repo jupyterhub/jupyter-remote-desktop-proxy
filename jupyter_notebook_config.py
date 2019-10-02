@@ -7,6 +7,7 @@ elif os.getenv('DESKTOP_PACKAGE') == 'xfce4':
 else:
     xstartup = 'xterm'
 
+vnc_socket = os.path.join(os.getenv('HOME'), '.vnc', 'socket')
 c.ServerProxy.servers = {
     'desktop': {
         'command': [
@@ -15,12 +16,14 @@ c.ServerProxy.servers = {
             '--web', '/opt/noVNC-1.1.0',
             '--heartbeat', '30',
             '5901',
+            '--unix-target', vnc_socket,
             '--',
             'vncserver',
             '-verbose',
             '-xstartup', xstartup,
             '-geometry', '1024x768',
             '-SecurityTypes', 'None',
+            '-rfbunixpath', vnc_socket,
             '-fg',
             ':1',
         ],
