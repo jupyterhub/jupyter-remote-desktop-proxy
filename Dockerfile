@@ -38,7 +38,8 @@ RUN curl -sSfL 'https://bintray.com/tigervnc/stable/download_file?file_path=tige
 USER jovyan
 
 # Custom jupyter-server-proxy to load vnc_lite.html instead of /
-RUN /opt/conda/bin/pip install https://github.com/manics/jupyter-server-proxy/archive/indexpage.zip
+# https://github.com/jupyterhub/jupyter-server-proxy/pull/151
+RUN /opt/conda/bin/pip install https://github.com/manics/jupyter-server-proxy/archive/1f22ccf44abd7ab5f7b306d57b6adb1dc3190e8b.zip
 RUN conda install -y -q -c manics websockify=0.9.0
 ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
 

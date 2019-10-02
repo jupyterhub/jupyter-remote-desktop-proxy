@@ -30,6 +30,6 @@ c.ServerProxy.servers = {
         'absolute_url': False,
         'port': 5901,
         'timeout': 30,
-        'indexpage': 'vnc_lite.html',
+        'mappath': {'/': '/vnc_lite.html'},
     }
 }
