@@ -1,5 +1,5 @@
 # Jupyter Linux Desktop
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gist/manics/7d1f4b76ce06c2bb07db88e3496a1561/master) (Currently broken)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gist/manics/7d1f4b76ce06c2bb07db88e3496a1561/master?urlpath=desktop)
 
 Example of running a Linux desktop or window manager with noVNC inside Jupyter.
 
