@@ -9,7 +9,7 @@ else:
 
 vnc_socket = os.path.join(os.getenv('HOME'), '.vnc', 'socket')
 c.ServerProxy.servers = {
-    'desktop': {
+    'Desktop': {
         'command': [
             '/opt/conda/bin/websockify',
             '-v',

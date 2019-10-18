@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook
+FROM jupyter/base-notebook:1386e2046833
 
 USER root
 # Useful tools for debugging connection problems
@@ -11,7 +11,8 @@ RUN apt-get update -y -q && \
 # Desktop environment, keep in sync with jupyter_notebook_config.py
 # ENV DESKTOP_PACKAGE lxde
 ENV DESKTOP_PACKAGE xfce4
-RUN apt-get install -y -q \
+RUN apt-get update -y -q && \
+    apt-get install -y -q \
     xterm \
     ${DESKTOP_PACKAGE}
 
@@ -41,7 +42,43 @@ USER jovyan
 # https://github.com/jupyterhub/jupyter-server-proxy/pull/151
 RUN /opt/conda/bin/pip install https://github.com/manics/jupyter-server-proxy/archive/1f22ccf44abd7ab5f7b306d57b6adb1dc3190e8b.zip
 RUN conda install -y -q -c manics websockify=0.9.0
+
 ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
+
+
+########## Applications
+
+USER root
+RUN apt-get update -y -q && \
+    apt-get install -y -q \
+    firefox \
+    less \
+    openjdk-8-jre \
+    unzip
+# default-jre is java 11 which is incompatible with Fiji
+
+USER jovyan
+RUN wget -q https://downloads.imagej.net/fiji/latest/fiji-nojre.zip && \
+    unzip -q fiji-nojre.zip && \
+    echo TODO: rm fiji-nojre.zip
+RUN wget -q https://github.com/ome/omero-insight/releases/download/v5.5.6/OMERO.imagej-5.5.6.zip && \
+    cd Fiji.app/plugins && \
+    unzip -q ../../OMERO.imagej-5.5.6.zip && \
+    echo TODO: rm OMERO.imagej-5.5.6.zip
+
+RUN wget -q https://github.com/ome/omero-insight/releases/download/v5.5.6/OMERO.insight-5.5.6.zip && \
+    unzip -q OMERO.insight-5.5.6.zip && \
+    echo TODO: rm OMERO.insight-5.5.6.zip
+
+RUN mkdir .java && \
+    cd OMERO.insight-5.5.6 && \
+    wget -q https://www.openmicroscopy.org/img/logos/omero-logomark.svg
+# https://developer.gnome.org/desktop-entry-spec/
+#COPY --chown=${NB_UID}:${NB_GID} *.desktop /home/jovyan/Desktop/
+COPY --chown=1000:100 *.desktop /home/jovyan/Desktop/
+# Configure default OMERO.insight server list
+#COPY --chown=${NB_UID}:${NB_GID} java_userPrefs .java/.userPrefs
+COPY --chown=1000:100 java_userPrefs .java/.userPrefs
 
 WORKDIR ${HOME}
 

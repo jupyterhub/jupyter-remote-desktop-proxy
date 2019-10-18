@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=OMERO.insight
+GenericName=OMERO.insight
+X-GNOME-FullName=OMERO.insight
+Comment=OMERO desktop client
+Type=Application
+Categories=Education;Science;ImageProcessing;
+Exec=/home/jovyan/OMERO.insight-5.5.6/bin/omero-insight
+TryExec=/home/jovyan/OMERO.insight-5.5.6/bin/omero-insight
+Terminal=false
+StartupNotify=true
+Icon=/home/jovyan/OMERO.insight-5.5.6/omero-logomark.svg
