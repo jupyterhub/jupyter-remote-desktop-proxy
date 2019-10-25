@@ -38,9 +38,9 @@ RUN curl -sSfL 'https://bintray.com/tigervnc/stable/download_file?file_path=tige
 
 USER jovyan
 
-# Custom jupyter-server-proxy to load vnc_lite.html instead of /
+# Recent jupyter-server-proxy to load vnc_lite.html instead of /
 # https://github.com/jupyterhub/jupyter-server-proxy/pull/151
-RUN /opt/conda/bin/pip install https://github.com/manics/jupyter-server-proxy/archive/1f22ccf44abd7ab5f7b306d57b6adb1dc3190e8b.zip
+RUN /opt/conda/bin/pip install https://github.com/jupyterhub/jupyter-server-proxy/archive/0e67e1afd0bab1342443f13bd147a2f8c682e9e0.zip
 RUN conda install -y -q -c manics websockify=0.9.0
 
 ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
@@ -76,12 +76,6 @@ RUN mkdir .java && \
 # https://developer.gnome.org/desktop-entry-spec/
 #COPY --chown=${NB_UID}:${NB_GID} *.desktop /home/jovyan/Desktop/
 COPY --chown=1000:100 *.desktop /home/jovyan/Desktop/
-# Configure default OMERO.insight server list
-#COPY --chown=${NB_UID}:${NB_GID} java_userPrefs .java/.userPrefs
-COPY --chown=1000:100 java_userPrefs .java/.userPrefs
 
 WORKDIR ${HOME}
 
-# Both these should work:
-# http://127.0.0.1:8888/desktop
-# http://localhost:5901/vnc.html
