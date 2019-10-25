@@ -1,0 +1,14 @@
+curl
+dbus-x11
+firefox
+less
+net-tools
+openjdk-8-jre
+unzip
+vim
+xfce4
+xfce4-panel
+xfce4-session
+xfce4-settings
+xorg
+xubuntu-icon-theme 
