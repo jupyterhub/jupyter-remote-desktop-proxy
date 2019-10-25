@@ -79,3 +79,28 @@ COPY --chown=1000:100 *.desktop /home/jovyan/Desktop/
 
 WORKDIR ${HOME}
 
+# https://github.com/napari/napari/blob/v0.2.2/requirements/default.txt
+RUN conda install --freeze-installed -y -q -c conda-forge \
+    dask \
+    zarr \
+    fsspec \
+    imageio \
+    qtpy \
+    qtconsole \
+    scipy \
+    scikit-image \
+    vispy \
+    backcall \
+    pyopengl \
+    pyside2 \
+    wrapt \
+    numpydoc
+# Already installed:
+    # ipykernel
+    # numpy
+    # ipython
+
+# The conda pyside package doesn't appear in pip list so napari tries to reinstall it
+RUN pip install --no-dependencies napari==0.2.2
+
+COPY napari.ipynb /home/jovyan/
