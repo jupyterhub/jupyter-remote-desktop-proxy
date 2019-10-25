@@ -30,25 +30,30 @@ chmod +x xstartup
 
 # Desktop applications
 # Fiji and OMERO insight
-OMERO_INSIGHT_VERSION=5.5.6
+
+#OMERO_INSIGHT_VERSION=5.5.6
+#OMERO_INSIGHT_URL_BASE=https://github.com/ome/omero-insight/releases/download/v$OMERO_INSIGHT_VERSION/
+OMERO_INSIGHT_VERSION=5.5.7-SNAPSHOT
+OMERO_INSIGHT_URL_BASE=https://users.openmicroscopy.org.uk/~spli/insight
 
 wget -q https://downloads.imagej.net/fiji/latest/fiji-nojre.zip
 unzip -q fiji-nojre.zip
 rm fiji-nojre.zip
 
 pushd Fiji.app/plugins
-wget -q https://github.com/ome/omero-insight/releases/download/v5.5.6/OMERO.imagej-$OMERO_INSIGHT_VERSION.zip
+wget -q $OMERO_INSIGHT_URL_BASE/OMERO.imagej-$OMERO_INSIGHT_VERSION.zip
 unzip -q OMERO.imagej-$OMERO_INSIGHT_VERSION.zip
 rm OMERO.imagej-$OMERO_INSIGHT_VERSION.zip
 popd
 
-wget -q https://github.com/ome/omero-insight/releases/download/v5.5.6/OMERO.insight-$OMERO_INSIGHT_VERSION.zip
+wget -q $OMERO_INSIGHT_URL_BASE/OMERO.insight-$OMERO_INSIGHT_VERSION.zip
 unzip -q OMERO.insight-$OMERO_INSIGHT_VERSION.zip
 rm OMERO.insight-$OMERO_INSIGHT_VERSION.zip
 pushd OMERO.insight-$OMERO_INSIGHT_VERSION && \
 wget -q https://www.openmicroscopy.org/img/logos/omero-logomark.svg
 popd
 
+ln -s OMERO.insight-$OMERO_INSIGHT_VERSION OMERO.insight
 mkdir Desktop
 cp $REPO_DIR/jupyter_desktop/share/*.desktop Desktop
 chmod +x Desktop/*.desktop
