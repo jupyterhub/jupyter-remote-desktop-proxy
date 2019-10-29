@@ -25,7 +25,4 @@ sed -i.bak \
     noVNC-1.1.0/vnc_lite.html
 
 
-cp $REPO_DIR/share/xstartup .
-chmod +x xstartup
-
 pip install $REPO_DIR

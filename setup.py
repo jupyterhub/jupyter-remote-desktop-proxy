@@ -1,17 +1,16 @@
-import setuptools
+from setuptools import setup, find_packages
 
 
-setuptools.setup(
+setup(
     name="jupyter-desktop-server",
-    # py_modules rather than packages, since we only have 1 file
-    py_modules=['jupyter_desktop'],
+    packages=find_packages(),
+    version='0.1',
     entry_points={
         'jupyter_serverproxy_servers': [
             'desktop = jupyter_desktop:setup_desktop',
         ]
     },
     install_requires=['jupyter-server-proxy'],
-    package_data={
-        'jupyter_desktop': ['desktop/*'],
-    },
+    include_package_data=True,
+    zip_safe=False
 )

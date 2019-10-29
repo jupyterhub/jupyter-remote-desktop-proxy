@@ -1,6 +1,8 @@
 import os
 
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+
 def setup_desktop():
     VNC_APPLICATION_DIR = os.path.join(os.getenv('CONDA_DIR'), 'vnc')
     return {
@@ -13,7 +15,7 @@ def setup_desktop():
             '--',
             VNC_APPLICATION_DIR + '/bin/vncserver',
             '-verbose',
-            '-xstartup', VNC_APPLICATION_DIR + '/xstartup',
+            '-xstartup', os.path.join(HERE, 'share/xstartup'),
             '-geometry', '1024x768',
             '-SecurityTypes', 'None',
             '-rfbunixpath', VNC_APPLICATION_DIR + '/socket',
