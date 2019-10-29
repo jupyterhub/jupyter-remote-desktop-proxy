@@ -1,0 +1,6 @@
+channels:
+  - manics
+dependencies:
+  - websockify
+  - pip:
+    - https://github.com/jupyterhub/jupyter-server-proxy/archive/0e67e1afd0bab1342443f13bd147a2f8c682e9e0.zip
