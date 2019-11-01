@@ -1,0 +1,314 @@
+.TH X0VNCSERVER 1 "" "TigerVNC" "TigerVNC Manual"
+.SH NAME
+x0vncserver \- TigerVNC Server for X displays
+.SH SYNOPSIS
+.B x0vncserver
+.RI [ options ]
+.br
+.B x0vncserver -version
+.SH DESCRIPTION
+.B x0vncserver
+is a TigerVNC Server which makes any X display remotely accessible via VNC,
+TigerVNC or compatible viewers.  Unlike \fBXvnc\fP(1), it does not create a
+virtual display.  Instead, it just shares an existing X server (typically,
+that one connected to the physical screen).
+
+XDamage will be used if the existing X server supports it. Otherwise
+.B x0vncserver
+will fall back to polling the screen for changes.
+
+.SH OPTIONS
+.B x0vncserver
+interprets the command line as a list of parameters with optional values.
+Running \fBx0vncserver -h\fP will show a list of all valid parameters with
+short descriptions.  All parameters are optional, but normally you would have
+to use the \fBPasswordFile\fP parameter (see its description below).
+.PP
+There are several forms of specifying parameters in the command line (here we
+use `\fISomeParameter\fP' as an example parameter name):
+
+.TP
+.B -\fISomeParameter\fP
+Enable the parameter, turn the feature on.  This form can be used with
+parameters that simply enable or disable some feature.
+.
+.TP
+.B -\fISomeParameter\fP=0
+Disable the parameter, turn the feature off.
+.
+.TP
+.B -\fISomeParameter\fP=\fIvalue\fP
+Assign the specified \fIvalue\fP to the parameter.  The leading dash can be
+omitted, or it can be doubled if desired (like in GNU-style long options).
+.PP
+Parameter names are case-insensitive, their order in the command line can be
+arbitrary.
+
+.SH PARAMETERS
+
+.TP
+.B \-display \fIdisplay\fP
+The X display name.  If not specified, it defaults to the value of the
+DISPLAY environment variable.
+.
+.TP
+.B \-rfbport \fIport\fP
+Specifies the TCP port on which x0vncserver listens for connections from
+viewers (the protocol used in VNC is called RFB - "remote framebuffer").
+The default port is 5900.
+.
+.TP
+.B \-UseIPv4
+Use IPv4 for incoming and outgoing connections. Default is on.
+.
+.TP
+.B \-UseIPv6
+Use IPv6 for incoming and outgoing connections. Default is on.
+.
+.TP
+.B \-rfbunixpath \fIpath\fP
+Specifies the path of a Unix domain socket on which x0vncserver listens for
+connections from viewers, instead of listening on a TCP port.
+.
+.TP
+.B \-rfbunixmode \fImode\fP
+Specifies the mode of the Unix domain socket.  The default is 0600.
+.
+.TP
+.B \-Log \fIlogname\fP:\fIdest\fP:\fIlevel\fP
+Configures the debug log settings.  \fIdest\fP can currently be \fBstderr\fP,
+\fBstdout\fP or \fBsyslog\fP, and \fIlevel\fP is between 0 and 100, 100 meaning
+most verbose output.  \fIlogname\fP is usually \fB*\fP meaning all, but you can
+target a specific source file if you know the name of its "LogWriter".  Default
+is \fB*:stderr:30\fP.
+.
+.TP
+.B \-HostsFile \fIfilename\fP
+This parameter allows to specify a file name with IP access control rules.
+The file should include one rule per line, and the rule format is one of the
+following: +\fIaddress\fP/\fIprefix\fP (accept connections from the
+specified address group), -\fIaddress\fP/\fIprefix\fP (reject connections)
+or ?\fIaddress\fP/\fIprefix\fP (query the local user).  The first rule
+matching the IP address determines the action to be performed.  Rules that
+include only an action sign (+, - or ?) will match any IP address.
+\fIPrefix\fP is optional and is specified as a number of bits (e.g. /24).
+Default is to accept connections from any IP address.
+.
+.TP
+.B \-SecurityTypes \fIsec-types\fP
+Specify which security scheme to use for incoming connections.  Valid values
+are a comma separated list of \fBNone\fP, \fBVncAuth\fP, \fBPlain\fP,
+\fBTLSNone\fP, \fBTLSVnc\fP, \fBTLSPlain\fP, \fBX509None\fP, \fBX509Vnc\fP
+and \fBX509Plain\fP. Default is \fBVncAuth,TLSVnc\fP.
+.
+.TP
+.B \-rfbauth \fIpasswd-file\fP, \-PasswordFile \fIpasswd-file\fP
+Password file for VNC authentication.  There is no default, you should
+specify the password file explicitly.  Password file should be created with
+the \fBvncpasswd\fP(1) utility.  The file is accessed each time a connection
+comes in, so it can be changed on the fly.
+.
+.TP
+.B \-Password \fIpassword\fP
+Obfuscated binary encoding of the password which clients must supply to
+access the server.  Using this parameter is insecure, use \fBPasswordFile\fP
+parameter instead.
+.
+.TP
+.B \-PlainUsers \fIuser-list\fP
+A comma separated list of user names that are allowed to authenticate via
+any of the "Plain" security types (Plain, TLSPlain, etc.). Specify \fB*\fP
+to allow any user to authenticate using this security type. Default is to
+deny all users.
+.
+.TP
+.B \-pam_service \fIname\fP, \-PAMService \fIname\fP
+PAM service name to use when authentication users using any of the "Plain"
+security types. Default is \fBvnc\fP.
+.
+.TP
+.B \-X509Cert \fIpath\fP
+Path to a X509 certificate in PEM format to be used for all X509 based
+security types (X509None, X509Vnc, etc.).
+.
+.TP
+.B \-X509Key \fIpath\fP
+Private key counter part to the certificate given in \fBX509Cert\fP. Must
+also be in PEM format.
+.
+.TP
+.B \-GnuTLSPriority \fIpriority\fP
+GnuTLS priority string that controls the TLS session’s handshake algorithms.
+See the GnuTLS manual for possible values. Default is \fBNORMAL\fP.
+.
+.TP
+.B \-BlacklistThreshold \fIcount\fP
+The number of unauthenticated connection attempts allowed from any individual
+host before that host is black-listed.  Default is 5.
+.
+.TP
+.B \-BlacklistTimeout \fIseconds\fP
+The initial timeout applied when a host is first black-listed.  The host
+cannot re-attempt a connection until the timeout expires.  Default is 10.
+.
+.TP
+.B \-QueryConnect
+Prompts the user of the desktop to explicitly accept or reject incoming
+connections. Default is off.
+.
+.TP
+.B \-QueryConnectTimeout \fIseconds\fP
+Number of seconds to show the Accept Connection dialog before rejecting the
+connection.  Default is \fB10\fP.
+.
+.TP
+.B \-AlwaysShared
+Always treat incoming connections as shared, regardless of the client-specified
+setting. Default is off.
+.
+.TP
+.B \-NeverShared
+Never treat incoming connections as shared, regardless of the client-specified
+setting. Default is off.
+.
+.TP
+.B \-DisconnectClients
+Disconnect existing clients if an incoming connection is non-shared. Default is
+on. If \fBDisconnectClients\fP is false, then a new non-shared connection will
+be refused while there is a client active.  When combined with
+\fBNeverShared\fP this means only one client is allowed at a time.
+.
+.TP
+.B \-AcceptKeyEvents
+Accept key press and release events from clients. Default is on.
+.
+.TP
+.B \-AcceptPointerEvents
+Accept pointer press and release events from clients. Default is on.
+.
+.TP
+.B \-RemapKeys \fImapping
+Sets up a keyboard mapping.
+.I mapping
+is a comma-separated string of character mappings, each of the form
+.IR char -> char ,
+or
+.IR char <> char ,
+where
+.I char
+is a hexadecimal keysym. For example, to exchange the " and @ symbols you would specify the following:
+
+.RS 10
+RemapKeys=0x22<>0x40
+.RE
+.
+.TP
+.B \-RawKeyboard
+Send keyboard events straight through and avoid mapping them to the current
+keyboard layout. This effectively makes the keyboard behave according to the
+layout configured on the server instead of the layout configured on the
+client. Default is off.
+.
+.TP
+.B \-Protocol3.3
+Always use protocol version 3.3 for backwards compatibility with badly-behaved
+clients. Default is off.
+.
+.TP
+.B \-Geometry \fIgeometry\fP
+This option specifies the screen area that will be shown to VNC clients.  The
+format is
+.B \fIwidth\fPx\fIheight\fP+\fIxoffset\fP+\fIyoffset\fP
+, where `+' signs can be replaced with `\-' signs to specify offsets from the
+right and/or from the bottom of the screen.  Offsets are optional, +0+0 is
+assumed by default (top left corner).  If the argument is empty, full screen
+is shown to VNC clients (this is the default).
+.
+.TP
+.B \-MaxProcessorUsage \fIpercent\fP
+Maximum percentage of CPU time to be consumed when polling the
+screen.  Default is 35.
+.
+.TP
+.B \-PollingCycle \fImilliseconds\fP
+Milliseconds per one polling cycle.  Actual interval may be dynamically
+adjusted to satisfy \fBMaxProcessorUsage\fP setting.  Default is 30.
+.
+.TP
+.B \-FrameRate \fIfps\fP
+The maximum number of updates per second sent to each client. If the screen
+updates any faster then those changes will be aggregated and sent in a single
+update to the client. Note that this only controls the maximum rate and a
+client may get a lower rate when resources are limited. Default is \fB60\fP.
+.
+.TP
+.B \-CompareFB \fImode\fP
+Perform pixel comparison on framebuffer to reduce unnecessary updates. Can
+be either \fB0\fP (off), \fB1\fP (always) or \fB2\fP (auto). Default is
+\fB2\fP.
+.
+.TP
+.B \-UseSHM
+Use MIT-SHM extension if available.  Using that extension accelerates reading
+the screen.  Default is on.
+.
+.TP
+.B \-ZlibLevel \fIlevel\fP
+Zlib compression level for ZRLE encoding (it does not affect Tight encoding).
+Acceptable values are between 0 and 9.  Default is to use the standard
+compression level provided by the \fBzlib\fP(3) compression library.
+.
+.TP
+.B \-ImprovedHextile
+Use improved compression algorithm for Hextile encoding which achieves better
+compression ratios by the cost of using slightly more CPU time.  Default is
+on.
+.
+.TP
+.B \-IdleTimeout \fIseconds\fP
+The number of seconds after which an idle VNC connection will be dropped.
+Default is 0, which means that idle connections will never be dropped.
+.
+.TP
+.B \-MaxDisconnectionTime \fIseconds\fP
+Terminate when no client has been connected for \fIN\fP seconds.  Default is
+0.
+.
+.TP
+.B \-MaxConnectionTime \fIseconds\fP
+Terminate when a client has been connected for \fIN\fP seconds.  Default is
+0.
+.
+.TP
+.B \-MaxIdleTime \fIseconds\fP
+Terminate after \fIN\fP seconds of user inactivity.  Default is 0.
+.
+.TP
+.B \-ClientWaitTimeMillis \fItime\fP
+Time in milliseconds to wait for a viewer which is blocking the server. This is
+necessary because the server is single-threaded and sometimes blocks until the
+viewer has finished sending or receiving a message - note that this does not
+mean an update will be aborted after this time.  Default is 20000 (20 seconds).
+.
+.TP
+.B \-AcceptCutText
+.TQ
+.B \-SendCutText
+.TQ
+.B \-MaxCutText
+Currently unused.
+
+.SH SEE ALSO
+.BR Xvnc (1),
+.BR vncpasswd (1),
+.br
+http://www.tigervnc.org/
+
+.SH AUTHOR
+Constantin Kaplinsky and others.
+
+VNC was originally developed by the RealVNC team while at Olivetti
+Research Ltd / AT&T Laboratories Cambridge.  TightVNC additions were
+implemented by Constantin Kaplinsky. Many other people have since
+participated in development, testing and support. This manual is part
+of the TigerVNC software suite.
