@@ -13,7 +13,7 @@ def setup_desktop():
     return {
         'command': [
             'websockify', '-v',
-            '--web', VNC_APPLICATION_DIR + '/noVNC-1.1.0',
+            '--web', os.path.join(HERE, 'share/web/noVNC-1.1.0'),
             '--heartbeat', '30',
             '5901',
             '--unix-target', sockets_path,
