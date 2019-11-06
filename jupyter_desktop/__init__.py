@@ -20,7 +20,7 @@ def setup_desktop():
             os.path.join(HERE, 'share/tigervnc/bin/vncserver'),
             '-verbose',
             '-xstartup', os.path.join(HERE, 'share/xstartup'),
-            '-geometry', '1024x768',
+            '-geometry', '1680x1050',
             '-SecurityTypes', 'None',
             '-rfbunixpath', sockets_path,
             '-fg',
