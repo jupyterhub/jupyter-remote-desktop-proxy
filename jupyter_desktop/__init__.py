@@ -1,4 +1,5 @@
 import os
+import shlex
 import tempfile
 
 
@@ -9,6 +10,17 @@ def setup_desktop():
     # This is only readable, writeable & searchable by our uid
     sockets_dir = tempfile.mkdtemp()
     sockets_path = os.path.join(sockets_dir, 'vnc-socket')
+
+    vnc_command = ' '.join((shlex.quote(p) for p in [
+        os.path.join(HERE, 'share/tigervnc/bin/vncserver'),
+        '-verbose',
+        '-xstartup', os.path.join(HERE, 'share/xstartup'),
+        '-geometry', '1680x1050',
+        '-SecurityTypes', 'None',
+        '-rfbunixpath', sockets_path,
+        '-fg',
+        ':1',
+    ]))
     return {
         'command': [
             'websockify', '-v',
@@ -17,14 +29,8 @@ def setup_desktop():
             '5901',
             '--unix-target', sockets_path,
             '--',
-            os.path.join(HERE, 'share/tigervnc/bin/vncserver'),
-            '-verbose',
-            '-xstartup', os.path.join(HERE, 'share/xstartup'),
-            '-geometry', '1680x1050',
-            '-SecurityTypes', 'None',
-            '-rfbunixpath', sockets_path,
-            '-fg',
-            ':1',
+            '/bin/sh', '-c',
+            f'cd {os.getcwd()} && {vnc_command}'
         ],
         'port': 5901,
         'timeout': 30,
