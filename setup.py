@@ -7,12 +7,9 @@ setup(
     version='0.1.2',
     entry_points={
         'jupyter_serverproxy_servers': [
-            'vnc = jupyter_desktop_server:setup_vnc',
+            'desktop = jupyter_desktop:setup_desktop',
         ]
     },
-    data_files=[
-        ('etc/jupyter/jupyter_notebook_config.d', ['jupyter_desktop_server/etc/jupyter-desktop-server-serverextension.json']),
-    ],
     install_requires=['jupyter-server-proxy>=1.2.0'],
     include_package_data=True,
     zip_safe=False
