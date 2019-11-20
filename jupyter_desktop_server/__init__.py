@@ -1,17 +1,20 @@
 import os
 import shlex
 import tempfile
+from notebook.utils import url_path_join as ujoin
+from tornado.web import StaticFileHandler
+from .handlers import DesktopHandler
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-def setup_desktop():
+def setup_vnc():
     # make a secure temporary directory for sockets
     # This is only readable, writeable & searchable by our uid
     sockets_dir = tempfile.mkdtemp()
     sockets_path = os.path.join(sockets_dir, 'vnc-socket')
 
-    vnc_command = ' '.join((shlex.quote(p) for p in [
+    vnc_command = [
         os.path.join(HERE, 'share/tigervnc/bin/vncserver'),
         '-verbose',
         '-xstartup', os.path.join(HERE, 'share/xstartup'),
@@ -20,7 +23,7 @@ def setup_desktop():
         '-rfbunixpath', sockets_path,
         '-fg',
         ':1',
-    ]))
+    ]
     return {
         'command': [
             'websockify', '-v',
@@ -29,10 +32,18 @@ def setup_desktop():
             '5901',
             '--unix-target', sockets_path,
             '--',
-            '/bin/sh', '-c',
-            f'cd {os.getcwd()} && {vnc_command}'
-        ],
+        ] + vnc_command,
         'port': 5901,
         'timeout': 30,
-        'mappath': {'/': '/vnc_lite.html'},
     }
+
+
+def load_jupyter_server_extension(nbapp):
+    # Set up handlers picked up via config
+    base_url = nbapp.web_app.settings['base_url']
+
+    web_path = os.path.join(HERE, 'share/web')
+    nbapp.web_app.add_handlers('.*', [
+        (ujoin(base_url, 'desktop-server/static/(.*)'), StaticFileHandler, {'path': web_path}),
+        (ujoin(base_url, 'desktop'), DesktopHandler)
+    ])

@@ -1,1 +1,3 @@
-graft jupyter_desktop/share
+graft jupyter_desktop_server/share
+graft jupyter_desktop_server/etc
+graft jupyter_desktop_server/templates

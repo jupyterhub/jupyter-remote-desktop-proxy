@@ -60,7 +60,7 @@
     </style>
 
     <!-- Promise polyfill for IE11 -->
-    <script src="vendor/promise.js"></script>
+    <script src="{{novnc_base_url}}vendor/promise.js"></script>
 
     <!-- ES2015/ES6 modules polyfill -->
     <script type="module">
@@ -70,7 +70,7 @@
         window.addEventListener("load", function() {
             if (window._noVNC_has_module_support) return;
             const loader = document.createElement("script");
-            loader.src = "vendor/browser-es-module-loader/dist/" +
+            loader.src = "{{novnc_base_url}}vendor/browser-es-module-loader/dist/" +
                 "browser-es-module-loader.js";
             document.head.appendChild(loader);
         });
@@ -79,7 +79,7 @@
     <!-- actual script modules -->
     <script type="module" crossorigin="use-credentials">
         // RFB holds the API to connect and communicate with a VNC server
-        import RFB from './core/rfb.js';
+        import RFB from '../desktop-server/static/noVNC-1.1.0/core/rfb.js';
 
         let rfb;
         let desktopName;
@@ -155,7 +155,7 @@
         let port = readQueryVariable('port', window.location.port);
         const password = readQueryVariable('password', '');
         // MODIFICATION FROM vnc_lite.html
-        const path = readQueryVariable('path', window.location.pathname.replace(/[^/]*$/, '').substring(1) + 'websockify');
+        const path = readQueryVariable('path', "{{base_url}}vnc/");
 
         // | | |         | | |
         // | | | Connect | | |
@@ -174,7 +174,8 @@
         if(port) {
             url += ':' + port;
         }
-        url += '/' + path;
+        // MODIFICATION FROM vnc_lite
+        url += path;
 
         // Creating a new RFB object will start a new connection
         rfb = new RFB(document.getElementById('screen'), url,
