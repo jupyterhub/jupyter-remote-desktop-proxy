@@ -10,7 +10,7 @@ setup(
             'desktop = jupyter_desktop:setup_desktop',
         ]
     },
-    install_requires=['jupyter-server-proxy>=1.2.0'],
+    install_requires=['jupyter-server-proxy>=1.4.0'],
     include_package_data=True,
     zip_safe=False
 )
