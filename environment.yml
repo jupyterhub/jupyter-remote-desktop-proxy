@@ -1,6 +1,8 @@
 channels:
-  - manics
+  - conda-forge
 dependencies:
+  - jupyter-server-proxy>=1.4
+  - pip
   - websockify
   - pip:
-    - .
+      - jupyter-desktop-server==0.1.3

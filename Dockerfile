@@ -14,5 +14,5 @@ RUN apt-get -y update \
    xubuntu-icon-theme
 
 USER $NB_USER
-RUN conda install -c manics websockify \ 
- && pip install jupyter-desktop-server
+ADD environment.yml .
+RUN conda env update -n base --file environment.yml
