@@ -14,5 +14,6 @@ RUN apt-get -y update \
    xubuntu-icon-theme
 
 USER $NB_USER
-ADD environment.yml .
-RUN conda env update -n base --file environment.yml
+ADD . /opt/install
+RUN cd /opt/install && \
+   conda env update -n base --file environment.yml

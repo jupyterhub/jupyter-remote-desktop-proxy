@@ -5,4 +5,4 @@ dependencies:
   - pip
   - websockify
   - pip:
-      - jupyter-desktop-server==0.1.3
+      - .
