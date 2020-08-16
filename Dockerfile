@@ -12,6 +12,8 @@ RUN apt-get -y update \
    xfce4-settings \
    xorg \
    xubuntu-icon-theme
+# apt-get may result in root-owned directories/files under $HOME
+RUN chown -R $NB_UID:$NB_GID $HOME
 
 USER $NB_USER
 ADD . /opt/install
