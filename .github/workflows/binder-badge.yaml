@@ -17,7 +17,7 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: `[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/${PR_HEAD_USERREPO}/${PR_HEAD_SHA}) :point_left: Launch a binder notebook on this branch for commit ${PR_HEAD_SHA}`
+            body: `[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/${PR_HEAD_USERREPO}/${PR_HEAD_SHA}?urlpath=desktop) :point_left: Launch a binder notebook on this branch for commit ${PR_HEAD_SHA}`
           })
       env:
         PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
