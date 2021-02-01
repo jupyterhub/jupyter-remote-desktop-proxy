@@ -1,5 +1,6 @@
 import os
 import shlex
+from shutil import which
 import tempfile
 
 
@@ -10,11 +11,11 @@ def setup_desktop():
     # This is only readable, writeable & searchable by our uid
     sockets_dir = tempfile.mkdtemp()
     sockets_path = os.path.join(sockets_dir, 'vnc-socket')
-    turbovnc = '/opt/TurboVNC/bin/vncserver'
+    vncserver = which('vncserver')
 
-    if os.path.exists(turbovnc):
+    if vncserver:
         vnc_args = [
-            '/opt/TurboVNC/bin/vncserver',
+            vncserver,
         ]
         socket_args = []
     else:

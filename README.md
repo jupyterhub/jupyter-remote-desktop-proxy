@@ -5,22 +5,16 @@ Run XFCE (or other desktop environments) on a JupyterHub.
 
 This is based on https://github.com/ryanlovett/nbnovnc and a fork of https://github.com/manics/jupyter-omeroanalysis-desktop
 
+If a `vncserver` executable is found in `PATH` it will be used, otherwise a bundled TightVNC server is run.
+You can use this to install vncserver with support for other features, for example the [`Dockerfile`](./Dockerfile) in this repository installs TurboVNC for improved OpenGL support.
 
-## Docker 
 
-To spin up such a notebook, please build and run the container like this.
+## Docker
+
+To spin up such a notebook first build the container:
 
 ```bash
 $ docker build -t $(whoami)/$(basename ${PWD}) .
-Sending build context to Docker daemon  36.76MB
-Step 1/5 : FROM jupyter/datascience-notebook:latest
-**snip**
-Successfully installed aiohttp-3.6.2 async-timeout-3.0.1 jupyter-desktop-server-0.1.2 jupyter-server-proxy-1.5.0 multidict-4.7.6 simpervisor-0.3 yarl-1.4.2
-Removing intermediate container ed906d6b1074
- ---> 826211e74ce1
-Successfully built 826211e74ce1
-Successfully tagged myname/jupyter-desktop-server:latest
-$ 
 ```
 
 Now you can ran the image:
