@@ -12,6 +12,14 @@ RUN apt-get -y update \
    xfce4-settings \
    xorg \
    xubuntu-icon-theme
+
+# Remove light-locker to prevent screen lock
+RUN wget 'https://sourceforge.net/projects/turbovnc/files/2.2.5/turbovnc_2.2.5_amd64.deb/download' -O turbovnc_2.2.5_amd64.deb && \
+   apt-get install -y -q ./turbovnc_2.2.5_amd64.deb && \
+   apt-get remove -y -q light-locker && \
+   rm ./turbovnc_2.2.5_amd64.deb && \
+   ln -s /opt/TurboVNC/bin/* /usr/local/bin/
+
 # apt-get may result in root-owned directories/files under $HOME
 RUN chown -R $NB_UID:$NB_GID $HOME
 

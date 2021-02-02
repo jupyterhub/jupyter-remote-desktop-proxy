@@ -1,5 +1,6 @@
 import os
 import shlex
+from shutil import which
 import tempfile
 
 
@@ -10,14 +11,28 @@ def setup_desktop():
     # This is only readable, writeable & searchable by our uid
     sockets_dir = tempfile.mkdtemp()
     sockets_path = os.path.join(sockets_dir, 'vnc-socket')
+    vncserver = which('vncserver')
 
-    vnc_command = ' '.join((shlex.quote(p) for p in [
-        os.path.join(HERE, 'share/tigervnc/bin/vncserver'),
+    if vncserver:
+        vnc_args = [
+            vncserver,
+        ]
+        socket_args = []
+    else:
+        # Use bundled tigervnc
+        vnc_args = [
+            os.path.join(HERE, 'share/tigervnc/bin/vncserver'),
+            '-rfbunixpath', sockets_path,
+        ]
+        socket_args = [
+            '--unix-target', sockets_path
+        ]
+
+    vnc_command = ' '.join(shlex.quote(p) for p in (vnc_args + [
         '-verbose',
         '-xstartup', os.path.join(HERE, 'share/xstartup'),
         '-geometry', '1680x1050',
         '-SecurityTypes', 'None',
-        '-rfbunixpath', sockets_path,
         '-fg',
         ':1',
     ]))
@@ -27,7 +42,7 @@ def setup_desktop():
             '--web', os.path.join(HERE, 'share/web/noVNC-1.1.0'),
             '--heartbeat', '30',
             '5901',
-            '--unix-target', sockets_path,
+        ] + socket_args + [
             '--',
             '/bin/sh', '-c',
             f'cd {os.getcwd()} && {vnc_command}'
