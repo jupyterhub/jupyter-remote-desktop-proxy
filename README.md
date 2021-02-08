@@ -1,9 +1,9 @@
-# Jupyter Desktop Server
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/yuvipanda/jupyter-desktop-server/master?urlpath=desktop)
+# Jupyter Remote Desktop Proxy
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterhub/jupyter-remote-desktop-proxy/master?urlpath=desktop)
 
 Run XFCE (or other desktop environments) on a JupyterHub.
 
-This is based on https://github.com/ryanlovett/nbnovnc and a fork of https://github.com/manics/jupyter-omeroanalysis-desktop
+This is based on https://github.com/ryanlovett/nbnovnc.
 
 If a `vncserver` executable is found in `PATH` it will be used, otherwise a bundled TightVNC server is run.
 You can use this to install vncserver with support for other features, for example the [`Dockerfile`](./Dockerfile) in this repository installs TurboVNC for improved OpenGL support.
