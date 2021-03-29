@@ -86,7 +86,9 @@ describe('Helpers', function () {
                 window.navigator.platform = "Mac x86_64";
             });
             afterEach(function () {
-                Object.defineProperty(window, "navigator", origNavigator);
+                if (origNavigator !== undefined) {
+                    Object.defineProperty(window, "navigator", origNavigator);
+                }
             });
 
             it('should respect ContextMenu on modern browser', function () {
@@ -109,6 +111,9 @@ describe('Helpers', function () {
             expect(KeyboardUtil.getKey({key: 'OS'})).to.be.equal('Meta');
             expect(KeyboardUtil.getKey({key: 'Win'})).to.be.equal('Meta');
             expect(KeyboardUtil.getKey({key: 'UIKeyInputLeftArrow'})).to.be.equal('ArrowLeft');
+        });
+        it('should handle broken Delete', function () {
+            expect(KeyboardUtil.getKey({key: '\x00', code: 'NumpadDecimal'})).to.be.equal('Delete');
         });
         it('should use code if no key', function () {
             expect(KeyboardUtil.getKey({code: 'NumpadBackspace'})).to.be.equal('Backspace');
@@ -147,7 +152,9 @@ describe('Helpers', function () {
                 }
             });
             afterEach(function () {
-                Object.defineProperty(window, "navigator", origNavigator);
+                if (origNavigator !== undefined) {
+                    Object.defineProperty(window, "navigator", origNavigator);
+                }
             });
 
             it('should ignore printable character key on IE', function () {
@@ -165,6 +172,16 @@ describe('Helpers', function () {
             it('should allow non-printable character key on Edge', function () {
                 window.navigator.userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
                 expect(KeyboardUtil.getKey({key: 'Shift'})).to.be.equal('Shift');
+            });
+            it('should allow printable character key with charCode on IE', function () {
+                window.navigator.userAgent = "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko";
+                expect(KeyboardUtil.getKey({key: 'a', charCode: 0x61})).to.be.equal('a');
+                expect(KeyboardUtil.getKey({key: 'Unidentified', charCode: 0x61})).to.be.equal('a');
+            });
+            it('should allow printable character key with charCode on Edge', function () {
+                window.navigator.userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
+                expect(KeyboardUtil.getKey({key: 'a', charCode: 0x61})).to.be.equal('a');
+                expect(KeyboardUtil.getKey({key: 'Unidentified', charCode: 0x61})).to.be.equal('a');
             });
         });
     });
@@ -191,6 +208,22 @@ describe('Helpers', function () {
             it('should handle AltGraph', function () {
                 expect(KeyboardUtil.getKeysym({code: 'AltRight', key: 'Alt', location: 2})).to.be.equal(0xFFEA);
                 expect(KeyboardUtil.getKeysym({code: 'AltRight', key: 'AltGraph', location: 2})).to.be.equal(0xFE03);
+            });
+            it('should handle Windows key with incorrect location', function () {
+                expect(KeyboardUtil.getKeysym({key: 'Meta', location: 0})).to.be.equal(0xFFEC);
+            });
+            it('should handle Clear/NumLock key with incorrect location', function () {
+                this.skip(); // Broken because of Clear/NumLock override
+                expect(KeyboardUtil.getKeysym({key: 'Clear', code: 'NumLock', location: 3})).to.be.equal(0xFF0B);
+            });
+            it('should handle Meta/Windows distinction', function () {
+                expect(KeyboardUtil.getKeysym({code: 'AltLeft', key: 'Meta', location: 1})).to.be.equal(0xFFE7);
+                expect(KeyboardUtil.getKeysym({code: 'AltRight', key: 'Meta', location: 2})).to.be.equal(0xFFE8);
+                expect(KeyboardUtil.getKeysym({code: 'MetaLeft', key: 'Meta', location: 1})).to.be.equal(0xFFEB);
+                expect(KeyboardUtil.getKeysym({code: 'MetaRight', key: 'Meta', location: 2})).to.be.equal(0xFFEC);
+            });
+            it('should send NumLock even if key is Clear', function () {
+                expect(KeyboardUtil.getKeysym({key: 'Clear', code: 'NumLock'})).to.be.equal(0xFF7F);
             });
             it('should return null for unknown keys', function () {
                 expect(KeyboardUtil.getKeysym({key: 'Semicolon'})).to.be.null;
