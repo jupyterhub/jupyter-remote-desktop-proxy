@@ -43,13 +43,22 @@
         #status {
             text-align: center;
         }
-        #sendCtrlAltDelButton {
+        .vncButton {
             position: fixed;
             top: 0px;
-            right: 0px;
             border: 1px outset;
             padding: 5px 5px 4px 5px;
             cursor: pointer;
+        }
+        .vncButton a {
+            text-decoration: none;
+            color: white;
+        }
+        #jupyterHubHome {
+            left: 0px;
+        }
+        #sendCtrlAltDelButton {
+            right: 0px;
         }
 
         #screen {
@@ -195,8 +204,9 @@
 
 <body>
     <div id="top_bar">
+        <div id="jupyterHubHome" class="vncButton"><a href="../../../hub/home">Home</a></div>
         <div id="status">Loading</div>
-        <div id="sendCtrlAltDelButton">Send CtrlAltDel</div>
+        <div id="sendCtrlAltDelButton" class="vncButton">Send CtrlAltDel</div>
     </div>
     <div id="screen">
         <!-- This is where the remote screen will appear -->
