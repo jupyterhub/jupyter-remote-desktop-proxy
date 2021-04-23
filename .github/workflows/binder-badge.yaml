@@ -6,7 +6,7 @@ jobs:
   binder:
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      pull-requests: write
     steps:
     - name: comment on PR with Binder link
       uses: actions/github-script@v1
