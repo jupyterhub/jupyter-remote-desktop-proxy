@@ -1,0 +1,33 @@
+diff --git a/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html b/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
+index d17ab9e..a9e3e9b 100644
+--- a/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
++++ b/jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html
+@@ -3,6 +3,8 @@
+ <head>
+ 
+     <!--
++    Modified from novnc_lite.html example in noVNC 1.2.0
++
+     noVNC example: lightweight example using minimal UI and features
+ 
+     This is a self-contained file which doesn't import WebUtil or external CSS.
+@@ -144,7 +146,8 @@
+         const host = readQueryVariable('host', window.location.hostname);
+         let port = readQueryVariable('port', window.location.port);
+         const password = readQueryVariable('password');
+-        const path = readQueryVariable('path', 'websockify');
++        // MODIFICATION FROM vnc_lite.html
++        const path = readQueryVariable('path', window.location.pathname.replace(/[^/]*$/, '').substring(1) + 'websockify');
+ 
+         // | | |         | | |
+         // | | | Connect | | |
+@@ -177,7 +180,8 @@
+ 
+         // Set parameters that can be changed on an active connection
+         rfb.viewOnly = readQueryVariable('view_only', false);
+-        rfb.scaleViewport = readQueryVariable('scale', false);
++        // MODIFICATION FROM vnc_lite.html
++        rfb.scaleViewport = readQueryVariable('scale', true);
+     </script>
+ </head>
+ 
