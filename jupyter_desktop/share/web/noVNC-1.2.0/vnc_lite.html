@@ -176,7 +176,7 @@
         const host = readQueryVariable('host', window.location.hostname);
         let port = readQueryVariable('port', window.location.port);
         const password = readQueryVariable('password');
-        // MODIFICATION FROM vnc_lite.html
+
         const path = readQueryVariable('path', window.location.pathname.replace(/[^/]*$/, '').substring(1) + 'websockify');
 
         // | | |         | | |
@@ -210,7 +210,7 @@
 
         // Set parameters that can be changed on an active connection
         rfb.viewOnly = readQueryVariable('view_only', false);
-        // MODIFICATION FROM vnc_lite.html
+
         rfb.scaleViewport = readQueryVariable('scale', true);
 
         // Clipboard
