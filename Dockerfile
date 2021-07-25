@@ -29,9 +29,10 @@ RUN wget -q "https://sourceforge.net/projects/turbovnc/files/${TURBOVNC_VERSION}
  && ln -s /opt/TurboVNC/bin/* /usr/local/bin/
 
 COPY jupyter_desktop /opt/install/jupyter_desktop
-COPY setup.py MANIFEST.in README.md LICENSE environment.yml /opt/install/
+COPY setup.py MANIFEST.in README.md LICENSE /opt/install/
 RUN fix-permissions /opt/install
 
 USER $NB_USER
 RUN cd /opt/install \
- && mamba env update -n base --file environment.yml
+ && mamba install -y websockify \
+ && pip install -e .

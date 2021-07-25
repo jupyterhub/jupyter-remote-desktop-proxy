@@ -25,7 +25,9 @@ setup(
             'desktop = jupyter_desktop:setup_desktop',
         ]
     },
-    install_requires=['jupyter-server-proxy>=1.4.0'],
+    install_requires=[
+        'jupyter-server-proxy>=1.4.0',
+    ],
     include_package_data=True,
     keywords=["Interactive", "Desktop", "Jupyter"],
     license="BSD",
