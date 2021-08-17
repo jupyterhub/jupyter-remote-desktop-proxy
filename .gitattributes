@@ -1,0 +1,18 @@
+# Set non-text as binary
+* text=auto
+*.png binary
+
+# Forcing UNIX LF line endings for text files added to container
+*.sh text eol=lf
+*.xml text eol=lf
+*.xml text eol=lf
+vncserver text eol=lf
+protocol.txt text eol=lf
+vncviewer.desktop text eol=lf
+novnc-vnc_lite.html.patch text eol=lf
+apt.txt text eol=lf
+build_and_run.sh text eol=lf
+ text eol=lf
+ text eol=lf
+ text eol=lf
+ text eol=lf
