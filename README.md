@@ -43,3 +43,7 @@ Executing the command: jupyter notebook
 ```
 
 Now head to the URL shown and you will be greated with a XFCE desktop.
+
+## Limitations
+
+1. Desktop applications that require access to OpenGL are currently unsupported.
