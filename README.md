@@ -10,6 +10,36 @@ When this extension is launched it will run a Linux desktop on the Jupyter singl
 If a `vncserver` executable is found in `PATH` it will be used, otherwise a bundled TightVNC server is run.
 You can use this to install vncserver with support for other features, for example the [`Dockerfile`](./Dockerfile) in this repository installs TurboVNC for improved OpenGL support.
 
+## Installation
+
+1. Install this package itself, with `pip` from `PyPI`:
+
+   ```bash
+   pip install jupyter-remote-desktop-proxy
+   ```
+
+2. Install the [websockify](https://github.com/novnc/websockify) dependency. Unfortunately,
+   the PyPI `websockify` package is broken, so you need to install it either
+   from [conda-forge](https://anaconda.org/conda-forge/websockify) or with
+   [apt](https://packages.ubuntu.com/search?suite=all&searchon=names&keywords=websockify)
+
+3. Install the packages needed to provide the actual Linux Desktop environment.
+   You need to pick a desktop environment (there are many!) - here is the packages
+   you would need for using the light-weight [XFCE4](https://www.xfce.org/) desktop environment:
+
+   ```
+   dbus-x11
+   libgl1-mesa-glx
+   xfce4
+   xfce4-panel
+   xfce4-session
+   xfce4-settings
+   xorg
+   xubuntu-icon-theme
+   ```
+
+   The recommended way to install these is from your Linux system package manager
+   of choice (such as apt).
 
 ## Docker
 
@@ -43,3 +73,7 @@ Executing the command: jupyter notebook
 ```
 
 Now head to the URL shown and you will be greated with a XFCE desktop.
+
+## Limitations
+
+1. Desktop applications that require access to OpenGL are currently unsupported.
