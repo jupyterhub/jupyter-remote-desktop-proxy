@@ -1,0 +1,13 @@
+# flake8 is used for linting Python code setup to automatically run with
+# pre-commit.
+#
+# ref: https://flake8.pycqa.org/en/latest/user/configuration.html
+#
+
+[flake8]
+# E: style errors
+# W: style warnings
+# C: complexity
+# D: docstring warnings (unused pydocstyle extension)
+# F841: local variable assigned but never used
+ignore = E, C, W, D, F841
