@@ -15,7 +15,7 @@ You can use this to install vncserver with support for other features, for examp
 1. Install this package itself, with `pip` from `PyPI`:
 
    ```bash
-   pip install jupyter-remote-desktop-server
+   pip install jupyter-remote-desktop-proxy
    ```
 
 2. Install the [websockify](https://github.com/novnc/websockify) dependency. Unfortunately,
