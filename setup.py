@@ -6,9 +6,9 @@ with open("README.md") as f:
 
 
 setup(
-    name="jupyter-desktop-server",
+    name="jupyter-remote-desktop-proxy",
     packages=find_packages(),
-    version='0.1.3',
+    version='0.2.0',
     author="Jupyter Development Team",
     author_email="jupyter@googlegroups.com",
     classifiers=[
@@ -22,7 +22,7 @@ setup(
     description="Run a desktop environments on Jupyter",
     entry_points={
         'jupyter_serverproxy_servers': [
-            'desktop = jupyter_desktop:setup_desktop',
+            'desktop = jupyter_remote_desktop_proxy:setup_desktop',
         ]
     },
     install_requires=[
