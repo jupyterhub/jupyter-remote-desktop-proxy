@@ -27,7 +27,7 @@ RUN wget -q "https://sourceforge.net/projects/turbovnc/files/${TURBOVNC_VERSION}
  && rm ./turbovnc.deb \
  && ln -s /opt/TurboVNC/bin/* /usr/local/bin/
 
-COPY jupyter_desktop /opt/install/jupyter_desktop
+COPY jupyter_remote_desktop_proxy /opt/install/jupyter_remote_desktop_proxy
 COPY setup.py MANIFEST.in README.md LICENSE /opt/install/
 RUN fix-permissions /opt/install
 

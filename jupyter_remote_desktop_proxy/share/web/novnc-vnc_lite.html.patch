@@ -1,5 +1,7 @@
---- jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html.orig	2021-07-23 15:53:07.951581766 +0100
-+++ jupyter_desktop/share/web/noVNC-1.2.0/vnc_lite.html	2021-07-23 15:52:29.893284532 +0100
+diff --git a/jupyter_remote_desktop_proxy/share/web/noVNC-1.2.0/vnc_lite.html b/jupyter_remote_desktop_proxy/share/web/noVNC-1.2.0/vnc_lite.html
+index d17ab9e..a9e3e9b 100644
+--- a/jupyter_remote_desktop_proxy/share/web/noVNC-1.2.0/vnc_lite.html
++++ b/jupyter_remote_desktop_proxy/share/web/noVNC-1.2.0/vnc_lite.html
 @@ -3,6 +3,8 @@
  <head>
  
