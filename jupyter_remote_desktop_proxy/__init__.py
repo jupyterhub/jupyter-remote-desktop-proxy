@@ -1,10 +1,10 @@
 import os
 import shlex
-from shutil import which
 import tempfile
-
+from shutil import which
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
 
 def setup_desktop():
     # make a secure temporary directory for sockets
@@ -22,33 +22,42 @@ def setup_desktop():
         # Use bundled tigervnc
         vnc_args = [
             os.path.join(HERE, 'share/tigervnc/bin/vncserver'),
-            '-rfbunixpath', sockets_path,
+            '-rfbunixpath',
+            sockets_path,
         ]
-        socket_args = [
-            '--unix-target', sockets_path
-        ]
+        socket_args = ['--unix-target', sockets_path]
 
-    vnc_command = ' '.join(shlex.quote(p) for p in (vnc_args + [
-        '-verbose',
-        '-xstartup', os.path.join(HERE, 'share/xstartup'),
-        '-geometry', '1680x1050',
-        '-SecurityTypes', 'None',
-        '-fg',
-        ':1',
-    ]))
+    vnc_command = ' '.join(
+        shlex.quote(p)
+        for p in (
+            vnc_args
+            + [
+                '-verbose',
+                '-xstartup',
+                os.path.join(HERE, 'share/xstartup'),
+                '-geometry',
+                '1680x1050',
+                '-SecurityTypes',
+                'None',
+                '-fg',
+                ':1',
+            ]
+        )
+    )
     return {
         'command': [
-            'websockify', '-v',
-            '--web', os.path.join(HERE, 'share/web/noVNC-1.2.0'),
-            '--heartbeat', '30',
+            'websockify',
+            '-v',
+            '--web',
+            os.path.join(HERE, 'share/web/noVNC-1.2.0'),
+            '--heartbeat',
+            '30',
             '5901',
-        ] + socket_args + [
-            '--',
-            '/bin/sh', '-c',
-            f'cd {os.getcwd()} && {vnc_command}'
-        ],
+        ]
+        + socket_args
+        + ['--', '/bin/sh', '-c', f'cd {os.getcwd()} && {vnc_command}'],
         'port': 5901,
         'timeout': 30,
         'mappath': {'/': '/vnc_lite.html'},
-        'new_browser_window': True
+        'new_browser_window': True,
     }
