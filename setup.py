@@ -1,5 +1,4 @@
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 with open("README.md") as f:
     readme = f.read()
@@ -40,5 +39,5 @@ setup(
     },
     python_requires=">=3.6",
     url="https://jupyter.org",
-    zip_safe=False
+    zip_safe=False,
 )
