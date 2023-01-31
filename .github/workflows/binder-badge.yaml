@@ -10,6 +10,6 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: manics/action-binderbadge@main
+      - uses: manics/action-binderbadge@2.0.0
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
