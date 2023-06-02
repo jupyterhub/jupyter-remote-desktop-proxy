@@ -10,12 +10,12 @@ on:
     paths-ignore:
       - "docs/**"
       - ".github/workflows/*.yaml"
-      - "!.github/workflows/publish.yaml"
+      - "!.github/workflows/release.yaml"
   push:
     paths-ignore:
       - "docs/**"
       - ".github/workflows/*.yaml"
-      - "!.github/workflows/publish.yaml"
+      - "!.github/workflows/release.yaml"
     branches-ignore:
       - "dependabot/**"
       - "pre-commit-ci-update-config"
@@ -43,7 +43,7 @@ jobs:
           ls -l dist
 
       - name: publish to pypi
-        uses: pypa/gh-action-pypi-publish@v1.8.6
+        uses: pypa/gh-action-pypi-publish@release/v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           user: __token__
