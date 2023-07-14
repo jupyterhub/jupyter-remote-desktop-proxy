@@ -15,7 +15,7 @@ def setup_desktop():
 
     if vncserver is None:
         # Use bundled tigervnc
-        vncserver = (os.path.join(HERE, 'share/tigervnc/bin/vncserver'),)
+        vncserver = os.path.join(HERE, 'share/tigervnc/bin/vncserver')
 
     # TigerVNC provides the option to connect a Unix socket. TurboVNC does not.
     # TurboVNC and TigerVNC share the same origin and both use a Perl script
