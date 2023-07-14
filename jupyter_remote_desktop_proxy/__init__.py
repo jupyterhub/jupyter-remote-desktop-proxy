@@ -28,6 +28,8 @@ def setup_desktop():
         socket_args = ['--unix-target', sockets_path]
 
     if not os.path.exists(os.path.expand('~/.vnc/xstartup')):
+        # If there's an existing xstartup file in the default place VNC
+        # servers look for, let's not add our own.
         vnc_args.extend(['-xstartup', os.path.join(HERE, 'share/xstartup')])
 
     vnc_command = ' '.join(
