@@ -38,6 +38,8 @@ def setup_desktop():
             vnc_args
             + [
                 '-verbose',
+                '-geometry',
+                '1680x1050',
                 '-SecurityTypes',
                 'None',
                 '-fg',
