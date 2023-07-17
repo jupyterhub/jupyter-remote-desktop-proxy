@@ -1,10 +1,9 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
-# ref: https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions
+# ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 #
 name: Release
 
-# always build releases (to make sure wheel-building works)
-# but only publish to PyPI on tags
+# Always tests wheel building, but only publish to PyPI on pushed tags.
 on:
   pull_request:
     paths-ignore:
@@ -25,11 +24,19 @@ on:
 jobs:
   build-release:
     runs-on: ubuntu-22.04
+    permissions:
+      # id-token=write is required for pypa/gh-action-pypi-publish, and the PyPI
+      # project needs to be configured to trust this workflow.
+      #
+      # ref: https://github.com/jupyterhub/team-compass/issues/648
+      #
+      id-token: write
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: install build package
         run: |
