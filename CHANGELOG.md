@@ -1,4 +1,47 @@
 # Changelog
+### v1.0...v1.1
+
+([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v1.0...v1.1))
+
+#### Enhancements made
+
+- Add logic to determine if vncserver is TigerVNC [#32](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/32) ([@cmd-ntrf](https://github.com/cmd-ntrf))
+  
+#### Bugs fixed
+
+- Fix path when using bundled tigervnc [#44](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/44) ([@pnasrat](https://github.com/pnasrat))
+- Remove hardcoded display number and port, avoids multi-user conflicts [#34](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/34) ([@cmd-ntrf](https://github.com/cmd-ntrf))
+
+#### Maintenance and upkeep improvements
+
+- Add RELEASE.md, adopt tbump, rename release workflow for consistency [#38](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/38) ([@consideRatio](https://github.com/consideRatio))
+- Remove "/usr/bin" prefix in front of dbus-launch in xstartup [#33](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/33) ([@cmd-ntrf](https://github.com/cmd-ntrf))
+- Add logic to determine if vncserver is TigerVNC [#32](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/32) ([@cmd-ntrf](https://github.com/cmd-ntrf))
+- dependabot: monthly updates of github actions [#30](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/30) ([@consideRatio](https://github.com/consideRatio))
+- maint: add pre-commit config [#25](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/25) ([@consideRatio](https://github.com/consideRatio))
+- Quieten binder-badge bot [#3](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/3) ([@manics](https://github.com/manics))
+
+#### Documentation improvements
+
+- Add PyPI/Issues/Forum badges for readme [#40](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/40) ([@consideRatio](https://github.com/consideRatio))
+- Backfill changelog for 1.0.0 and 0.1.3 [#37](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/37) ([@consideRatio](https://github.com/consideRatio))
+
+#### Other merged PRs
+
+- Fix permissions required for trusted workflow [#48](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/48) ([@yuvipanda](https://github.com/yuvipanda))
+- Use trusted publishing to push to PyPI [#46](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/46) ([@yuvipanda](https://github.com/yuvipanda))
+- [pre-commit.ci] pre-commit autoupdate [#42](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/42) ([@pre-commit-ci](https://github.com/pre-commit-ci))
+- ci: fix typo in manics/action-binderbadge version [#39](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/39) ([@consideRatio](https://github.com/consideRatio))
+- Bump pypa/gh-action-pypi-publish from 1.8.5 to 1.8.6 [#36](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/36) ([@dependabot](https://github.com/dependabot))
+- Bump pypa/gh-action-pypi-publish from 1.6.4 to 1.8.5 [#31](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/31) ([@dependabot](https://github.com/dependabot))
+- [pre-commit.ci] pre-commit autoupdate [#28](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/28) ([@pre-commit-ci](https://github.com/pre-commit-ci))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/graphs/contributors?from=2023-01-19&to=2023-07-18&type=c))
+
+[@cmd-ntrf](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Acmd-ntrf+updated%3A2023-01-19..2023-07-18&type=Issues) | [@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3AconsideRatio+updated%3A2023-01-19..2023-07-18&type=Issues) | | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Amanics+updated%3A2023-01-19..2023-07-18&type=Issues) | [@pnasrat](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Apnasrat+updated%3A2023-01-19..2023-07-18&type=Issues) |  [@yuvipanda](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Ayuvipanda+updated%3A2023-01-19..2023-07-18&type=Issues)
+
 
 ## v1.0.0 - 2023-01-19
 
