@@ -1,4 +1,5 @@
 # Changelog
+
 ### v1.0...v1.1
 
 ([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v1.0...v1.1))
@@ -6,7 +7,7 @@
 #### Enhancements made
 
 - Add logic to determine if vncserver is TigerVNC [#32](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/32) ([@cmd-ntrf](https://github.com/cmd-ntrf))
-  
+
 #### Bugs fixed
 
 - Fix path when using bundled tigervnc [#44](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/44) ([@pnasrat](https://github.com/pnasrat))
@@ -40,8 +41,7 @@
 
 ([GitHub contributors page for this release](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/graphs/contributors?from=2023-01-19&to=2023-07-18&type=c))
 
-[@cmd-ntrf](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Acmd-ntrf+updated%3A2023-01-19..2023-07-18&type=Issues) | [@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3AconsideRatio+updated%3A2023-01-19..2023-07-18&type=Issues) | | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Amanics+updated%3A2023-01-19..2023-07-18&type=Issues) | [@pnasrat](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Apnasrat+updated%3A2023-01-19..2023-07-18&type=Issues) |  [@yuvipanda](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Ayuvipanda+updated%3A2023-01-19..2023-07-18&type=Issues)
-
+[@cmd-ntrf](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Acmd-ntrf+updated%3A2023-01-19..2023-07-18&type=Issues) | [@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3AconsideRatio+updated%3A2023-01-19..2023-07-18&type=Issues) | | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Amanics+updated%3A2023-01-19..2023-07-18&type=Issues) | [@pnasrat](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Apnasrat+updated%3A2023-01-19..2023-07-18&type=Issues) | [@yuvipanda](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Ayuvipanda+updated%3A2023-01-19..2023-07-18&type=Issues)
 
 ## v1.0.0 - 2023-01-19
 
