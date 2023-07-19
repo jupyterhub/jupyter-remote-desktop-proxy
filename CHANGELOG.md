@@ -1,5 +1,7 @@
 # Changelog
 
+## v1.1 - 2023-07-18
+
 ### v1.0...v1.1
 
 ([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v1.0...v1.1))
