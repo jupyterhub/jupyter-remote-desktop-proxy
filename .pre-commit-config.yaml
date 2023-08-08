@@ -61,6 +61,9 @@ repos:
 
       # Lint: Checks that non-binary executables have a proper shebang.
       - id: check-executables-have-shebangs
+        # .desktop files need to be executable so users can click on them
+        # in the Linux desktop, but should not have a shebang
+        exclude: '.*\.desktop$'
 
   # Lint: Python code
   - repo: https://github.com/PyCQA/flake8
