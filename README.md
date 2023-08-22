@@ -56,7 +56,7 @@ $ docker build -t $(whoami)/$(basename ${PWD}) .
 Now you can ran the image:
 
 ```bash
-$ docker run --rm  -p 8888:8888 $(whoami)/$(basename ${PWD})
+$ docker run --rm --security-opt seccomp=unconfined -p 8888:8888 $(whoami)/$(basename ${PWD})
 Executing the command: jupyter notebook
 [I 12:43:59.148 NotebookApp] Writing notebook server cookie secret to /home/jovyan/.local/share/jupyter/runtime/notebook_cookie_secret
 [I 12:44:00.221 NotebookApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
@@ -77,6 +77,11 @@ Executing the command: jupyter notebook
 ```
 
 Now head to the URL shown and you will be greated with a XFCE desktop.
+
+Note the `--security-opt seccomp=unconfined` parameter - this is necessary
+to start daemons (such as dbus, pulseaudio, etc) necessary for linux desktop
+to work. This is the option kubernetes runs with by default, so most kubernetes
+based JupyterHubs will not need any modifications for this to work.
 
 ## Limitations
 
