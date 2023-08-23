@@ -56,6 +56,8 @@ def get_tags(image: str, base_image_spec: str):
             ]
         )
 
+        subprocess.check_call(['docker', 'logs', container_name])
+
         tag_generator_scripts = [
             str(f)
             for f in [
