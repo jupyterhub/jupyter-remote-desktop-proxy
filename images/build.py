@@ -3,15 +3,19 @@
 Build and push all the images we maintain
 """
 import argparse
+import secrets
 import subprocess
+from pathlib import Path
 
 IMAGES = {
     "base": None,
     "qgis": "base",
 }
 
+HERE = Path(__file__).parent
 
-def build(name: str, tag: str, build_args: dict, platform: str, push: bool):
+
+def build(name: str, tag: str, build_args: dict, platform: str):
     cmd = [
         'docker',
         'buildx',
@@ -24,13 +28,78 @@ def build(name: str, tag: str, build_args: dict, platform: str, push: bool):
     for key, value in build_args.items():
         cmd += ['--build-arg', f'{key}={value}']
 
-    if push:
-        cmd += ['--push']
-
     cmd.append(name)
     print(cmd)
 
     subprocess.check_call(cmd)
+
+
+def get_tags(image: str, base_image_spec: str):
+    container_name = secrets.token_hex(8)
+    try:
+        run_cmd = [
+            'docker',
+            'container',
+            'run',
+            '--detach',
+            '--name',
+            container_name,
+            base_image_spec,
+        ]
+        subprocess.check_call(run_cmd)
+
+        subprocess.check_call(
+            [
+                'docker',
+                'container',
+                'ls',
+            ]
+        )
+
+        tag_generator_scripts = [
+            str(f)
+            for f in [
+                HERE / "common-tags-generator",
+                HERE / image / "tags-generator",
+            ]
+            if f.exists()
+        ]
+
+        tags = set()
+
+        for tgs in tag_generator_scripts:
+            subprocess.check_call(
+                [
+                    'docker',
+                    'container',
+                    'cp',
+                    str(tgs),
+                    f'{container_name}:/tmp/tags-generator',
+                ]
+            )
+
+            tags.update(
+                set(
+                    subprocess.check_output(
+                        [
+                            'docker',
+                            'container',
+                            'exec',
+                            container_name,
+                            '/tmp/tags-generator',
+                        ]
+                    )
+                    .decode()
+                    .strip()
+                    .split('\n')
+                )
+            )
+
+        print(tags)
+        return tags
+
+    finally:
+        subprocess.check_call(['docker', 'container', 'stop', container_name])
 
 
 def images_to_build(name: str, image_dependencies_graph: dict[str, str]) -> list[str]:
@@ -80,9 +149,22 @@ def main():
         to_build = images_to_build(args.image, IMAGES)
 
     for image in to_build:
-        tag = f"{args.image_prefix}{image}"
+        base_image_spec = f"{args.image_prefix}{image}"
 
-        build(image, tag, build_args, args.platforms, args.push)
+        build(image, base_image_spec, build_args, args.platforms)
+
+        tags = get_tags(image, base_image_spec)
+
+        for t in tags:
+            image_spec = f"{base_image_spec}:{t}"
+            subprocess.check_call(
+                ['docker', 'image', 'tag', base_image_spec, image_spec]
+            )
+            print(f'Tagged {image_spec}')
+
+            if args.push:
+                subprocess.check_call(['docker', 'image', 'push', image_spec])
+                print(f'Pushed {image_spec}')
 
 
 main()

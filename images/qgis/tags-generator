@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+import json
+import subprocess
+
+# Ubuntu version should be a tag
+qgis_version = json.loads(
+    subprocess.check_output(["mamba", "list", "qgis", "--json"]).decode().strip()
+)[0]['version']
+
+
+print(f"qgis-{qgis_version}")
+# Provide a shortened, major.minor version too
+shortened_version = '.'.join(qgis_version.split('.')[0:2])
+print(f"qgis-{shortened_version}")

@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+import subprocess
+import sys
+from datetime import date
+
+# Today's date should be a tag
+print(date.today().isoformat())
+
+# Python version inside should be a tag
+python_version_string = f"{sys.version_info.major}.{sys.version_info.minor}"
+print(f"python-{python_version_string}")
+
+# Ubuntu version should be a tag
+ubuntu_version = (
+    subprocess.check_output(
+        ["/bin/bash", "-c", "source /etc/os-release; echo $VERSION_ID"]
+    )
+    .decode()
+    .strip()
+)
+print(f"ubuntu-{ubuntu_version}")
