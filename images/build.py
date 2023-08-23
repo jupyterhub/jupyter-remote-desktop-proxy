@@ -11,24 +11,25 @@ IMAGES = {
 }
 
 
-def build(name: str, tag: str, build_args: dict):
+def build(name: str, tag: str, build_args: dict, platform: str, push: bool):
     cmd = [
         'docker',
+        'buildx',
         'build',
+        '--platform',
+        platform,
         '-t',
         tag,
     ]
     for key, value in build_args.items():
         cmd += ['--build-arg', f'{key}={value}']
 
+    if push:
+        cmd += ['--push']
+
     cmd.append(name)
     print(cmd)
 
-    subprocess.check_call(cmd)
-
-
-def push(tag: str):
-    cmd = ['docker', 'push', tag]
     subprocess.check_call(cmd)
 
 
@@ -55,6 +56,9 @@ def main():
         help='Prefix used for tagging and building images',
     )
     argparser.add_argument(
+        '--platforms', help="Platform to build this image for", default='linux/amd64'
+    )
+    argparser.add_argument(
         '--push', help='Push built images to docker registry', action='store_true'
     )
 
@@ -78,14 +82,7 @@ def main():
     for image in to_build:
         tag = f"{args.image_prefix}{image}"
 
-        build(image, tag, build_args)
-
-    # Push images only after *all* images have been built. This ensures
-    # we don't push a
-    if args.push:
-        for image in to_build:
-            tag = f"{args.image_prefix}{image}"
-            push(tag)
+        build(image, tag, build_args, args.platforms, args.push)
 
 
 main()
