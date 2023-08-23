@@ -7,6 +7,9 @@ set -euo pipefail
 # It's done at startup time because $HOME is often mounted over by a
 # persistent remote filesystem, hiding whatever is in the directory.
 
+# Set nullglob, so we don't error out if there are no MIME files to be found
+shopt -s nullglob
+
 MIME_DIR="${HOME}/.local/share/mime"
 MIME_PACKAGES_DIR="${MIME_DIR}/packages"
 mkdir -p "${MIME_PACKAGES_DIR}"

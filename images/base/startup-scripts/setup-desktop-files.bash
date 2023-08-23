@@ -6,6 +6,9 @@ set -euo pipefail
 # user. It's done at startup time because $HOME is often mounted over by a
 # persistent remote filesystem, hiding whatever is in the directory.
 
+# Set nullglob, so we don't error out if there are no Desktop files to be found
+shopt -s nullglob
+
 APPLICATIONS_DIR="${HOME}/.local/share/applications"
 DESKTOP_DIR="${HOME}/Desktop"
 mkdir -p "${APPLICATIONS_DIR}"
