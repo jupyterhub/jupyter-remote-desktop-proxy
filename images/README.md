@@ -28,3 +28,14 @@ This image is based off the base image, and installs the popular [QGIS](https://
 application. A desktop launcher icon is provided, along with filetype associations
 so users can double click most files that can be opend via QGIS and they will
 be!
+
+## Policy for adding images
+
+To reduce maintenance burden, we will only accept maintaining images here that
+match the following criteria:
+
+1. They add an application with a _popular_ scientific use case.
+2. The application is already package and maintained in `conda-forge`.
+
+Users are encouraged to build and maintain their own images where possible,
+inheriting from the base image here for ease of use.
