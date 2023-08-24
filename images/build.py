@@ -20,6 +20,7 @@ def build(name: str, tag: str, build_args: dict, platform: str):
         'docker',
         'buildx',
         'build',
+        '--load',
         '--platform',
         platform,
         '-t',
