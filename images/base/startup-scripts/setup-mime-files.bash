@@ -16,4 +16,4 @@ mkdir -p "${MIME_PACKAGES_DIR}"
 for mime_file_path in ${MIME_FILES_DIR}/*.xml; do
     cp "${mime_file_path}" "${MIME_PACKAGES_DIR}/."
 done
-update-mime-database -v "${MIME_DIR}"
+update-mime-database "${MIME_DIR}"

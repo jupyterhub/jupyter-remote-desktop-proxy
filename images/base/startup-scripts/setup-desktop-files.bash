@@ -20,4 +20,4 @@ for desktop_file_path in ${DESKTOP_FILES_DIR}/*.desktop; do
     desktop_file_name="$(basename ${desktop_file_path})"
     ln -sf "${APPLICATIONS_DIR}/${desktop_file_name}" "${DESKTOP_DIR}/${desktop_file_name}"
 done
-update-desktop-database -v "${APPLICATIONS_DIR}"
+update-desktop-database "${APPLICATIONS_DIR}"
