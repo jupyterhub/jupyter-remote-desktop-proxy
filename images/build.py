@@ -154,9 +154,7 @@ def main():
     for image in to_build:
         base_image_spec = f"{args.image_prefix}{image}"
 
-        image_spec = f"{base_image_spec}:latest"
-
-        build(image, image_spec, build_args, args.platforms)
+        build(image, base_image_spec, build_args, args.platforms)
 
         tags = get_tags(image, base_image_spec)
 
