@@ -15,7 +15,8 @@ IMAGES = {
 HERE = Path(__file__).parent
 
 
-def build(name: str, tag: str, build_args: dict, platform: str):
+def build(name: str, base_image_spec: str, build_args: dict, platform: str):
+    print(f"Building {name} to {base_image_spec} for {platform}")
     cmd = [
         'docker',
         'buildx',
@@ -24,14 +25,14 @@ def build(name: str, tag: str, build_args: dict, platform: str):
         '--platform',
         platform,
         '-t',
-        tag,
+        base_image_spec,
     ]
     for key, value in build_args.items():
         cmd += ['--build-arg', f'{key}={value}']
 
     cmd.append(name)
-    print(cmd)
 
+    print(f"Running {' '.join(cmd)}")
     subprocess.check_call(cmd)
 
 
@@ -119,6 +120,14 @@ def images_to_build(name: str, image_dependencies_graph: dict[str, str]) -> list
     return to_build
 
 
+def get_git_head_sha() -> str:
+    return (
+        subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=HERE)
+        .decode()
+        .strip()
+    )
+
+
 def main():
     argparser = argparse.ArgumentParser()
 
@@ -142,6 +151,8 @@ def main():
 
     args = argparser.parse_args()
 
+    git_sha = get_git_head_sha()
+
     build_args = {"IMAGE_PREFIX": args.image_prefix}
 
     if args.image is None:
@@ -157,6 +168,8 @@ def main():
         build(image, base_image_spec, build_args, args.platforms)
 
         tags = get_tags(image, base_image_spec)
+
+        tags.add(git_sha)
 
         for t in tags:
             image_spec = f"{base_image_spec}:{t}"
