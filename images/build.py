@@ -171,7 +171,11 @@ def main():
 
         tags = get_tags(image, latest_image_spec)
 
+        # Tag with current git sha
         tags.add(git_sha)
+
+        # Tag with :latest as well. Without this, :latest is not pushed
+        tags.add("latest")
 
         for t in tags:
             image_spec = f"{base_image_spec}:{t}"
