@@ -1,5 +1,5 @@
 ARG IMAGE_PREFIX
-FROM ${IMAGE_PREFIX}base
+FROM ${IMAGE_PREFIX}base:latest
 
 RUN mamba install -c conda-forge --yes \
     qgis

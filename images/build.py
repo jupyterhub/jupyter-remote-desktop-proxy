@@ -165,16 +165,18 @@ def main():
     for image in to_build:
         base_image_spec = f"{args.image_prefix}{image}"
 
-        build(image, base_image_spec, build_args, args.platforms)
+        latest_image_spec = f"{base_image_spec}:latest"
 
-        tags = get_tags(image, base_image_spec)
+        build(image, latest_image_spec, build_args, args.platforms)
+
+        tags = get_tags(image, latest_image_spec)
 
         tags.add(git_sha)
 
         for t in tags:
             image_spec = f"{base_image_spec}:{t}"
             subprocess.check_call(
-                ['docker', 'image', 'tag', base_image_spec, image_spec]
+                ['docker', 'image', 'tag', latest_image_spec, image_spec]
             )
             print(f'Tagged {image_spec}')
 
