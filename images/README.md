@@ -29,6 +29,8 @@ Base and all additional inheriting from it have the following additional tags:
 3. The version of the base Ubuntu image used for the image
 4. The version of python used for the image
 
+All the available tags can be found [here](https://quay.io/repository/jupyter-remote-desktop-proxy/base?tab=tags)
+
 Child images may have additional tags provided as well, particularly around
 the version of the application they provide.
 
@@ -44,6 +46,8 @@ additional tags:
 
 1. The _full_ qgis version, such as `qgis-3.31.2`
 2. A _partial_ qgis version, such as `qgis-3.31`
+
+All the available tags can be found [here](https://quay.io/repository/jupyter-remote-desktop-proxy/qgis?tab=tags)
 
 ## Policy for adding images
 
