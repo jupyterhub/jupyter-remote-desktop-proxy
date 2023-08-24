@@ -22,12 +22,28 @@ as part of jupyter/docker-stacks, and adds the following features:
    correctly, so users can double click certain kinds of files and have them open
    in specific applications.
 
+Base and all additional inheriting from it have the following additional tags:
+
+1. The UTC date on which the image was built
+2. The commit hash of the repo when the image was built
+3. The version of the base Ubuntu image used for the image
+4. The version of python used for the image
+
+Child images may have additional tags provided as well, particularly around
+the version of the application they provide.
+
 ## QGIS image `quay.io/jupyter-remote-desktop-proxy/qgis`
 
 This image is based off the base image, and installs the popular [QGIS](https://qgis.org/en/site/)
 application. A desktop launcher icon is provided, along with filetype associations
 so users can double click most files that can be opend via QGIS and they will
 be!
+
+In addition to the tags provided by the base image, qgis image provides two
+additional tags:
+
+1. The _full_ qgis version, such as `qgis-3.31.2`
+2. A _partial_ qgis version, such as `qgis-3.31`
 
 ## Policy for adding images
 
