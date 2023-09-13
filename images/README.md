@@ -49,6 +49,14 @@ additional tags:
 
 All the available tags can be found [here](https://quay.io/repository/jupyter-remote-desktop-proxy/qgis?tab=tags)
 
+QGIS plugins that are deemed useful when working in the cloud are included
+by default. This currently includes the following plugins:
+
+1. [QGIS STAC API browser](https://stac-utils.github.io/qgis-stac-plugin/)
+
+However, these are not _enabled_ by default. The user still has to go to the
+plugins menu and enable them.
+
 ## Policy for adding images
 
 To reduce maintenance burden, we will only accept maintaining images here that
