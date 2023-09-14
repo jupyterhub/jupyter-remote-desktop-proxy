@@ -31,12 +31,13 @@ def setup_desktop():
         vnc_args = [vncserver]
         socket_args = []
 
+    if not os.path.exists(os.path.expand('~/.vnc/xstartup')):
+        vnc_args.extend(['-xstartup', os.path.join(HERE, 'share/xstartup')])
+
     vnc_command = shlex.join(
         vnc_args
         + [
             '-verbose',
-            '-xstartup',
-            os.path.join(HERE, 'share/xstartup'),
             '-geometry',
             '1680x1050',
             '-SecurityTypes',
@@ -44,6 +45,7 @@ def setup_desktop():
             '-fg',
         ]
     )
+
     return {
         'command': [
             'websockify',
