@@ -31,7 +31,7 @@ def setup_desktop():
         vnc_args = [vncserver]
         socket_args = []
 
-    if not os.path.exists(os.path.expand('~/.vnc/xstartup')):
+    if not os.path.exists(os.path.expanduser('~/.vnc/xstartup')):
         vnc_args.extend(['-xstartup', os.path.join(HERE, 'share/xstartup')])
 
     vnc_command = shlex.join(
