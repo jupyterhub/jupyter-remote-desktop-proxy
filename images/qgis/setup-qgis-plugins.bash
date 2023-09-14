@@ -3,11 +3,6 @@
 # on the cloud
 set -euo pipefail
 
-# First, let's install the plugin manager
-# Install from pip until https://github.com/conda-forge/staged-recipes/pull/23971
-# is merged and available from `conda-forge`
-pip install --no-cache qgis-plugin-manager
-
 # Tell qgis-plugin-manager where our qgis plugins are
 export QGIS_PLUGINPATH=/opt/conda/share/qgis/python/plugins
 
