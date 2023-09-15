@@ -10,11 +10,6 @@ from urllib.request import HTTPError, urlopen, urlretrieve
 
 from xml.etree import ElementTree
 
-machine_map = {
-    "x86_64": "amd64",
-}
-
-
 def checksum_file(path):
     """Compute the md5 checksum of a path"""
     hasher = hashlib.md5()
@@ -31,12 +26,7 @@ def fetch_release_info(tigervnc_archive, tigervnc_version):
     )
     release_title = f'/stable/{tigervnc_version}/{tigervnc_archive}'
     print(f"Fetching md5 and download url from {url}")
-    try:
-        urlopen(url)
-    except HTTPError as e:
-        print(f"Failed to retrieve md5 and download url: {e}")
-        return {}
-    
+
     with urlopen(url) as f:
         tree = ElementTree.parse(f)
         root = tree.getroot()
@@ -47,6 +37,9 @@ def fetch_release_info(tigervnc_archive, tigervnc_version):
                 media = item.find('{http://video.search.yahoo.com/mrss/}content')
                 url = media.get('url')
                 md5 = media.find('{http://video.search.yahoo.com/mrss/}hash').text
+                break
+        else:
+            raise Exception(f"Could not find a tarball \"{tigervnc_archive}\" on sourceforge.net")
     return url, md5
 
 
@@ -61,7 +54,14 @@ def install_tigervnc(prefix, plat, tigervnc_version):
         print("--- Done ---")
         return
 
-    tigervnc_url, tigervnc_md5 = fetch_release_info(tigervnc_archive, tigervnc_version)
+    try:
+        tigervnc_url, tigervnc_md5 = fetch_release_info(tigervnc_archive, tigervnc_version)
+    except HTTPError as e:
+        print(f"Failed to retrieve md5 and download url: {e}")
+        return
+    except Exception as e:
+        print(f"Failed to retrieve md5 and download url: {e}")
+        return
 
     print(f"Downloading tigervnc {tigervnc_version} from {tigervnc_url}...")
     urlretrieve(tigervnc_url, tigervnc_archive_path)
@@ -106,13 +106,10 @@ def main():
     )
 
     machine = platform.machine()
-    machine = machine_map.get(machine, machine)
-    default_platform = f"{sys.platform}-{machine}"
-
     parser.add_argument(
         "--platform",
         dest="plat",
-        default=default_platform,
+        default=machine,
         help=textwrap.dedent(
             """\
             The platform to download for.
