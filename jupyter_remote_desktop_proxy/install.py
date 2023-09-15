@@ -2,11 +2,10 @@ import argparse
 import hashlib
 import os
 import platform
+import shutil
 import sys
 import tarfile
 import textwrap
-import warnings
-import zipfile
 from urllib.request import HTTPError, urlopen, urlretrieve
 
 from xml.etree import ElementTree
@@ -73,9 +72,14 @@ def install_tigervnc(prefix, plat, tigervnc_version):
 
     print("Extracting the archive...")
     with tarfile.open(tigervnc_archive_path, "r") as tar_ref:
-        tar_ref.extract("traefik", prefix)
+        tar_ref.extractall(prefix)
+
+    shutil.move(f"{prefix}/tigervnc-{tigervnc_version}.{plat}/usr/bin", prefix)
+    shutil.move(f"{prefix}/tigervnc-{tigervnc_version}.{plat}/usr/lib64", prefix)
+    shutil.move(f"{prefix}/tigervnc-{tigervnc_version}.{plat}/usr/share", prefix)
 
     print(f"Installed tigervnc {tigervnc_version}")
+    shutil.rmtree(f"{prefix}/tigervnc-{tigervnc_version}.{plat}")
     os.unlink(tigervnc_archive_path)
     print("--- Done ---")
 
