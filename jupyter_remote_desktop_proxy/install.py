@@ -123,9 +123,9 @@ def main():
     )
 
     parser.add_argument(
-        "--traefik-version",
-        dest="traefik_version",
-        default="2.10.1",
+        "--tigervnc-version",
+        dest="tigervnc_version",
+        default="1.10.0",
         help=textwrap.dedent(
             """\
             The version of traefik to download.
@@ -134,25 +134,11 @@ def main():
             """
         ),
     )
-    if "--etcd" in sys.argv:
-        sys.exit(
-            "Installing etcd is no longer supported. Visit https://github.com/etcd-io/etcd/releases/"
-        )
-    if "--consul" in sys.argv:
-        sys.exit(
-            "Installing consul is no longer supported. Visit https://developer.hashicorp.com/consul/downloads"
-        )
 
     args = parser.parse_args()
     deps_dir = args.installation_dir
     plat = args.plat
-    traefik_version = args.traefik_version.lstrip("v")
-
-    if args.traefik:
-        print(
-            "Specifying --traefik is deprecated and ignored. Only installing traefik is supported.",
-            file=sys.stderr,
-        )
+    tigervnc_version = args.tigervnc_version.lstrip("v")
 
     if os.path.exists(deps_dir):
         print(f"Using existing output directory {deps_dir}...")
@@ -160,7 +146,7 @@ def main():
         print(f"Creating output directory {deps_dir}...")
         os.makedirs(deps_dir)
 
-    install_traefik(deps_dir, plat, traefik_version)
+    install_tigervnc(deps_dir, plat, tigervnc_version)
 
 
 if __name__ == "__main__":
