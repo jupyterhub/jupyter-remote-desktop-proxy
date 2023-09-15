@@ -3,12 +3,13 @@ import hashlib
 import os
 import platform
 import shutil
-import sys
 import tarfile
 import textwrap
 from urllib.request import HTTPError, urlopen, urlretrieve
 
 from xml.etree import ElementTree
+
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 def checksum_file(path):
     """Compute the md5 checksum of a path"""
@@ -94,7 +95,7 @@ def main():
     parser.add_argument(
         "--output",
         dest="installation_dir",
-        default="./dependencies",
+        default=f"{HERE}/share/tigervnc",
         help=textwrap.dedent(
             """\
             The installation directory (absolute or relative path).
