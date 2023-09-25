@@ -45,16 +45,14 @@ def fetch_release_info(tigervnc_archive, tigervnc_version):
 
 
 def install_tigervnc(prefix, plat, tigervnc_version):
-    tigervnc_path = os.path.join(prefix, "tigervnc")
-
-    tigervnc_archive = f"tigervnc-{tigervnc_version}.{plat}.tar.gz"
-    tigervnc_archive_path = os.path.join(prefix, tigervnc_archive)
-
+    tigervnc_path = os.path.join(prefix, "bin", "vncserver")
     if os.path.exists(tigervnc_path):
         print(f"Tigervnc already exists at {tigervnc_path}. Remove it to re-install.")
         print("--- Done ---")
         return
 
+    tigervnc_archive = f"tigervnc-{tigervnc_version}.{plat}.tar.gz"
+    tigervnc_archive_path = os.path.join(prefix, tigervnc_archive)
     try:
         tigervnc_url, tigervnc_md5 = fetch_release_info(tigervnc_archive, tigervnc_version)
     except HTTPError as e:
