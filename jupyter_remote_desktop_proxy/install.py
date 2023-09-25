@@ -45,7 +45,7 @@ def fetch_release_info(tigervnc_archive, tigervnc_version):
 
 
 def install_tigervnc(prefix, plat, tigervnc_version):
-    tigervnc_path = os.path.join(prefix, "bin", "vncserver")
+    tigervnc_path = os.path.join(prefix, "bin", "vncconfig")
     if os.path.exists(tigervnc_path):
         print(f"Tigervnc already exists at {tigervnc_path}. Remove it to re-install.")
         print("--- Done ---")
