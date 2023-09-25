@@ -126,7 +126,7 @@ def main():
         default="1.10.0",
         help=textwrap.dedent(
             """\
-            The version of traefik to download.
+            The version of tigervnc to download.
             If no version is provided, it defaults to:
             --- %(default)s ---
             """
