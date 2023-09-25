@@ -11,11 +11,24 @@ def setup_desktop():
     # This is only readable, writeable & searchable by our uid
     sockets_dir = tempfile.mkdtemp()
     sockets_path = os.path.join(sockets_dir, 'vnc-socket')
-    vncserver = which('vncserver')
+
+    # Try to find a local install of vncserver script.
+    # If installed with jupyter-remote-desktop-proxy.install,
+    # it will by default in of two location based on the tigervnc version:
+    #   - bundled_bin: tigervnc < 1.11.0
+    #   - bundled_exec: tigervnc > 1.11.0
+    # If no vncserver is found in the default bundled path, which will
+    # look in the user's PATH. If which return None, vncserver was not found
+    # and an exception is raised.
+    bundled_bin = os.path.join(HERE, 'share/tigervnc/bin')
+    bundled_libexec = os.path.join(HERE, 'share/tigervnc/libexec')
+    vncserver = which(
+        cmd='vncserver',
+        path=f"{bundled_bin}:{bundled_libexec}:{os.environ.get('PATH', os.defpath)}"
+    )
 
     if vncserver is None:
-        # Use bundled tigervnc
-        vncserver = os.path.join(HERE, 'share/tigervnc/bin/vncserver')
+        raise FileNotFoundError('jupyter-remote-desktop-proxy: could not find vncserver')
 
     # TigerVNC provides the option to connect a Unix socket. TurboVNC does not.
     # TurboVNC and TigerVNC share the same origin and both use a Perl script
