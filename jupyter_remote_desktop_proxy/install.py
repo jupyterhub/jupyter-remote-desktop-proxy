@@ -73,9 +73,11 @@ def install_tigervnc(prefix, plat, tigervnc_version):
     with tarfile.open(tigervnc_archive_path, "r") as tar_ref:
         tar_ref.extractall(prefix)
 
-    shutil.move(f"{prefix}/tigervnc-{tigervnc_version}.{plat}/usr/bin", prefix)
-    shutil.move(f"{prefix}/tigervnc-{tigervnc_version}.{plat}/usr/lib64", prefix)
-    shutil.move(f"{prefix}/tigervnc-{tigervnc_version}.{plat}/usr/share", prefix)
+    shutil.copytree(
+        src=f"{prefix}/tigervnc-{tigervnc_version}.{plat}/usr",
+        dst=prefix,
+        dirs_exist_ok=True,
+    )
 
     print(f"Installed tigervnc {tigervnc_version}")
     shutil.rmtree(f"{prefix}/tigervnc-{tigervnc_version}.{plat}")
