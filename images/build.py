@@ -32,6 +32,8 @@ def build(name: str, image_spec: str, build_args: dict, platform: str):
         'buildx',
         'build',
         '--load',
+        '--progress',
+        'plain',
         '--platform',
         platform,
         '-t',

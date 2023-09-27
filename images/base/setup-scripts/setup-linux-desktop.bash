@@ -38,9 +38,11 @@ rm -rf /var/lib/apt/lists/*
 # Install packages required for linux desktop VPN setup to work
 # websockify and jupyter-server-proxy available from conda-forge, but
 # jupyter-remote-desktop-proxy is not.
+# Temporarily install nbgitpuller too, while we work on getting it upstream
 mamba install -c conda-forge --yes \
       websockify \
-      jupyter-server-proxy
+      jupyter-server-proxy \
+      nbgitpuller
 
 python -m pip install --no-cache "jupyter-remote-desktop-proxy<1.2.0"
 
