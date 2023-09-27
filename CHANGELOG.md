@@ -1,6 +1,14 @@
 # Changelog
 
-### v1.2.0 - 2023-09-25
+## v1.2.1 - 2023-09-27
+
+([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v1.2.0...v1.2.1))
+
+### Bugs fixed
+
+- Revert "Simplify xtartup command" [#64](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/64) ([@yuvipanda](https://github.com/yuvipanda), [@consideRatio](https://github.com/consideRatio))
+
+## v1.2.0 - 2023-09-25
 
 ([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v1.1.0...v1.2.0))
 
@@ -8,20 +16,20 @@
 
 - Let user defines its own xstartup and geometry via ~/.vnc/xstartup [#35](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/35) ([@cmd-ntrf](https://github.com/cmd-ntrf), [@yuvipanda](https://github.com/yuvipanda), [@consideRatio](https://github.com/consideRatio))
 
-#### Bugs fixed
+### Bugs fixed
 
 - Fix module 'posixpath' has no attribute 'expand' [#61](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/61) ([@cmd-ntrf](https://github.com/cmd-ntrf), [@consideRatio](https://github.com/consideRatio))
 
-#### Maintenance and upkeep improvements
+### Maintenance and upkeep improvements
 
 - Simplify xtartup command [#59](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/59) ([@yuvipanda](https://github.com/yuvipanda), [@consideRatio](https://github.com/consideRatio))
 - Simplify developmental dockerfile [#58](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/58) ([@yuvipanda](https://github.com/yuvipanda), [@consideRatio](https://github.com/consideRatio))
 
-#### Documentation improvements
+### Documentation improvements
 
 - Document needing seccomp=unconfined [#53](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/53) ([@yuvipanda](https://github.com/yuvipanda), [@consideRatio](https://github.com/consideRatio))
 
-#### Contributors to this release
+### Contributors to this release
 
 The following people contributed discussions, new ideas, code and documentation contributions, and review.
 See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
