@@ -43,7 +43,7 @@ target_version = [
 github_url = "https://github.com/jupyterhub/jupyter-remote-desktop-proxy"
 
 [tool.tbump.version]
-current = "1.2.1"
+current = "1.2.2.dev"
 regex = '''
     (?P<major>\d+)
     \.
