@@ -42,7 +42,7 @@ mamba install -c conda-forge --yes \
       websockify \
       jupyter-server-proxy
 
-python -m pip install --no-cache jupyter-remote-desktop-proxy
+python -m pip install --no-cache "jupyter-remote-desktop-proxy<1.2.0"
 
 fix-permissions "${CONDA_DIR}"
 fix-permissions "/home/${NB_USER}"
