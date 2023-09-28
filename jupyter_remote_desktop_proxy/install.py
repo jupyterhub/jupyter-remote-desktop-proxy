@@ -123,7 +123,8 @@ def main():
     parser.add_argument(
         "--tigervnc-version",
         dest="tigervnc_version",
-        default="1.10.0",
+        default="1.10.1",
+        choices=["1.10.1", "1.10.0", "1.9.0"],
         help=textwrap.dedent(
             """\
             The version of tigervnc to download.
