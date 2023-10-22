@@ -1,7 +1,7 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
 # ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 #
-name: Build
+name: Test
 
 on:
   pull_request:
