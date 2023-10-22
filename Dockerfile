@@ -15,7 +15,9 @@ RUN apt-get -y -qq update \
         tigervnc-xorg-extension \
     # chown $HOME to workaround that the xorg installation creates a
     # /home/jovyan/.cache directory owned by root
- && chown -R $NB_UID:$NB_GID $HOME \
+    # Create /opt/install to ensure it's writable by pip
+ && mkdir -p /opt/install \
+ && chown -R $NB_UID:$NB_GID $HOME /opt/install \
  && rm -rf /var/lib/apt/lists/*
 
 USER $NB_USER
