@@ -1,0 +1,34 @@
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+#
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - "dependabot/**"
+      - "pre-commit-ci-update-config"
+    tags: ["**"]
+  workflow_dispatch:
+
+jobs:
+  container:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: |
+          docker build -t jupyter-remote-desktop-proxy .
+
+      - name: Smoke test image
+        run: |
+          docker run -d -p 8888:8888 -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy
+          sleep 10
+          curl 'http://localhost:8888/desktop/?token=secret' | grep 'Modified from novnc_lite.html example in noVNC'
+
+      # TODO: Check VNC desktop works, e.g. by comparing Playwright screenshots
+      # https://playwright.dev/docs/test-snapshots

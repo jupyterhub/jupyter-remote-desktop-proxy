@@ -20,10 +20,9 @@ RUN apt-get -y -q update \
 
 USER $NB_USER
 
-RUN mamba install --yes websockify
+COPY --chown=$NB_UID:$NB_GID jupyter_remote_desktop_proxy /opt/install/jupyter_remote_desktop_proxy
+COPY --chown=$NB_UID:$NB_GID environment.yml setup.py MANIFEST.in README.md LICENSE /opt/install/
 
-COPY --chown=$NB_USER:$NB_USER jupyter_remote_desktop_proxy /opt/install/jupyter_remote_desktop_proxy
-COPY --chown=$NB_USER:$NB_USER setup.py MANIFEST.in README.md LICENSE /opt/install/
-
-RUN cd /opt/install \
- && pip install -e .
+RUN cd /opt/install && \
+    . /opt/conda/bin/activate && \
+    mamba env update --quiet --file environment.yml
