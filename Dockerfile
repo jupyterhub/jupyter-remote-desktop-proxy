@@ -1,9 +1,9 @@
-FROM jupyter/base-notebook
+FROM quay.io/jupyter/base-notebook:latest
 
 USER root
 
-RUN apt-get -y -q update \
- && apt-get -y -q install \
+RUN apt-get -y -qq update \
+ && apt-get -y -qq install \
         dbus-x11 \
         xfce4 \
         xfce4-panel \
