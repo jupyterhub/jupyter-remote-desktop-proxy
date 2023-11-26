@@ -54,7 +54,7 @@ To spin up such a notebook first build the container:
 $ docker build -t $(whoami)/$(basename ${PWD}) .
 ```
 
-Now you can ran the image:
+Now you can run the image:
 
 ```bash
 $ docker run --rm --security-opt seccomp=unconfined -p 8888:8888 $(whoami)/$(basename ${PWD})
