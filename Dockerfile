@@ -13,6 +13,8 @@ RUN apt-get -y -qq update \
         xubuntu-icon-theme \
         tigervnc-standalone-server \
         tigervnc-xorg-extension \
+    # Disable the automatic screenlock since the account password is unknown
+ && apt-get -y -qq remove xfce4-screensaver \
     # chown $HOME to workaround that the xorg installation creates a
     # /home/jovyan/.cache directory owned by root
     # Create /opt/install to ensure it's writable by pip
