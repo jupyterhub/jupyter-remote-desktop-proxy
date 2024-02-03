@@ -21,10 +21,13 @@
       <a href=".." id="logo">
         <img src="./jupyter-logo.svg" />
       </a>
-      <span id="status">Connecting...</span>
       <ul id="menu">
+        <li>
+          <span id="status-label">Status:</span>
+          <span id="status">Connecting...</span>
+        </li>
         <li id="clipboard-button">
-          <span class="label">Clipboard</span>
+          <a class="label" href="#"> Clipboard </a>
         </li>
       </ul>
     </div>
@@ -33,12 +36,15 @@
     </div>
 
     <!-- Clipboard -->
-    <div id="clipboard-area" class="hidden">
-      <span
-        >Contents of this text box are synced with the clipboard on the remote
-        desktop</span
-      >
-      <textarea id="clipboard-text" rows="5"></textarea>
+    <div id="clipboard-container" class="tooltip-container" popover>
+      <div class="arrow"></div>
+      <div id="clipboard-content">
+        <p>
+          Contents of this text box are synced with the clipboard on the remote
+          desktop
+        </p>
+        <textarea id="clipboard-text" rows="5"></textarea>
+      </div>
     </div>
 
     <script src="./dist/viewer.js"></script>

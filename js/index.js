@@ -9,9 +9,11 @@ import "./index.css";
 // RFB holds the API to connect and communicate with a VNC server
 import RFB from "@novnc/novnc/core/rfb";
 
+import { setupTooltip } from "./setupTooltip";
+
 // When this function is called we have successfully connected to a server
 function connectedToServer() {
-  status("Connected!");
+  status("Connected");
 }
 
 // This function is called when we are disconnected
@@ -50,12 +52,6 @@ rfb.scaleViewport = true;
 rfb.background = "var(--jupyter-medium-dark-grey)";
 
 // Clipboard
-function toggleClipboardPanel() {
-  document.getElementById("clipboard-area").classList.toggle("hidden");
-}
-document
-  .getElementById("clipboard-button")
-  .addEventListener("click", toggleClipboardPanel);
 
 function clipboardReceive(e) {
   document.getElementById("clipboard-text").value = e.detail.text;
@@ -69,3 +65,8 @@ function clipboardSend() {
 document
   .getElementById("clipboard-text")
   .addEventListener("change", clipboardSend);
+
+setupTooltip(
+  document.getElementById("clipboard-button"),
+  document.getElementById("clipboard-container"),
+);
