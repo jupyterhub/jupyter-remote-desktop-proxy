@@ -11,7 +11,7 @@ let desktopName;
 
 // When this function is called we have
 // successfully connected to a server
-function connectedToServer(e) {
+function connectedToServer() {
   status("Connected to " + desktopName);
 }
 
