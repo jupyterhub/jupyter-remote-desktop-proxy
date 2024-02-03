@@ -13,26 +13,28 @@
                 Chrome Frame. -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link href="./index.css" rel="stylesheet" />
+    <link href="./dist/index.css" rel="stylesheet" />
   </head>
 
   <body>
-    <div id="top_bar">
-      <div id="status">Loading</div>
-
-      <!-- Clipboard -->
-      <div id="noVNC_clipboard_area" class="noVNC_clipboard_closed">
-        <div id="noVNC_clipboard_button">
-          <img src="./clipboard.svg" />
-          <span class="label">Clipboard</span>
-        </div>
-        <div id="noVNC_clipboard">
-          <textarea id="noVNC_clipboard_text" rows="5"></textarea>
-        </div>
+    <div id="top-bar">
+      <div id="clipboard-button">
+        <img src="./clipboard.svg" />
+        <span class="label">Clipboard</span>
       </div>
+      <div id="status">Loading...</div>
     </div>
     <div id="screen">
       <!-- This is where the remote screen will appear -->
+    </div>
+
+    <!-- Clipboard -->
+    <div id="clipboard-area" class="hidden">
+      <span
+        >Contents of this text box are synced with the clipboard on the remote
+        desktop</span
+      >
+      <textarea id="clipboard-text" rows="5"></textarea>
     </div>
 
     <script src="./dist/viewer.js"></script>

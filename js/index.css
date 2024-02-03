@@ -1,0 +1,86 @@
+/**
+* Derived from https://github.com/novnc/noVNC/blob/v1.4.0/vnc_lite.html, which was licensed
+* under the 2-clause BSD license
+*/
+
+html {
+  /**
+  Colors from https://github.com/jupyter/design/blob/main/brandguide/brand_guide.pdf
+  **/
+  --jupyter-main-brand-color: #f37626;
+  --jupyter-dark-grey: #4d4d4d;
+  --jupyter-medium-dark-grey: #616161;
+  --jupyter-medium-grey: #757575;
+  --jupyter-grey: #9e9e9e;
+
+  --topbar-height: 32px;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--jupyter-medium-dark-grey);
+}
+
+#top-bar {
+  background-color: var(--jupyter-main-brand-color);
+  color: white;
+  font: bold 12px Helvetica;
+  border-bottom: 1px white;
+  display: flex;
+  align-items: center;
+  height: var(--topbar-height);
+}
+
+#status {
+  text-align: center;
+  flex-grow: 1;
+}
+
+#screen {
+  flex: 1;
+  /* fill remaining space */
+  overflow: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Clipboard */
+#clipboard-area {
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0px;
+  padding: 4px;
+}
+
+#clipboard-button {
+  border: 1px outset;
+  cursor: pointer;
+}
+
+#clipboard-button img {
+  height: 24px;
+  vertical-align: middle;
+}
+
+#clipboard-button .label {
+  padding: 5px 5px 4px 0px;
+}
+
+#clipboard-area {
+  /* Full screen, minus padding and left and right margins */
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-bottom-right-radius: 4px;
+  border: 1px solid var(--jupyter-medium-grey);
+}
+
+#clipboard-text {
+  min-width: 500px;
+  max-width: 100%;
+  border: 1px solid var(--jupyter-medium-grey);
+}

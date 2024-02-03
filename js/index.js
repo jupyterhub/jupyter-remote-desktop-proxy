@@ -3,6 +3,9 @@
  * under the 2-clause BSD license
  */
 
+import "reset-css";
+import "./index.css";
+
 // RFB holds the API to connect and communicate with a VNC server
 import RFB from "@novnc/novnc/core/rfb";
 
@@ -45,23 +48,21 @@ rfb.scaleViewport = true;
 
 // Clipboard
 function toggleClipboardPanel() {
-  document
-    .getElementById("noVNC_clipboard_area")
-    .classList.toggle("noVNC_clipboard_closed");
+  document.getElementById("clipboard-area").classList.toggle("hidden");
 }
 document
-  .getElementById("noVNC_clipboard_button")
+  .getElementById("clipboard-button")
   .addEventListener("click", toggleClipboardPanel);
 
 function clipboardReceive(e) {
-  document.getElementById("noVNC_clipboard_text").value = e.detail.text;
+  document.getElementById("clipboard-text").value = e.detail.text;
 }
 rfb.addEventListener("clipboard", clipboardReceive);
 
 function clipboardSend() {
-  const text = document.getElementById("noVNC_clipboard_text").value;
+  const text = document.getElementById("clipboard-text").value;
   rfb.clipboardPasteFrom(text);
 }
 document
-  .getElementById("noVNC_clipboard_text")
+  .getElementById("clipboard-text")
   .addEventListener("change", clipboardSend);
