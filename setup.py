@@ -2,33 +2,41 @@ import os
 from subprocess import check_call
 
 from setuptools import find_packages, setup
+from setuptools.command.build_py import build_py
 from setuptools.command.sdist import sdist
 
 HERE = os.path.dirname(__file__)
 
 
-class WebPackedSDist(sdist):
+def webpacked_command(command):
     """
-    Run npm webpack to generate appropriate output files before sdist.
-
-    This generates all the js & css we need, and that is included via an
-    entry in MANIFEST.in
+    Return a command that inherits from command, but adds webpack JS building
     """
 
-    description = "build frontend files with webpack"
-
-    def run(self):
+    class WebPackedCommand(command):
         """
-        Call npm install & npm run webpack before packaging
+        Run npm webpack to generate appropriate output files before given command.
+
+        This generates all the js & css we need, and that is included via an
+        entry in MANIFEST.in
         """
-        check_call(
-            ["npm", "install", "--progress=false", "--unsafe-perm"],
-            cwd=HERE,
-        )
 
-        check_call(["npm", "run", "webpack"], cwd=HERE)
+        description = "build frontend files with webpack"
 
-        return super().run()
+        def run(self):
+            """
+            Call npm install & npm run webpack before packaging
+            """
+            check_call(
+                ["npm", "install", "--progress=false", "--unsafe-perm"],
+                cwd=HERE,
+            )
+
+            check_call(["npm", "run", "webpack"], cwd=HERE)
+
+            return super().run()
+
+    return WebPackedCommand
 
 
 with open("README.md") as f:
@@ -71,5 +79,10 @@ setup(
     python_requires=">=3.6",
     url="https://jupyter.org",
     zip_safe=False,
-    cmdclass={"sdist": WebPackedSDist},
+    cmdclass={
+        # Handles making sdists and wheels
+        "sdist": webpacked_command(sdist),
+        # Handles `pip install` directly
+        "build_py": webpacked_command(build_py),
+    },
 )
