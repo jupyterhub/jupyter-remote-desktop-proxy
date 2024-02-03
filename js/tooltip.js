@@ -46,14 +46,14 @@ export function setupTooltip(trigger, tooltip) {
       });
     });
   }
-  function toggleTooltip() {
+
+  trigger.addEventListener("click", (e) => {
     if (tooltip.style.display === "block") {
       tooltip.style.display = "none";
     } else {
       tooltip.style.display = "block";
     }
     updatePosition();
-  }
-
-  trigger.addEventListener("click", toggleTooltip);
+    e.preventDefault();
+  });
 }
