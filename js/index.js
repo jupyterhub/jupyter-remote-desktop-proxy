@@ -6,13 +6,9 @@
 // RFB holds the API to connect and communicate with a VNC server
 import RFB from "@novnc/novnc/core/rfb";
 
-let rfb;
-let desktopName;
-
-// When this function is called we have
-// successfully connected to a server
+// When this function is called we have successfully connected to a server
 function connectedToServer() {
-  status("Connected to " + desktopName);
+  status("Connected!");
 }
 
 // This function is called when we are disconnected
@@ -22,12 +18,6 @@ function disconnectedFromServer(e) {
   } else {
     status("Something went wrong, connection is closed");
   }
-}
-
-// When this function is called we have received
-// a desktop name from the server
-function updateDesktopName(e) {
-  desktopName = e.detail.name;
 }
 
 // Show a status text in the top bar
@@ -40,12 +30,15 @@ let websockifyUrl = new URL("websockify", window.location);
 websockifyUrl.protocol = window.location.protocol === "https" ? "wss" : "ws";
 
 // Creating a new RFB object will start a new connection
-rfb = new RFB(document.getElementById("screen"), websockifyUrl.toString(), {});
+const rfb = new RFB(
+  document.getElementById("screen"),
+  websockifyUrl.toString(),
+  {},
+);
 
 // Add listeners to important events from the RFB module
 rfb.addEventListener("connect", connectedToServer);
 rfb.addEventListener("disconnect", disconnectedFromServer);
-rfb.addEventListener("desktopname", updateDesktopName);
 
 // Clipboard
 function toggleClipboardPanel() {
