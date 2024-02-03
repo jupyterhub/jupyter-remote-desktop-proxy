@@ -1,14 +1,19 @@
+/**
+ * Setup simplest popover possible to provide popovers.
+ *
+ * Mostly follows https://floating-ui.com/docs/tutorial
+ */
 import { computePosition, flip, shift, offset, arrow } from "@floating-ui/dom";
 
 /**
- *
- * @param {Element} button
+ * Setup trigger element to toggle showing / hiding tooltip element
+ * @param {Element} trigger
  * @param {Element} tooltip
  */
-export function setupTooltip(button, tooltip) {
-  const arrowElement = document.querySelector(".arrow");
+export function setupTooltip(trigger, tooltip) {
+  const arrowElement = tooltip.querySelector(".arrow");
   function updatePosition() {
-    computePosition(button, tooltip, {
+    computePosition(trigger, tooltip, {
       placement: "bottom",
       middleware: [
         offset(6),
@@ -50,14 +55,5 @@ export function setupTooltip(button, tooltip) {
     updatePosition();
   }
 
-  function hideTooltip() {
-    tooltip.style.display = "";
-  }
-
-  [
-    ["click", toggleTooltip],
-    ["blur", hideTooltip],
-  ].forEach(([event, listener]) => {
-    button.addEventListener(event, listener);
-  });
+  trigger.addEventListener("click", toggleTooltip);
 }
