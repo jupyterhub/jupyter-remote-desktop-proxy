@@ -1,5 +1,5 @@
 /**
- * Derived from https://github.com/novnc/noVNC/blob/master/vnc_lite.html, which was licensed
+ * Derived from https://github.com/novnc/noVNC/blob/v1.4.0/vnc_lite.html, which was licensed
  * under the 2-clause BSD license
  */
 
