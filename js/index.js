@@ -1,3 +1,8 @@
+/**
+ * Derived from https://github.com/novnc/noVNC/blob/master/vnc_lite.html, which was licensed
+ * under the 2-clause BSD license
+ */
+
 // RFB holds the API to connect and communicate with a VNC server
 import RFB from "@novnc/novnc/core/rfb";
 
