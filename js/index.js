@@ -40,6 +40,9 @@ const rfb = new RFB(
 rfb.addEventListener("connect", connectedToServer);
 rfb.addEventListener("disconnect", disconnectedFromServer);
 
+// Scale our viewport so the user doesn't have to scroll
+rfb.scaleViewport = true;
+
 // Clipboard
 function toggleClipboardPanel() {
   document
