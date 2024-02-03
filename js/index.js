@@ -46,6 +46,9 @@ rfb.addEventListener("disconnect", disconnectedFromServer);
 // Scale our viewport so the user doesn't have to scroll
 rfb.scaleViewport = true;
 
+// Use a CSS variable to set background color
+rfb.background = "var(--jupyter-medium-dark-grey)";
+
 // Clipboard
 function toggleClipboardPanel() {
   document.getElementById("clipboard-area").classList.toggle("hidden");

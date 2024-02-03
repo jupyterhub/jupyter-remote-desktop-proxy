@@ -24,13 +24,29 @@ body {
 }
 
 #top-bar {
-  background-color: var(--jupyter-main-brand-color);
+  background-color: var(--jupyter-dark-grey);
   color: white;
-  font: bold 12px Helvetica;
+  font: 12px Helvetica;
   border-bottom: 1px white;
   display: flex;
   align-items: center;
   height: var(--topbar-height);
+}
+
+#logo {
+  padding: 0 32px;
+}
+
+#logo img {
+  height: 24px;
+}
+
+#menu {
+  display: flex;
+  font-weight: bold;
+}
+
+#menu li {
 }
 
 #status {
@@ -57,7 +73,6 @@ body {
 }
 
 #clipboard-button {
-  border: 1px outset;
   cursor: pointer;
 }
 
