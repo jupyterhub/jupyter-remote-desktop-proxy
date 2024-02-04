@@ -9,7 +9,7 @@ import "./index.css";
 // RFB holds the API to connect and communicate with a VNC server
 import RFB from "@novnc/novnc/core/rfb";
 
-import { setupTooltip } from "./tooltip";
+import { setupTooltip } from "./tooltip.js";
 
 // When this function is called we have successfully connected to a server
 function connectedToServer() {

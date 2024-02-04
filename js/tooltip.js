@@ -4,6 +4,7 @@
  * Mostly follows https://floating-ui.com/docs/tutorial
  */
 import { computePosition, flip, shift, offset, arrow } from "@floating-ui/dom";
+import "./tooltip.css";
 
 /**
  * Setup trigger element to toggle showing / hiding tooltip element
