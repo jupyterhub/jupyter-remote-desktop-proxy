@@ -58,7 +58,12 @@ setup(
         "Programming Language :: Python :: 3",
     ],
     description="Run a desktop environments on Jupyter",
-    install_requires=[
+    entry_points={
+        'jupyter_serverproxy_servers': [
+            'desktop-websockify = jupyter_remote_desktop_proxy.setup_websockify:setup_websockify',
+        ]
+    },
+    stall_requires=[
         'jupyter-server-proxy>=1.4.0',
     ],
     include_package_data=True,

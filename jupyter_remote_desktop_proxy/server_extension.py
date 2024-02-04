@@ -18,12 +18,15 @@ def load_jupyter_server_extension(server_app):
     server_app.web_app.add_handlers(
         ".*",
         [
+            # Serve our own static files
             (
                 url_path_join(base_url, "/desktop/static/(.*)"),
                 AuthenticatedFileHandler,
                 {"path": (str(HERE / "static"))},
             ),
+            # To simplify URL mapping, we make sure that /desktop/ always
+            # has a trailing slash
             (url_path_join(base_url, "/desktop"), AddSlashHandler),
-            (url_path_join(base_url, "/desktop/()"), DesktopHandler, {'state': {}}),
+            (url_path_join(base_url, "/desktop/"), DesktopHandler),
         ],
     )
