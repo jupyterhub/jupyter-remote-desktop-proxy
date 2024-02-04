@@ -32,7 +32,7 @@ function status(text) {
 
 // Construct the websockify websocket URL we want to connect to
 let websockifyUrl = new URL("websockify", window.location);
-websockifyUrl.protocol = window.location.protocol === "https" ? "wss" : "ws";
+websockifyUrl.protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
 // Creating a new RFB object will start a new connection
 const rfb = new RFB(
