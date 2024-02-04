@@ -1,3 +1,10 @@
+# Extra ignore patterns specific to this project
+# Installed JS libraries
+node_modules/
+# Built JS files
+jupyter_remote_desktop_proxy/static/dist
+
+# Standard python gitignore patterns
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,8 +134,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# JS libraries
-node_modules/
-# Built JS files
-jupyter_remote_desktop_proxy/static/dist
