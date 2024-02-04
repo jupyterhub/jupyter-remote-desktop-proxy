@@ -31,4 +31,5 @@ RUN . /opt/conda/bin/activate && \
 
 COPY --chown=$NB_UID:$NB_GID . /opt/install
 RUN . /opt/conda/bin/activate && \
-    pip install -e /opt/install
+    pip install -e /opt/install && \
+    jupyter server extension enable jupyter_remote_desktop_proxy

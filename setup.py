@@ -58,11 +58,6 @@ setup(
         "Programming Language :: Python :: 3",
     ],
     description="Run a desktop environments on Jupyter",
-    entry_points={
-        'jupyter_serverproxy_servers': [
-            'desktop = jupyter_remote_desktop_proxy:setup_desktop',
-        ]
-    },
     install_requires=[
         'jupyter-server-proxy>=1.4.0',
     ],
@@ -85,4 +80,18 @@ setup(
         # Handles `pip install` directly
         "build_py": webpacked_command(build_py),
     },
+    data_files=[
+        (
+            'etc/jupyter/jupyter_server_config.d',
+            [
+                'jupyter-config/jupyter_server_config.d/jupyter_remote_desktop_proxy.json'
+            ],
+        ),
+        (
+            'etc/jupyter/jupyter_notebook_config.d',
+            [
+                'jupyter-config/jupyter_notebook_config.d/jupyter_remote_desktop_proxy.json'
+            ],
+        ),
+    ],
 )
