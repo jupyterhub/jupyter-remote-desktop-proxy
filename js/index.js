@@ -63,14 +63,19 @@ function connect() {
     console.log("connected");
     setStatusText("Connected");
   });
-  rfb.addEventListener("disconnect", (e) => {
-    if (e.detail.clean) {
-      setStatusText("Disconnected");
-    } else {
-      setStatusText("Something went wrong, connection is closed");
-    }
+  rfb.addEventListener("disconnect", () => {
     console.log("disconnected");
-    connect();
+    let countDown = 5;
+    setStatusText(`Reconnecting in ${countDown}s`);
+    const intervalHandle = setInterval(() => {
+      countDown -= 1;
+      setStatusText(`Reconnecting in ${countDown}s`);
+      console.log(countDown);
+      if (countDown === 0) {
+        clearInterval(intervalHandle);
+        connect();
+      }
+    }, 1000);
   });
 
   // Scale our viewport so the user doesn't have to scroll
