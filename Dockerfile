@@ -31,4 +31,4 @@ RUN . /opt/conda/bin/activate && \
 
 COPY --chown=$NB_UID:$NB_GID . /opt/install
 RUN . /opt/conda/bin/activate && \
-    pip install /opt/install
+    pip install -e /opt/install
