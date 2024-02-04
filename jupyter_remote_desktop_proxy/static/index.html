@@ -22,12 +22,12 @@
         <img src="./jupyter-logo.svg" />
       </a>
       <ul id="menu">
-        <li>
+        <li id="status-container">
           <span id="status-label">Status:</span>
           <span id="status">Connecting...</span>
         </li>
-        <li id="clipboard-button">
-          <a class="label" href="#"> Clipboard </a>
+        <li>
+          <a id="clipboard-button" href="#">Remote Clipboard</a>
         </li>
       </ul>
     </div>
@@ -36,7 +36,7 @@
     </div>
 
     <!-- Clipboard -->
-    <div id="clipboard-container" class="tooltip-container" popover>
+    <div id="clipboard-container" class="tooltip-container hidden">
       <div class="arrow"></div>
       <div id="clipboard-content">
         <p>

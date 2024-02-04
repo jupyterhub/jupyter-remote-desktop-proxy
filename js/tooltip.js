@@ -48,11 +48,8 @@ export function setupTooltip(trigger, tooltip) {
   }
 
   trigger.addEventListener("click", (e) => {
-    if (tooltip.style.display === "block") {
-      tooltip.style.display = "none";
-    } else {
-      tooltip.style.display = "block";
-    }
+    tooltip.classList.toggle("hidden");
+    trigger.classList.toggle("active");
     updatePosition();
     e.preventDefault();
   });

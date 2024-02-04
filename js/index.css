@@ -32,7 +32,6 @@ body {
   border-bottom: 1px white;
   display: flex;
   align-items: center;
-  padding: 4px 0px;
 }
 
 #logo {
@@ -51,8 +50,8 @@ body {
 }
 
 #menu li {
-  border-right: 1px white solid;
-  padding: 8px 8px;
+  border-right: 1px var(--jupyter-grey) solid;
+  padding: 12px 0px;
 }
 
 #menu li:last-child {
@@ -62,15 +61,20 @@ body {
 #menu a {
   color: white;
   text-decoration: none;
+  padding: 12px 8px;
+}
+
+#menu a:hover,
+#menu a.active {
+  background-color: var(--jupyter-medium-grey);
+}
+
+li#status-container {
+  padding-right: 8px;
 }
 
 #status-label {
   font-weight: normal;
-}
-
-#status {
-  text-align: center;
-  flex-grow: 1;
 }
 
 #screen {
@@ -97,7 +101,6 @@ body {
 }
 
 .tooltip-container {
-  display: none;
   overflow: visible; /* Needed for the arrow to show up */
   width: max-content;
   position: absolute;
