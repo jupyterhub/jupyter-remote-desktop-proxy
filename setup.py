@@ -63,7 +63,7 @@ setup(
             'desktop-websockify = jupyter_remote_desktop_proxy.setup_websockify:setup_websockify',
         ]
     },
-    stall_requires=[
+    install_requires=[
         'jupyter-server-proxy>=1.4.0',
     ],
     include_package_data=True,
