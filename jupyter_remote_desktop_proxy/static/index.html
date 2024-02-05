@@ -13,28 +13,38 @@
                 Chrome Frame. -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link href="./index.css" rel="stylesheet" />
+    <link href="./dist/index.css" rel="stylesheet" />
   </head>
 
   <body>
-    <div id="top_bar">
-      <div id="status">Loading</div>
-
-      <!-- Clipboard -->
-      <div id="noVNC_clipboard_area" class="noVNC_clipboard_closed">
-        <div id="noVNC_clipboard_button">
-          <img src="./clipboard.svg" />
-          <span class="label">Clipboard</span>
-        </div>
-        <div id="noVNC_clipboard">
-          <textarea id="noVNC_clipboard_text" rows="5"></textarea>
-        </div>
-      </div>
-
-      <div id="sendCtrlAltDelButton">Send CtrlAltDel</div>
+    <div id="top-bar">
+      <a href=".." id="logo">
+        <img src="./jupyter-logo.svg" />
+      </a>
+      <ul id="menu">
+        <li id="status-container">
+          <span id="status-label">Status:</span>
+          <span id="status">Connecting...</span>
+        </li>
+        <li>
+          <a id="clipboard-button" href="#">Remote Clipboard</a>
+        </li>
+      </ul>
     </div>
     <div id="screen">
       <!-- This is where the remote screen will appear -->
+    </div>
+
+    <!-- Clipboard -->
+    <div id="clipboard-container" class="tooltip-container hidden">
+      <div class="arrow"></div>
+      <div id="clipboard-content">
+        <p>
+          Contents of this text box are synced with the clipboard on the remote
+          desktop
+        </p>
+        <textarea id="clipboard-text" rows="5"></textarea>
+      </div>
     </div>
 
     <script src="./dist/viewer.js"></script>

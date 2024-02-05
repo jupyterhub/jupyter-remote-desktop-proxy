@@ -3,16 +3,17 @@
  * under the 2-clause BSD license
  */
 
+import "reset-css";
+import "./index.css";
+
 // RFB holds the API to connect and communicate with a VNC server
 import RFB from "@novnc/novnc/core/rfb";
 
-let rfb;
-let desktopName;
+import { setupTooltip } from "./tooltip.js";
 
-// When this function is called we have
-// successfully connected to a server
-function connectedToServer(e) {
-  status("Connected to " + desktopName);
+// When this function is called we have successfully connected to a server
+function connectedToServer() {
+  status("Connected");
 }
 
 // This function is called when we are disconnected
@@ -24,119 +25,47 @@ function disconnectedFromServer(e) {
   }
 }
 
-// When this function is called, the server requires
-// credentials to authenticate
-function credentialsAreRequired(e) {
-  const password = prompt("Password Required:");
-  rfb.sendCredentials({ password: password });
-}
-
-// When this function is called we have received
-// a desktop name from the server
-function updateDesktopName(e) {
-  desktopName = e.detail.name;
-}
-
-// Since most operating systems will catch Ctrl+Alt+Del
-// before they get a chance to be intercepted by the browser,
-// we provide a way to emulate this key sequence.
-function sendCtrlAltDel() {
-  rfb.sendCtrlAltDel();
-  return false;
-}
-
 // Show a status text in the top bar
 function status(text) {
   document.getElementById("status").textContent = text;
 }
 
-// This function extracts the value of one variable from the
-// query string. If the variable isn't defined in the URL
-// it returns the default value instead.
-function readQueryVariable(name, defaultValue) {
-  // A URL with a query parameter can look like this:
-  // https://www.example.com?myqueryparam=myvalue
-  //
-  // Note that we use location.href instead of location.search
-  // because Firefox < 53 has a bug w.r.t location.search
-  const re = new RegExp(".*[?&]" + name + "=([^&#]*)"),
-    match = document.location.href.match(re);
-
-  if (match) {
-    // We have to decode the URL since want the cleartext value
-    return decodeURIComponent(match[1]);
-  }
-
-  return defaultValue;
-}
-
-document.getElementById("sendCtrlAltDelButton").onclick = sendCtrlAltDel;
-
-// Read parameters specified in the URL query string
-// By default, use the host and port of server that served this file
-const host = readQueryVariable("host", window.location.hostname);
-let port = readQueryVariable("port", window.location.port);
-const password = readQueryVariable("password");
-
-const path = readQueryVariable(
-  "path",
-  window.location.pathname.replace(/[^/]*$/, "").substring(1) + "websockify",
-);
-
-// | | |         | | |
-// | | | Connect | | |
-// v v v         v v v
-
-status("Connecting");
-
-// Build the websocket URL used to connect
-let url;
-if (window.location.protocol === "https:") {
-  url = "wss";
-} else {
-  url = "ws";
-}
-url += "://" + host;
-if (port) {
-  url += ":" + port;
-}
-url += "/" + path;
+// Construct the websockify websocket URL we want to connect to
+let websockifyUrl = new URL("websockify", window.location);
+websockifyUrl.protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
 // Creating a new RFB object will start a new connection
-rfb = new RFB(document.getElementById("screen"), url, {
-  credentials: { password: password },
-});
+const rfb = new RFB(
+  document.getElementById("screen"),
+  websockifyUrl.toString(),
+  {},
+);
 
 // Add listeners to important events from the RFB module
 rfb.addEventListener("connect", connectedToServer);
 rfb.addEventListener("disconnect", disconnectedFromServer);
-rfb.addEventListener("credentialsrequired", credentialsAreRequired);
-rfb.addEventListener("desktopname", updateDesktopName);
 
-// Set parameters that can be changed on an active connection
-rfb.viewOnly = readQueryVariable("view_only", false);
+// Scale our viewport so the user doesn't have to scroll
+rfb.scaleViewport = true;
 
-rfb.scaleViewport = readQueryVariable("scale", true);
+// Use a CSS variable to set background color
+rfb.background = "var(--jupyter-medium-dark-grey)";
 
 // Clipboard
-function toggleClipboardPanel() {
-  document
-    .getElementById("noVNC_clipboard_area")
-    .classList.toggle("noVNC_clipboard_closed");
-}
-document
-  .getElementById("noVNC_clipboard_button")
-  .addEventListener("click", toggleClipboardPanel);
-
 function clipboardReceive(e) {
-  document.getElementById("noVNC_clipboard_text").value = e.detail.text;
+  document.getElementById("clipboard-text").value = e.detail.text;
 }
 rfb.addEventListener("clipboard", clipboardReceive);
 
 function clipboardSend() {
-  const text = document.getElementById("noVNC_clipboard_text").value;
+  const text = document.getElementById("clipboard-text").value;
   rfb.clipboardPasteFrom(text);
 }
 document
-  .getElementById("noVNC_clipboard_text")
+  .getElementById("clipboard-text")
   .addEventListener("change", clipboardSend);
+
+setupTooltip(
+  document.getElementById("clipboard-button"),
+  document.getElementById("clipboard-container"),
+);

@@ -1,0 +1,24 @@
+.hidden {
+  display: none !important;
+}
+
+.tooltip-container {
+  overflow: visible; /* Needed for the arrow to show up */
+  width: max-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: white;
+  color: var(--jupyter-dark-grey);
+  padding: 6px;
+  border-radius: 4px;
+  font-size: 90%;
+}
+
+.arrow {
+  position: absolute;
+  background: white;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+}

@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "@novnc/novnc": "^1.4.0"
+    "@floating-ui/dom": "^1.6.1",
+    "@novnc/novnc": "^1.4.0",
+    "reset-css": "^5.0.2"
   },
   "scripts": {
     "webpack": "webpack",
@@ -8,6 +10,10 @@
   },
   "devDependencies": {
     "babel-loader": "^9.1.3",
+    "css-loader": "^6.10.0",
+    "eslint": "^8.56.0",
+    "mini-css-extract-plugin": "^2.8.0",
+    "style-loader": "^3.3.4",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4"
   }

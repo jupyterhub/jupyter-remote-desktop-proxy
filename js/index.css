@@ -1,0 +1,97 @@
+/**
+* Derived from https://github.com/novnc/noVNC/blob/v1.4.0/vnc_lite.html, which was licensed
+* under the 2-clause BSD license
+*/
+
+html {
+  /**
+  Colors from https://github.com/jupyter/design/blob/main/brandguide/brand_guide.pdf
+  **/
+  --jupyter-main-brand-color: #f37626;
+  --jupyter-dark-grey: #4d4d4d;
+  --jupyter-medium-dark-grey: #616161;
+  --jupyter-medium-grey: #757575;
+  --jupyter-grey: #9e9e9e;
+
+  --topbar-height: 32px;
+
+  /* Use Jupyter Brand fonts */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--jupyter-medium-dark-grey);
+}
+
+#top-bar {
+  background-color: var(--jupyter-dark-grey);
+  color: white;
+  border-bottom: 1px white;
+  display: flex;
+  align-items: center;
+}
+
+#logo {
+  padding: 0 24px;
+}
+
+#logo img {
+  height: 24px;
+}
+
+#menu {
+  display: flex;
+  font-weight: bold;
+  margin-left: auto;
+  font-size: 12px;
+}
+
+#menu li {
+  border-right: 1px var(--jupyter-grey) solid;
+  padding: 12px 0px;
+}
+
+#menu li:last-child {
+  border-right: 0;
+}
+
+#menu a {
+  color: white;
+  text-decoration: none;
+  padding: 12px 8px;
+}
+
+#menu a:hover,
+#menu a.active {
+  background-color: var(--jupyter-medium-grey);
+}
+
+li#status-container {
+  padding-right: 8px;
+}
+
+#status-label {
+  font-weight: normal;
+}
+
+#screen {
+  flex: 1;
+  /* fill remaining space */
+  overflow: hidden;
+}
+
+/* Clipboard */
+#clipboard-content {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  gap: 4px;
+}
+
+#clipboard-text {
+  min-width: 500px;
+  max-width: 100%;
+}

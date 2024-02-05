@@ -1,8 +1,14 @@
 const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
 module.exports = {
   entry: path.resolve(__dirname, "js/index.js"),
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "index.css",
+    }),
+  ],
   devtool: "source-map",
   mode: "development",
   module: {
@@ -14,7 +20,7 @@ module.exports = {
       },
       {
         test: /\.(css)/,
-        use: ["style-loader", "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
   },
