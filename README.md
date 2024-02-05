@@ -12,8 +12,8 @@ This is based on https://github.com/ryanlovett/nbnovnc.
 
 When this extension is launched it will run a Linux desktop on the Jupyter single-user server, and proxy it to your browser using VNC via Jupyter.
 
-If a `vncserver` executable is found in `PATH` it will be used, otherwise a bundled TightVNC server is run.
-You can use this to install vncserver with support for other features, for example the [`Dockerfile`](./Dockerfile) in this repository installs TurboVNC for improved OpenGL support.
+This extension requires a VNC server to be installed on the system, along with a desktop or equivalent.
+For example, see the [`Dockerfile`](./Dockerfile) in this repository which installs TigerVNC and XFCE4.
 
 ## Installation
 
@@ -28,19 +28,20 @@ You can use this to install vncserver with support for other features, for examp
    from [conda-forge](https://anaconda.org/conda-forge/websockify) or with
    [apt](https://packages.ubuntu.com/search?suite=all&searchon=names&keywords=websockify)
 
-3. Install the packages needed to provide the actual Linux Desktop environment.
-   You need to pick a desktop environment (there are many!) - here is the packages
-   you would need for using the light-weight [XFCE4](https://www.xfce.org/) desktop environment:
+3. Install the packages needed to provide a VNC server and the actual Linux Desktop environment.
+   You need to pick a desktop environment (there are many!) - here are the packages
+   to use TigerVNC and the light-weight [XFCE4](https://www.xfce.org/) desktop environment on Ubuntu 22.04:
 
    ```
    dbus-x11
-   libgl1-mesa-glx
    xfce4
    xfce4-panel
    xfce4-session
    xfce4-settings
    xorg
    xubuntu-icon-theme
+   tigervnc-standalone-server
+   tigervnc-xorg-extension
    ```
 
    The recommended way to install these is from your Linux system package manager
