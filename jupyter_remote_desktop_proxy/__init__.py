@@ -1,64 +1,17 @@
 import os
-import shlex
-import tempfile
-from shutil import which
+
+from .server_extension import load_jupyter_server_extension
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
-def setup_desktop():
-    # make a secure temporary directory for sockets
-    # This is only readable, writeable & searchable by our uid
-    sockets_dir = tempfile.mkdtemp()
-    sockets_path = os.path.join(sockets_dir, 'vnc-socket')
-    vncserver = which('vncserver')
+def _jupyter_server_extension_points():
+    """
+    Set up the server extension for collecting metrics
+    """
+    return [{"module": "jupyter_remote_desktop_proxy"}]
 
-    if vncserver is None:
-        # Use bundled tigervnc
-        vncserver = os.path.join(HERE, 'share/tigervnc/bin/vncserver')
 
-    # TigerVNC provides the option to connect a Unix socket. TurboVNC does not.
-    # TurboVNC and TigerVNC share the same origin and both use a Perl script
-    # as the executable vncserver. We can determine if vncserver is TigerVNC
-    # by searching TigerVNC string in the Perl script.
-    with open(vncserver) as vncserver_file:
-        is_tigervnc = "TigerVNC" in vncserver_file.read()
-
-    if is_tigervnc:
-        vnc_args = [vncserver, '-rfbunixpath', sockets_path]
-        socket_args = ['--unix-target', sockets_path]
-    else:
-        vnc_args = [vncserver]
-        socket_args = []
-
-    if not os.path.exists(os.path.expanduser('~/.vnc/xstartup')):
-        vnc_args.extend(['-xstartup', os.path.join(HERE, 'share/xstartup')])
-
-    vnc_command = shlex.join(
-        vnc_args
-        + [
-            '-verbose',
-            '-geometry',
-            '1680x1050',
-            '-SecurityTypes',
-            'None',
-            '-fg',
-        ]
-    )
-
-    return {
-        'command': [
-            'websockify',
-            '-v',
-            '--web',
-            os.path.join(HERE, 'static'),
-            '--heartbeat',
-            '30',
-            '{port}',
-        ]
-        + socket_args
-        + ['--', '/bin/sh', '-c', f'cd {os.getcwd()} && {vnc_command}'],
-        'timeout': 30,
-        'mappath': {'/': '/index.html'},
-        'new_browser_window': True,
-    }
+# For backward compatibility
+_load_jupyter_server_extension = load_jupyter_server_extension
+_jupyter_server_extension_paths = _jupyter_server_extension_points

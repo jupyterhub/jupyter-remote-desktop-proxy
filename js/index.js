@@ -30,8 +30,10 @@ function status(text) {
   document.getElementById("status").textContent = text;
 }
 
-// Construct the websockify websocket URL we want to connect to
-let websockifyUrl = new URL("websockify", window.location);
+// This page is served under the /desktop/, and the websockify websocket is served
+// under /desktop-websockify/ with the same base url as /desktop/. We resolve it relatively
+// this way.
+let websockifyUrl = new URL("../desktop-websockify/", window.location);
 websockifyUrl.protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
 // Creating a new RFB object will start a new connection
