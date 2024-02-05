@@ -28,7 +28,9 @@ jobs:
         run: |
           docker run -d -p 8888:8888 -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy
           sleep 10
-          curl 'http://localhost:8888/desktop/?token=secret' | grep 'Modified from novnc_lite.html example in noVNC'
+          curl 'http://localhost:8888/desktop/?token=secret' | grep 'Jupyter Remote Desktop Proxy'
+          # Test if the built JS file is present in the image
+          curl 'http://localhost:8888/desktop/dist/viewer.js?token=secret' > /dev/null
 
       # TODO: Check VNC desktop works, e.g. by comparing Playwright screenshots
       # https://playwright.dev/docs/test-snapshots

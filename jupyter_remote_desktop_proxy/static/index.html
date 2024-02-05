@@ -1,0 +1,42 @@
+<!--
+    Derived from https://github.com/novnc/noVNC/blob/v1.4.0/vnc_lite.html, which was licensed
+    under the 2-clause BSD license
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Jupyter Remote Desktop Proxy</title>
+
+    <meta charset="utf-8" />
+
+    <!-- Always force latest IE rendering engine (even in intranet) &
+                Chrome Frame. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link href="./index.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div id="top_bar">
+      <div id="status">Loading</div>
+
+      <!-- Clipboard -->
+      <div id="noVNC_clipboard_area" class="noVNC_clipboard_closed">
+        <div id="noVNC_clipboard_button">
+          <img src="./clipboard.svg" />
+          <span class="label">Clipboard</span>
+        </div>
+        <div id="noVNC_clipboard">
+          <textarea id="noVNC_clipboard_text" rows="5"></textarea>
+        </div>
+      </div>
+
+      <div id="sendCtrlAltDelButton">Send CtrlAltDel</div>
+    </div>
+    <div id="screen">
+      <!-- This is where the remote screen will appear -->
+    </div>
+
+    <script src="./dist/viewer.js"></script>
+  </body>
+</html>

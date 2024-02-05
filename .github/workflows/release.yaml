@@ -49,6 +49,11 @@ jobs:
           python -m build --sdist --wheel .
           ls -l dist
 
+      - name: test to see if built js file is in the package
+        run: |
+          tar -tvf dist/*.tar.gz | grep dist/viewer.js
+          unzip -l dist/*.whl | grep dist/viewer.js
+
       - name: publish to pypi
         uses: pypa/gh-action-pypi-publish@release/v1
         if: startsWith(github.ref, 'refs/tags/')

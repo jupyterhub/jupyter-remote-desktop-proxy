@@ -24,9 +24,11 @@ RUN apt-get -y -qq update \
 
 USER $NB_USER
 
-COPY --chown=$NB_UID:$NB_GID jupyter_remote_desktop_proxy /opt/install/jupyter_remote_desktop_proxy
-COPY --chown=$NB_UID:$NB_GID environment.yml setup.py MANIFEST.in README.md LICENSE /opt/install/
+# Install the environment first, and then install the package separately for faster rebuilds
+COPY --chown=$NB_UID:$NB_GID environment.yml /tmp
+RUN . /opt/conda/bin/activate && \
+    mamba env update --quiet --file /tmp/environment.yml
 
-RUN cd /opt/install && \
-    . /opt/conda/bin/activate && \
-    mamba env update --quiet --file environment.yml
+COPY --chown=$NB_UID:$NB_GID . /opt/install
+RUN . /opt/conda/bin/activate && \
+    pip install -e /opt/install

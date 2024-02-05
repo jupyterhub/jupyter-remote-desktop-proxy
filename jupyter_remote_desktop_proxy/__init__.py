@@ -51,7 +51,7 @@ def setup_desktop():
             'websockify',
             '-v',
             '--web',
-            os.path.join(HERE, 'share/web/noVNC-1.2.0'),
+            os.path.join(HERE, 'static'),
             '--heartbeat',
             '30',
             '{port}',
@@ -59,6 +59,6 @@ def setup_desktop():
         + socket_args
         + ['--', '/bin/sh', '-c', f'cd {os.getcwd()} && {vnc_command}'],
         'timeout': 30,
-        'mappath': {'/': '/vnc_lite.html'},
+        'mappath': {'/': '/index.html'},
         'new_browser_window': True,
     }

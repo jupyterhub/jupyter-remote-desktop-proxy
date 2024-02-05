@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@novnc/novnc": "^1.4.0"
+  },
+  "scripts": {
+    "webpack": "webpack",
+    "webpack:watch": "webpack --watch"
+  },
+  "devDependencies": {
+    "babel-loader": "^9.1.3",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4"
+  }
+}

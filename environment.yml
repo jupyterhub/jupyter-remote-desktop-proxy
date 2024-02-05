@@ -10,5 +10,3 @@ dependencies:
   - jupyterhub-singleuser
   - pip
   - websockify
-  - pip:
-      - .
