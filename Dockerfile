@@ -33,3 +33,11 @@ COPY --chown=$NB_UID:$NB_GID . /opt/install
 RUN . /opt/conda/bin/activate && \
     pip install -e /opt/install && \
     jupyter server extension enable jupyter_remote_desktop_proxy
+
+RUN mkdir -p /home/$NB_USER/.config/dconf/
+# The default terminal font displays poorly in XFCE4
+# The dconf CLI requires the dconf-service so can't be run at build time
+# To recreate this file run:
+#   dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/font "'Liberation Mono 12'"
+#   dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-system-font false
+COPY --chown=$NB_UID:$NB_GID dconf/user /home/$NB_USER/.config/dconf
