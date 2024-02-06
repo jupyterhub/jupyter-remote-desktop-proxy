@@ -11,6 +11,7 @@ RUN apt-get -y -qq update \
         xfce4-settings \
         xorg \
         xubuntu-icon-theme \
+        fonts-dejavu \
         tigervnc-standalone-server \
         tigervnc-xorg-extension \
     # Disable the automatic screenlock since the account password is unknown
