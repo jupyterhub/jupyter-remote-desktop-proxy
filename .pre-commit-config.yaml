@@ -77,10 +77,6 @@ repos:
         types: [file]
         exclude: jupyter_remote_desktop_proxy/static/dist
 
-# Content here is mostly copied from other locations, so lets not make
-# formatting changes in it.
-exclude: share
-
 # pre-commit.ci config reference: https://pre-commit.ci/#configuration
 ci:
   autoupdate_schedule: monthly

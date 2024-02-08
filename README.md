@@ -12,8 +12,16 @@ This is based on https://github.com/ryanlovett/nbnovnc.
 
 When this extension is launched it will run a Linux desktop on the Jupyter single-user server, and proxy it to your browser using VNC via Jupyter.
 
-If a `vncserver` executable is found in `PATH` it will be used, otherwise a bundled TightVNC server is run.
-You can use this to install vncserver with support for other features, for example the [`Dockerfile`](./Dockerfile) in this repository installs TurboVNC for improved OpenGL support.
+## VNC Server
+
+This extension requires a [VNC Server](https://en.wikipedia.org/wiki/Virtual_Network_Computing)
+to be installed on the system (likely, in the container image). The
+most tested VNC server is [TigerVNC](https://tigervnc.org/), while
+[TurboVNC](https://www.turbovnc.org/) also works. Any VNC server available
+in `$PATH` as `vncserver` will be used, but no real testing outside of
+these servers has been performed.
+
+For an example, see the [`Dockerfile`](./Dockerfile) in this repository which installs TigerVNC and XFCE4.
 
 ## Installation
 
@@ -28,19 +36,20 @@ You can use this to install vncserver with support for other features, for examp
    from [conda-forge](https://anaconda.org/conda-forge/websockify) or with
    [apt](https://packages.ubuntu.com/search?suite=all&searchon=names&keywords=websockify)
 
-3. Install the packages needed to provide the actual Linux Desktop environment.
-   You need to pick a desktop environment (there are many!) - here is the packages
-   you would need for using the light-weight [XFCE4](https://www.xfce.org/) desktop environment:
+3. Install the packages needed to provide a VNC server and the actual Linux Desktop environment.
+   You need to pick a desktop environment (there are many!) - here are the packages
+   to use TigerVNC and the light-weight [XFCE4](https://www.xfce.org/) desktop environment on Ubuntu 22.04:
 
    ```
    dbus-x11
-   libgl1-mesa-glx
    xfce4
    xfce4-panel
    xfce4-session
    xfce4-settings
    xorg
    xubuntu-icon-theme
+   tigervnc-standalone-server
+   tigervnc-xorg-extension
    ```
 
    The recommended way to install these is from your Linux system package manager

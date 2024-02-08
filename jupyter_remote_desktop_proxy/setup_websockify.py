@@ -13,9 +13,10 @@ def setup_websockify():
     sockets_path = os.path.join(sockets_dir, 'vnc-socket')
     vncserver = which('vncserver')
 
-    if vncserver is None:
-        # Use bundled tigervnc
-        vncserver = os.path.join(HERE, 'share/tigervnc/bin/vncserver')
+    if not vncserver:
+        raise RuntimeError(
+            "vncserver executable not found, please install a VNC server"
+        )
 
     # TigerVNC provides the option to connect a Unix socket. TurboVNC does not.
     # TurboVNC and TigerVNC share the same origin and both use a Perl script
