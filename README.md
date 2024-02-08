@@ -12,8 +12,16 @@ This is based on https://github.com/ryanlovett/nbnovnc.
 
 When this extension is launched it will run a Linux desktop on the Jupyter single-user server, and proxy it to your browser using VNC via Jupyter.
 
-This extension requires a VNC server to be installed on the system, along with a desktop or equivalent.
-For example, see the [`Dockerfile`](./Dockerfile) in this repository which installs TigerVNC and XFCE4.
+## VNC Server
+
+This extension requires a [VNC Server](https://en.wikipedia.org/wiki/Virtual_Network_Computing)
+to be installed on the system (likely, in the container image). The
+most tested VNC server is [TigerVNC](https://tigervnc.org/), while
+[TurboVNC](https://www.turbovnc.org/) also works. Any VNC server available
+in `$PATH` as `vncserver` will be used, but no real testing outside of
+these servers has been performed.
+
+For an example, see the [`Dockerfile`](./Dockerfile) in this repository which installs TigerVNC and XFCE4.
 
 ## Installation
 
