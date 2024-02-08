@@ -64,7 +64,7 @@ setup(
         ]
     },
     install_requires=[
-        'jupyter-server-proxy>=1.4.0',
+        'jupyter-server-proxy>=4.1.0',
     ],
     include_package_data=True,
     keywords=["Interactive", "Desktop", "Jupyter"],
