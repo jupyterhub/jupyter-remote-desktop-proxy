@@ -76,7 +76,7 @@ setup(
         "Source": "https://github.com/jupyterhub/jupyter-remote-desktop-proxy/",
         "Tracker": "https://github.com/jupyterhub/jupyter-remote-desktop-proxy/issues",
     },
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     url="https://jupyter.org",
     zip_safe=False,
     cmdclass={
