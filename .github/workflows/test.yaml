@@ -1,7 +1,7 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
 # ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 #
-name: Test
+name: Integration Tests
 
 on:
   pull_request:
@@ -20,17 +20,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build image
-        run: |
-          docker build -t jupyter-remote-desktop-proxy .
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-      - name: Smoke test image
+      - name: Install testing requirements
         run: |
-          docker run -d -p 8888:8888 -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy
-          sleep 10
-          curl 'http://localhost:8888/desktop/?token=secret' | grep 'Jupyter Remote Desktop Proxy'
-          # Test if the built JS file is present in the image
-          curl 'http://localhost:8888/desktop/dist/viewer.js?token=secret' > /dev/null
+          pip install -r dev-requirements.txt
+          # Install websocat, needed for integration tests
+          wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+            -O /usr/local/bin/websocat
+          chmod +x /usr/local/bin/websocat
 
-      # TODO: Check VNC desktop works, e.g. by comparing Playwright screenshots
+      - name: Run Integration tests
+        run: |
+          export PYTHONUNBUFFERED=1
+          py.test integration-tests/ -s --full-trace
+
+      # TODO: Check if the noVNC rendering works, perhaps by using playwright
       # https://playwright.dev/docs/test-snapshots
