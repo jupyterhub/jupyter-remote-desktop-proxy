@@ -1,7 +1,7 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
 # ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 #
-name: Test
+name: Integration Tests
 
 on:
   pull_request:
@@ -35,6 +35,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
@@ -42,7 +43,7 @@ jobs:
       - name: Install testing requirements
         run: |
           pip install -r dev-requirements.txt
-
+          # Install websocat, needed for integration tests
           wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
             -O /usr/local/bin/websocat
           chmod +x /usr/local/bin/websocat
