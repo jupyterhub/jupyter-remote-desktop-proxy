@@ -8,6 +8,7 @@ import subprocess
 import tempfile
 import time
 from pathlib import Path
+from urllib.request import urlopen
 
 import pytest
 from vncdotool import api
@@ -133,3 +134,16 @@ def test_vnc_screenshot(container, image_diff, unused_tcp_port):
 
         websocat_proc.kill()
         websocat_proc.wait()
+
+
+def test_desktop_page(container):
+    origin, token = container
+    # Check if the rendered HTML file is returned
+    desktop_url = f'http://{origin}/desktop/?token={token}'
+    with urlopen(desktop_url) as f:
+        assert '<title>Jupyter Remote Desktop Proxy</title>' in f.read().decode()
+
+    # Check if built JS file is served
+    js_url = f'http://{origin}/desktop/static/dist/viewer.js?token={token}'
+    resp = urlopen(js_url)
+    assert resp.status == 200
