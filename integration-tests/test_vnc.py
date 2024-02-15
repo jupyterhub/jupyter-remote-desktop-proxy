@@ -5,6 +5,7 @@ Test the VNC server is serving images
 import json
 import secrets
 import subprocess
+import tempfile
 import time
 from pathlib import Path
 
@@ -100,13 +101,16 @@ def test_vnc_screenshot(container, image_diff, unused_tcp_port):
         # :: is used to indicate port, as that is what VNC expects.
         # A single : is used to indicate display number. In our case, we
         # do not use multiple displays so no need to specify that.
-        with api.connect(f'127.0.0.1::{unused_tcp_port}') as client:
+        with api.connect(
+            f'127.0.0.1::{unused_tcp_port}'
+        ) as client, tempfile.TemporaryDirectory() as d:
+            screenshot_target = Path(d) / "screenshot.jpeg"
             # Wait a couple of seconds for the desktop to fully render
             time.sleep(5)
-            client.captureScreen("test.jpeg")
+            client.captureScreen(str(screenshot_target))
 
-        # This asserts if the images are different, so test will fail
-        image_diff(str(REPO_ROOT / "integration-tests/expected.jpeg"), "test.jpeg")
+            # This asserts if the images are different, so test will fail
+            image_diff(REPO_ROOT / "integration-tests/expected.jpeg", screenshot_target)
     finally:
         # Explicitly shutdown vncdo, as otherwise a stray thread keeps
         # running forever
