@@ -85,15 +85,14 @@ def container(container_image) -> tuple[str, str]:
         subprocess.check_call(['docker', 'container', 'stop', container_name])
 
 
-def test_vnc_screenshot(container, image_diff):
+def test_vnc_screenshot(container, image_diff, unused_tcp_port):
     origin, token = container
     websocat_proc = subprocess.Popen(
         [
             'websocat',
             '--binary',
             '--exit-on-eof',
-            # FIXME: Dynamically allocate this port too
-            'tcp-l:127.0.0.1:5999',
+            f'tcp-l:127.0.0.1:{unused_tcp_port}',
             f'ws://{origin}/desktop-websockify/?token={token}',
         ]
     )
@@ -101,7 +100,7 @@ def test_vnc_screenshot(container, image_diff):
         # :: is used to indicate port, as that is what VNC expects.
         # A single : is used to indicate display number. In our case, we
         # do not use multiple displays so no need to specify that.
-        with api.connect('127.0.0.1::5999') as client:
+        with api.connect(f'127.0.0.1::{unused_tcp_port}') as client:
             # Wait a couple of seconds for the desktop to fully render
             time.sleep(5)
             client.captureScreen("test.jpeg")

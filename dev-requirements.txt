@@ -1,3 +1,4 @@
 pytest
+pytest-asyncio # Used for unused_tcp_port fixture
 pytest-image-diff
 vncdotool
