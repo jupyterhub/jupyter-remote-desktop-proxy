@@ -43,9 +43,9 @@ def container(container_image) -> tuple[str, str]:
     cmd = [
         "docker",
         "run",
-        "-P",
+        "--publish-all",
         "--rm",
-        "-d",
+        "--detach",
         "--security-opt",
         "seccomp=unconfined",
         "--security-opt",
@@ -72,7 +72,7 @@ def container(container_image) -> tuple[str, str]:
     try:
         yield (origin, token)
     finally:
-        subprocess.check_call(['docker', 'stop', container_name])
+        subprocess.check_call(['docker', 'container', 'stop', container_name])
 
 
 def test_vnc_screenshot(container, image_diff):
