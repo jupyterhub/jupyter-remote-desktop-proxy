@@ -97,6 +97,7 @@ def test_vnc_screenshot(container, image_diff, unused_tcp_port):
             f'ws://{origin}/desktop-websockify/?token={token}',
         ]
     )
+    print(f"websocat proxying 127.0.0.1:{unused_tcp_port} to VNC server")
     try:
         # :: is used to indicate port, as that is what VNC expects.
         # A single : is used to indicate display number. In our case, we
@@ -104,9 +105,10 @@ def test_vnc_screenshot(container, image_diff, unused_tcp_port):
         with api.connect(
             f'127.0.0.1::{unused_tcp_port}'
         ) as client, tempfile.TemporaryDirectory() as d:
-            screenshot_target = Path(d) / "screenshot.jpeg"
+            print("Connected to VNC server. Attempting to capture screenshot...")
             # Wait a couple of seconds for the desktop to fully render
             time.sleep(5)
+            screenshot_target = Path(d) / "screenshot.jpeg"
             client.captureScreen(str(screenshot_target))
 
             # This asserts if the images are different, so test will fail
