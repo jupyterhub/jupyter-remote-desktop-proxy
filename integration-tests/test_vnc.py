@@ -41,12 +41,15 @@ def container(container_image) -> tuple[str, str]:
     remote container.
     """
     token = secrets.token_hex(16)
+    container_name = f"remote-desktop-proxy-integration-test-{secrets.token_hex(4)}"
     cmd = [
         "docker",
         "run",
         "--publish-all",
         "--rm",
-        "--detach",
+        "-it",
+        "--name",
+        container_name,
         "--security-opt",
         "seccomp=unconfined",
         "--security-opt",
@@ -56,16 +59,22 @@ def container(container_image) -> tuple[str, str]:
         "server",
         f"--IdentityProvider.token={token}",
     ]
-    container_name = subprocess.check_output(cmd).decode().strip()
+    proc = subprocess.Popen(cmd)
 
     print("Waiting for container to come online...")
     # Try 5 times, with a 2s wait in between
     for current_try in range(5):
-        container_info = json.loads(
-            subprocess.check_output(
-                ['docker', 'container', 'inspect', container_name]
-            ).decode()
-        )
+        time.sleep(5)
+        try:
+            container_info = json.loads(
+                subprocess.check_output(
+                    ['docker', 'container', 'inspect', container_name]
+                ).decode()
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Container not ready yet, inspect returned {e.returncode}")
+            time.sleep(2)
+            continue
 
         container_health = container_info[0]["State"]["Health"]["Status"]
         if container_health == "healthy":
@@ -83,6 +92,8 @@ def container(container_image) -> tuple[str, str]:
     try:
         yield (origin, token)
     finally:
+        proc.kill()
+        proc.wait()
         subprocess.check_call(['docker', 'container', 'stop', container_name])
 
 
