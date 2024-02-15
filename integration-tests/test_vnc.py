@@ -57,18 +57,28 @@ def container(container_image) -> tuple[str, str]:
     ]
     container_name = subprocess.check_output(cmd).decode().strip()
 
-    # FIXME: Instead, wait for container to be ready here
-    time.sleep(5)
+    print("Waiting for container to come online...")
+    # Try 5 times, with a 2s wait in between
+    for current_try in range(5):
+        container_info = json.loads(
+            subprocess.check_output(
+                ['docker', 'container', 'inspect', container_name]
+            ).decode()
+        )
 
-    container_info = json.loads(
-        subprocess.check_output(
-            ['docker', 'container', 'inspect', container_name]
-        ).decode()
-    )
+        container_health = container_info[0]["State"]["Health"]["Status"]
+        if container_health == "healthy":
+            break
+
+        print(f"Current container health status: {container_health}")
+        time.sleep(2)
+    else:
+        raise TimeoutError("Could not start docker container in time")
 
     exposed_port = container_info[0]["NetworkSettings"]["Ports"]["8888/tcp"][0]
     origin = f"{exposed_port['HostIp']}:{exposed_port['HostPort']}"
 
+    print(f"Container started at {origin}")
     try:
         yield (origin, token)
     finally:
