@@ -50,4 +50,5 @@ jobs:
 
       - name: Run Integration tests
         run: |
+          export PYTHONUNBUFFERED=1
           py.test integration-tests/ -s
