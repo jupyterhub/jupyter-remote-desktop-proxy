@@ -117,7 +117,7 @@ def test_vnc_screenshot(container, image_diff, unused_tcp_port):
         ) as client, tempfile.TemporaryDirectory() as d:
             print("Connected to VNC server. Attempting to capture screenshot...")
             # Wait a couple of seconds for the desktop to fully render
-            time.sleep(5)
+            time.sleep(15)
             screenshot_target = Path(d) / "screenshot.jpeg"
             client.captureScreen(str(screenshot_target))
 
