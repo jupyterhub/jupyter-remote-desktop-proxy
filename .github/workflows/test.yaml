@@ -43,7 +43,7 @@ jobs:
         run: |
           pip install -r dev-requirements.txt
 
-          wget https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+          wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
             -O /usr/local/bin/websocat
           chmod +x /usr/local/bin/websocat
 
