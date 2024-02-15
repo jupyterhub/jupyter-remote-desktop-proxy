@@ -2,6 +2,7 @@
 Test the VNC server is serving images
 """
 
+import json
 import secrets
 import subprocess
 import time
@@ -42,8 +43,7 @@ def container(container_image) -> tuple[str, str]:
     cmd = [
         "docker",
         "run",
-        "-p",
-        "8888:8888",
+        "-P",
         "--rm",
         "-d",
         "--security-opt",
@@ -55,19 +55,28 @@ def container(container_image) -> tuple[str, str]:
         "server",
         f"--IdentityProvider.token={token}",
     ]
-    container_name = subprocess.check_output(cmd).decode()
+    container_name = subprocess.check_output(cmd).decode().strip()
+
     # FIXME: Instead, wait for container to be ready here
     time.sleep(5)
 
+    container_info = json.loads(
+        subprocess.check_output(
+            ['docker', 'container', 'inspect', container_name]
+        ).decode()
+    )
+
+    exposed_port = container_info[0]["NetworkSettings"]["Ports"]["8888/tcp"][0]
+    origin = f"{exposed_port['HostIp']}:{exposed_port['HostPort']}"
+
     try:
-        # FIXME: Dynamically allocate this port
-        yield (8888, token)
+        yield (origin, token)
     finally:
         subprocess.check_call(['docker', 'stop', container_name])
 
 
 def test_vnc_screenshot(container, image_diff):
-    port, token = container
+    origin, token = container
     websocat_proc = subprocess.Popen(
         [
             'websocat',
@@ -75,32 +84,20 @@ def test_vnc_screenshot(container, image_diff):
             '--exit-on-eof',
             # FIXME: Dynamically allocate this port too
             'tcp-l:127.0.0.1:5999',
-            f'ws://127.0.0.1:{port}/desktop-websockify/?token={token}',
+            f'ws://{origin}/desktop-websockify/?token={token}',
         ]
     )
     try:
+        # :: is used to indicate port, as that is what VNC expects.
+        # A single : is used to indicate display number. In our case, we
+        # do not use multiple displays so no need to specify that.
         with api.connect('127.0.0.1::5999') as client:
+            # Wait a couple of seconds for the desktop to fully render
             time.sleep(5)
             client.captureScreen("test.jpeg")
-            assert image_diff(
-                str(REPO_ROOT / "integration-tests/expected.jpeg"), "test.jpeg"
-            )
-        # subprocess.check_call([
-        #     'vncdo',
-        #     '-vv',
-        #     '-s',
-        #     '127.0.0.1::5999',
-        #     'expect',
-        #     '5'
-        # ])
-        # time.sleep(10)
-        # subprocess.check_call([
-        #     'vncdo',
-        #     '-s',
-        #     '127.0.0.1::5999',
-        #     'capture',
-        #     'capture.jpeg'
-        # ])
+
+        # This asserts if the images are different, so test will fail
+        image_diff(str(REPO_ROOT / "integration-tests/expected.jpeg"), "test.jpeg")
     finally:
         # Explicitly shutdown vncdo, as otherwise a stray thread keeps
         # running forever
