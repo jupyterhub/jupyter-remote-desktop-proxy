@@ -77,7 +77,7 @@ jobs:
       - name: Set up Docker Buildx (for multi-arch builds)
         uses: docker/setup-buildx-action@v3
 
-      - name: Make decisions to push etc.
+      - name: Make decisions on pushing and suffix (based on vnc server chosen)
         id: decisions
         run: |
           if [ "${{ startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main') }}" = "true" ]; then
