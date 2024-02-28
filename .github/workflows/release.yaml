@@ -90,7 +90,7 @@ jobs:
           # for an explicit choice, but also ship with a default choice of
           # TigerVNC.
           if [ "${{ matrix.vncserver == 'tigervnc' }}" == "true" ]; then
-              echo "suffix=<empty-string>,-${{ matrix.vncserver }}" >> $GITHUB_OUTPUT
+              echo 'suffix="",-${{ matrix.vncserver }}' >> $GITHUB_OUTPUT
           else
               echo "suffix=-${{ matrix.vncserver }}" >> $GITHUB_OUTPUT
           fi
