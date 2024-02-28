@@ -16,17 +16,29 @@ jobs:
   container:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - vncserver: tigervnc
+          - vncserver: turbovnc
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Build image
         run: |
-          docker build -t jupyter-remote-desktop-proxy .
+          docker build --build-arg vncserver=${{ matrix.vncserver }} -t jupyter-remote-desktop-proxy .
 
       - name: Smoke test image
         run: |
-          docker run -d -p 8888:8888 -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy
+          container_id=$(docker run -d -p 8888:8888 -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy)
+
+          # -help flag is only available for TigerVNC, where TurboVNC can't
+          # print info without returning an error code.
+          docker exec $container_id vncserver -help || true
+          docker exec $container_id vncserver -list
+
           sleep 10
           curl 'http://localhost:8888/desktop/?token=secret' | grep 'Jupyter Remote Desktop Proxy'
           # Test if the built JS file is present in the image
