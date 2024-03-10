@@ -61,17 +61,17 @@ jobs:
           echo "Testing /desktop-websockify/ to return a vncserver typical response twice..."
           websocat --binary --one-message --exit-on-eof 'ws://127.0.0.1:8888/desktop-websockify/?token=secret' | grep --quiet RFB && echo "Pass" || { echo "Fail" && TEST_OK=false }
 
-          echo ::group::jupyter_server logs
+          echo "::group::jupyter_server logs"
           docker logs $container_id
           echo ::endgroup::
 
-          echo ::group::vncserver logs
+          echo "::group::vncserver logs"
           docker exec $container_id bash -c "cat ~/.vnc/*.log"
           echo ::endgroup::
 
           if [ "$TEST_OK" == "false" ]; then
             echo "One or more tests failed!"
-            echo ::group::another websocat connect attempt with --verbose
+            echo "::group::another websocat connect attempt with --verbose"
             websocat --binary --one-message --exit-on-eof --verbose 'ws://127.0.0.1:8888/desktop-websockify/?token=secret'
             echo ::endgroup::
             exit 1
