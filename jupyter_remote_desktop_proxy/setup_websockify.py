@@ -35,10 +35,10 @@ def setup_websockify():
 
     if is_tigervnc:
         vnc_args = [vncserver, '-rfbunixpath', sockets_path]
-        socket_args = ['--unix-target', sockets_path]
+        websockify_args = ['--unix-target', sockets_path]
     else:
-        vnc_args = [vncserver, '-rfbport', '{port}']
-        socket_args = []
+        vnc_args = [vncserver]
+        websockify_args = []
 
     if not os.path.exists(os.path.expanduser('~/.vnc/xstartup')):
         vnc_args.extend(['-xstartup', os.path.join(HERE, 'share/xstartup')])
@@ -58,12 +58,12 @@ def setup_websockify():
     return {
         'command': [
             'websockify',
-            '-v',
+            '--verbose',
             '--heartbeat',
             '30',
             '{port}',
         ]
-        + socket_args
+        + websockify_args
         + ['--', '/bin/sh', '-c', f'cd {os.getcwd()} && {vnc_command}'],
         'timeout': 30,
         'new_browser_window': True,
