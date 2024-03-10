@@ -48,7 +48,7 @@ jobs:
           # to this, we fallback to use the errorcode of vncsrever -list.
           docker run jupyter-remote-desktop-proxy bash -c "vncserver -help || vncserver -list > /dev/null"
 
-      - name: Run vncserver test without this project's logic
+      - name: Run vncserver, test with netcat (in container)
         run: |
           container_id=$(docker run -d --security-opt seccomp=unconfined jupyter-remote-desktop-proxy vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -localhost -fg -geometry 1680x1050 -SecurityTypes None)
           sleep 3
@@ -64,6 +64,19 @@ jobs:
           docker exec $container_id bash -c '
             nc -w 1 localhost 5901 | grep RFB
           '
+          echo "::endgroup::"
+
+          echo "::group::vncserver logs"
+          docker exec $container_id bash -c "cat ~/.vnc/*.log"
+          echo "::endgroup::"
+
+      - name: Run vncserver wrapped by websockify, test with websocat (outside container)
+        run: |
+          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined jupyter-remote-desktop-proxy websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -localhost -fg -geometry 1680x1050 -SecurityTypes None)
+          sleep 3
+
+          echo "::group::Testing vncserver with websocat outside container"
+          websocat -vv --no-async-stdio --binary --one-message --exit-on-eof 'ws://localhost:5901/'
           echo "::endgroup::"
 
           echo "::group::vncserver logs"
