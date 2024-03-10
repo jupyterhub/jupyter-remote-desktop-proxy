@@ -26,23 +26,53 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install test requirements (websocat)
+        run: |
+          wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+            -O /usr/local/bin/websocat
+          chmod +x /usr/local/bin/websocat
+
       - name: Build image
         run: |
           docker build --build-arg vncserver=${{ matrix.vncserver }} -t jupyter-remote-desktop-proxy .
 
-      - name: Smoke test image
+      - name: (inside container) websockify --help
         run: |
-          container_id=$(docker run -d -p 8888:8888 -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy)
+          docker run jupyter-remote-desktop-proxy websockify --help
 
-          # -help flag is only available for TigerVNC, where TurboVNC can't
-          # print info without returning an error code.
-          docker exec $container_id vncserver -help || true
-          docker exec $container_id vncserver -list
+      - name: (inside container)vncserver -help
+        run: |
+          # -help flag is not available for TurboVNC, but it emits the -help
+          # equivalent information anyhow if passed -help, but also errors. Due
+          # to this, we fallback to use the errorcode of vncsrever -list.
+          docker run jupyter-remote-desktop-proxy bash -c "vncserver -help || vncserver -list > /dev/null"
 
-          sleep 10
-          curl 'http://localhost:8888/desktop/?token=secret' | grep 'Jupyter Remote Desktop Proxy'
-          # Test if the built JS file is present in the image
-          curl 'http://localhost:8888/desktop/dist/viewer.js?token=secret' > /dev/null
+      - name: Run basic tests and print logs
+        run: |
+          container_id=$(docker run -d -p 8888:8888 --security-opt seccomp=unconfined -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy)
+          sleep 5
+
+          echo "Testing /desktop/ to return rendered index.html template"
+          curl --silent --fail 'http://localhost:8888/desktop/?token=secret' | grep 'Jupyter Remote Desktop Proxy' && echo "Pass" || { echo "Fail" && TEST_OK=false }
+
+          echo "Testing /desktop/ to provide pre-built viewer.js"
+          curl --silent --fail 'http://localhost:8888/desktop/static/dist/viewer.js?token=secret' > /dev/null && echo "Pass" || { echo "Fail" && TEST_OK=false }
+
+          echo "Testing /desktop-websockify/ to return a vncserver typical response twice..."
+          websocat --binary --one-message --exit-on-eof 'ws://127.0.0.1:8888/desktop-websockify/?token=secret' | grep --quiet RFB && echo "Pass" || { echo "Fail" && TEST_OK=false }
+
+          echo ::group::jupyter_server logs
+          docker logs $container_id
+          echo ::endgroup::
+
+          echo ::group::vncserver logs
+          docker exec $container_id bash -c "cat ~/.vnc/*.log"
+          echo ::endgroup::
+
+          if [ "$TEST_OK" == "false" ]; then
+            echo "One or more tests failed!"
+            exit 1
+          fi
 
       # TODO: Check VNC desktop works, e.g. by comparing Playwright screenshots
       # https://playwright.dev/docs/test-snapshots
