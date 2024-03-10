@@ -48,6 +48,28 @@ jobs:
           # to this, we fallback to use the errorcode of vncsrever -list.
           docker run jupyter-remote-desktop-proxy bash -c "vncserver -help || vncserver -list > /dev/null"
 
+      - name: Run vncserver test without this project's logic
+        run: |
+          container_id=$(docker run -d --security-opt seccomp=unconfined jupyter-remote-desktop-proxy vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -localhost -fg -geometry 1680x1050 -SecurityTypes None)
+          sleep 3
+
+          echo "::group::Installing netcat in container"
+          docker exec --user root $container_id bash -c '
+            apt update
+            apt install -y netcat
+          '
+          echo "::endgroup::"
+
+          echo "::group::Testing vncserver with netcat in container"
+          docker exec $container_id bash -c '
+            nc -w 1 localhost 5901 | grep RFB
+          '
+          echo "::endgroup::"
+
+          echo "::group::vncserver logs"
+          docker exec $container_id bash -c "cat ~/.vnc/*.log"
+          echo "::endgroup::"
+
       - name: Run basic tests and print logs
         run: |
           container_id=$(docker run -d -p 8888:8888 --security-opt seccomp=unconfined -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy)
@@ -82,19 +104,6 @@ jobs:
           echo "::group::Testing /desktop-websockify/ to return a vncserver typical response from within the container"
           docker exec $container_id bash -c '
             websocat -vv --no-async-stdio --binary --one-message --exit-on-eof 'ws://localhost:5901'
-          '
-          echo "::endgroup::"
-
-          echo "::group::Installing netcat in container"
-          docker exec --user root $container_id bash -c '
-            apt update
-            apt install -y netcat
-          '
-          echo "::endgroup::"
-
-          echo "::group::Testing vncserver directly to return typical response from within the container"
-          docker exec $container_id bash -c '
-            nc -w 1 localhost 5901
           '
           echo "::endgroup::"
 
