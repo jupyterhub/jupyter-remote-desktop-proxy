@@ -77,6 +77,10 @@ jobs:
           docker exec $container_id bash -c "cat ~/.vnc/*.log"
           echo "::endgroup::"
 
+          echo "::group::websockify logs"
+          docker exec $container_id bash -c "cat /tmp/websockify-*.log"
+          echo "::endgroup::"
+
           echo "::group::Testing container's ability to terminate via SIGTERM"
           timeout 5 docker stop $container_id > /dev/null && echo "Passed" || { echo "Failed" && TEST_OK=false; }
           echo "::endgroup::"

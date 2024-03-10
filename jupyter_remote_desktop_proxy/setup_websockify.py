@@ -59,6 +59,7 @@ def setup_websockify():
         'command': [
             'websockify',
             '--verbose',
+            '--log-file=/tmp/websockify-{port}.log',
             '--heartbeat',
             '30',
             '{port}',
