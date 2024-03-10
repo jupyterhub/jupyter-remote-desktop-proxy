@@ -70,6 +70,21 @@ jobs:
           }
           echo "::endgroup::"
 
+          echo "::group::Installing websocat in container"
+          docker exec --user root $container_id bash -c '
+            wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+              -O /usr/local/bin/websocat
+            chmod +x /usr/local/bin/websocat
+            websocat --help=long
+          '
+          echo "::endgroup::"
+
+          echo "::group::Testing /desktop-websockify/ to return a vncserver typical response from within the container"
+          docker exec $container_id bash -c '
+            websocat -vv --no-async-stdio --binary --one-message --exit-on-eof 'ws://localhost:5901'
+          '
+          echo "::endgroup::"
+
           echo "::group::jupyter_server logs"
           docker logs $container_id
           echo "::endgroup::"
