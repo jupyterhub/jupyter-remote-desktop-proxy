@@ -31,6 +31,7 @@ jobs:
           wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
             -O /usr/local/bin/websocat
           chmod +x /usr/local/bin/websocat
+          websocat --help=long
 
       - name: Build image
         run: |
@@ -40,7 +41,7 @@ jobs:
         run: |
           docker run jupyter-remote-desktop-proxy websockify --help
 
-      - name: (inside container)vncserver -help
+      - name: (inside container) vncserver -help
         run: |
           # -help flag is not available for TurboVNC, but it emits the -help
           # equivalent information anyhow if passed -help, but also errors. Due
