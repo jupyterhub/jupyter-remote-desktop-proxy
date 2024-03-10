@@ -85,6 +85,19 @@ jobs:
           '
           echo "::endgroup::"
 
+          echo "::group::Installing netcat in container"
+          docker exec --user root $container_id bash -c '
+            apt update
+            apt install -y netcat
+          '
+          echo "::endgroup::"
+
+          echo "::group::Testing vncserver directly to return typical response from within the container"
+          docker exec $container_id bash -c '
+            nc -w 1 localhost 5901
+          '
+          echo "::endgroup::"
+
           echo "::group::jupyter_server logs"
           docker logs $container_id
           echo "::endgroup::"
