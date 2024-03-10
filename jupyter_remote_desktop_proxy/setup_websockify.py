@@ -47,11 +47,12 @@ def setup_websockify():
         vnc_args
         + [
             '-verbose',
+            '-localhost',
+            '-fg',
             '-geometry',
             '1680x1050',
             '-SecurityTypes',
             'None',
-            '-fg',
         ]
     )
 
@@ -60,8 +61,7 @@ def setup_websockify():
             'websockify',
             '--verbose',
             '--log-file=/tmp/websockify-{port}.log',
-            '--heartbeat',
-            '30',
+            '--heartbeat=30',
             '{port}',
         ]
         + websockify_args
