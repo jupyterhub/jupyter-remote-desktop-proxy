@@ -47,7 +47,6 @@ def setup_websockify():
         vnc_args
         + [
             '-verbose',
-            '-localhost',
             '-fg',
             '-geometry',
             '1680x1050',

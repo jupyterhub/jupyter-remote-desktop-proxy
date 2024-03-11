@@ -1,28 +1,21 @@
-# container_id=$(docker run -it -d -p 5901:5901 -p 5901:5901/udp quay.io/consideratio/test:tiger vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None)
-container_id=$(docker run -it -d -p 5901:5901 -p 5901:5901/udp quay.io/consideratio/test:tiger python -m http.server)
-sleep 3
+# start a container with a tcp server spewing stuff on connect
+container_id=$(docker run -d -v $(pwd):/mnt/test -p 5901:5901 --entrypoint python quay.io/consideratio/test:tiger /mnt/test/dummy-tcp-server.py)
+sleep 1
 
-# echo "::group::Testing vncserver with netcat (inside container)"
-docker exec $container_id bash -c 'nc -v -w1 127.0.0.1 5901' 2>&1 | tee output-inside.txt
+# try connect to it from within the container
+docker exec $container_id bash -c 'timeout --preserve-status 1 nc -v 127.0.0.1 5901' 2>&1 | tee output-inside.txt
 cat output-inside.txt  | grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
-# echo "::endgroup::"
 
-# echo "::group::Testing vncserver with netcat (outside container)"
-nc -v -w1 127.0.0.1 5901 2>&1 | tee output-outside.txt
+# try connect to it from outside the container
+timeout --preserve-status 1 nc -v 127.0.0.1 5901 2>&1 | tee output-outside.txt
 cat output-outside.txt | grep --quiet RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
-# echo "::endgroup::"
 
-# echo "::group::Testing vncserver with netcat (inside container)"
-docker exec $container_id bash -c 'nc -v -w1 127.0.0.1 5901' 2>&1 | tee output-inside.txt
-cat output-inside.txt  | grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
-# echo "::endgroup::"
+# check logs from dummy tcp server
+docker logs $container_id
 
-# echo "::group::vncserver logs"
-# docker exec $container_id bash -c "cat ~/.vnc/*.log"
-# echo "::endgroup::"
-
-docker stop $container_id > /dev/null
-# if [ "$TEST_OK" == "false" ]; then
-#     echo "One or more tests failed!"
-#     exit 1
-# fi
+# stop and do error code etc
+docker stop -t0 $container_id > /dev/null
+if [ "$TEST_OK" == "false" ]; then
+    echo "One or more tests failed!"
+    exit 1
+fi

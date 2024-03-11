@@ -63,7 +63,7 @@ jobs:
       - name: Test vncserver
         if: always()
         run: |
-          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined ${{ matrix.image }} vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -localhost -fg -geometry 1680x1050 -SecurityTypes None)
+          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined ${{ matrix.image }} vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None)
           sleep 5
 
           # echo "::group::Installing netcat (inside container)"
@@ -74,12 +74,12 @@ jobs:
           # echo "::endgroup::"
 
           echo "::group::Testing vncserver with netcat (inside container)"
-          docker exec $container_id bash -c 'nc -w 1 localhost 5901' 2>&1 | tee output-inside.txt
+          docker exec $container_id bash -c 'timeout --preserve-status 1 nc -v localhost 5901' 2>&1 | tee output-inside.txt
           cat output-inside.txt  | grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
           echo "::endgroup::"
 
           echo "::group::Testing vncserver with netcat (outside container)"
-          nc -w 1 localhost 5901 2>&1 | tee output-outside.txt
+          timeout --preserve-status 1 nc -v localhost 5901 2>&1 | tee output-outside.txt
           cat output-outside.txt | grep --quiet RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
           echo "::endgroup::"
 
@@ -97,7 +97,7 @@ jobs:
         if: always()
         run: |
           container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined ${{ matrix.image }} websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
-          sleep 5
+          sleep 3
 
           # echo "::group::Installing websocat (inside container)"
           # docker exec --user root $container_id bash -c '
@@ -109,16 +109,12 @@ jobs:
 
           echo "::group::Testing websockify'ed vncserver with websocat (inside container)"
           docker exec $container_id bash -c 'websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | tee output-inside.txt
-          sleep 3
-          docker exec $container_id bash -c 'websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | tee -a output-inside.txt
-          cat output-inside.txt  | grep RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
+          cat output-inside.txt  | grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
           echo "::endgroup::"
 
           echo "::group::Testing websockify'ed vncserver with websocat (outside container)"
           websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | tee output-outside.txt
-          sleep 3
-          websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | tee -a output-outside.txt
-          cat output-outside.txt | grep RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
+          cat output-outside.txt | grep --quiet RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
           echo "::endgroup::"
 
           echo "::group::websockify logs"
