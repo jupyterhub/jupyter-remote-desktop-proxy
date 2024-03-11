@@ -34,11 +34,11 @@ def setup_websockify():
         is_tigervnc = "tigervnc" in vncserver_file.read().casefold()
 
     if is_tigervnc:
-        vnc_args = [vncserver, '-rfbunixpath', sockets_path]
         websockify_args = ['--unix-target', sockets_path]
+        vnc_args = [vncserver, '-rfbunixpath', sockets_path]
     else:
-        vnc_args = [vncserver]
         websockify_args = []
+        vnc_args = [vncserver, '-rfbport', '{port}']
 
     if not os.path.exists(os.path.expanduser('~/.vnc/xstartup')):
         vnc_args.extend(['-xstartup', os.path.join(HERE, 'share/xstartup')])
@@ -67,7 +67,6 @@ def setup_websockify():
         + websockify_args
         + ['--', '/bin/sh', '-c', f'cd {os.getcwd()} && {vnc_command}'],
         'timeout': 30,
-        'port': 5901,
         'new_browser_window': True,
         # We want the launcher entry to point to /desktop/, not to /desktop-websockify/
         # /desktop/ is the user facing URL, while /desktop-websockify/ now *only* serves
