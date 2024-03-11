@@ -60,10 +60,11 @@ jobs:
 
 
 
-      - name: Test vncserver with netcat
+      - name: Test vncserver
         if: always()
         run: |
           container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined ${{ matrix.image }} vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -localhost -fg -geometry 1680x1050 -SecurityTypes None)
+          sleep 5
 
           # echo "::group::Installing netcat (inside container)"
           # docker exec --user root $container_id bash -c '
@@ -92,10 +93,12 @@ jobs:
               exit 1
           fi
 
-      - name: Test websockify'ed vncserver with websocat
+      - name: Test websockify'ed vncserver
         if: always()
         run: |
-          container_id=$(docker run -d --security-opt seccomp=unconfined ${{ matrix.image }} websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
+          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined ${{ matrix.image }} websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
+          sleep 5
+
           # echo "::group::Installing websocat (inside container)"
           # docker exec --user root $container_id bash -c '
           #   wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
@@ -132,12 +135,11 @@ jobs:
               exit 1
           fi
 
-      - name: Test jupyter-server-proxy starting and proxying to websockify'ed vncserver with websocat
+      - name: Test project's proxy to websockify'ed vncserver
         if: always()
         run: |
           container_id=$(docker run -d -p 8888:8888 --security-opt seccomp=unconfined -e JUPYTER_TOKEN=secret ${{ matrix.image }})
-          sleep 3
-          TEST_OK=true
+          sleep 5
 
           echo "::group::Testing /desktop/ to return rendered index.html template"
           curl --silent --fail 'http://localhost:8888/desktop/?token=secret' | grep --quiet 'Jupyter Remote Desktop Proxy' && echo "Passed" || { echo "Failed" && TEST_OK=false; }
