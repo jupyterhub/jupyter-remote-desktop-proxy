@@ -21,7 +21,9 @@ jobs:
       matrix:
         include:
           - vncserver: tigervnc
+            image: quay.io/consideratio/test:tiger
           - vncserver: turbovnc
+            image: quay.io/consideratio/test:turbo
 
     steps:
       - uses: actions/checkout@v4
@@ -33,76 +35,51 @@ jobs:
           chmod +x /usr/local/bin/websocat
           websocat --help=long
 
-      - name: Build image
-        run: |
-          docker build --build-arg vncserver=${{ matrix.vncserver }} -t jupyter-remote-desktop-proxy .
+      # - name: Build image
+      #   run: |
+      #     docker build --build-arg vncserver=${{ matrix.vncserver }} -t jupyter-remote-desktop-proxy .
 
       - name: (inside container) websockify --help
         run: |
-          docker run jupyter-remote-desktop-proxy websockify --help
+          docker run ${{ matrix.image }} websockify --help
 
       - name: (inside container) vncserver -help
         run: |
           # -help flag is not available for TurboVNC, but it emits the -help
           # equivalent information anyhow if passed -help, but also errors. Due
           # to this, we fallback to use the errorcode of vncsrever -list.
-          docker run jupyter-remote-desktop-proxy bash -c "vncserver -help || vncserver -list > /dev/null"
+          docker run ${{ matrix.image }} bash -c "vncserver -help || vncserver -list > /dev/null"
 
-      - name: Test vncserver with netcat (inside container)
+
+
+
+
+
+
+
+
+
+
+      - name: Test vncserver with netcat
+        if: always()
         run: |
-          container_id=$(docker run -d --security-opt seccomp=unconfined jupyter-remote-desktop-proxy vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -localhost -fg -geometry 1680x1050 -SecurityTypes None)
+          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined ${{ matrix.image }} vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -localhost -fg -geometry 1680x1050 -SecurityTypes None)
 
-          echo "::group::Installing netcat (inside container)"
-          docker exec --user root $container_id bash -c '
-            apt update
-            apt install -y netcat
-          '
-          echo "::endgroup::"
+          # echo "::group::Installing netcat (inside container)"
+          # docker exec --user root $container_id bash -c '
+          #   apt update
+          #   apt install -y netcat
+          # '
+          # echo "::endgroup::"
 
           echo "::group::Testing vncserver with netcat (inside container)"
-          docker exec $container_id bash -c 'nc -w 1 localhost 5901 2>&1' | tee output.txt
+          docker exec $container_id bash -c 'nc -w 1 localhost 5901' 2>&1 | tee output-inside.txt
+          cat output-inside.txt  | grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
           echo "::endgroup::"
-
-          echo "::group::vncserver logs"
-          docker exec $container_id bash -c "cat ~/.vnc/*.log"
-          echo "::endgroup::"
-
-          docker stop $container_id > /dev/null
-          cat output.txt | grep --quiet RFB
-
-      - name: Test websockify'ed vncserver with websocat (inside container)
-        run: |
-          container_id=$(docker run -d --security-opt seccomp=unconfined jupyter-remote-desktop-proxy websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5902)
-          echo "::group::Installing websocat (inside container)"
-          docker exec --user root $container_id bash -c '
-            wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
-              -O /usr/local/bin/websocat
-            chmod +x /usr/local/bin/websocat
-          '
-          echo "::endgroup::"
-
-          echo "::group::Testing websockify'ed vncserver with websocat (inside container)"
-          docker exec $container_id bash -c 'websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | tee output.txt
-          echo "::endgroup::"
-
-          echo "::group::websockify logs"
-          docker exec $container_id bash -c "cat /tmp/websockify.log"
-          echo "::endgroup::"
-
-          echo "::group::vncserver logs"
-          docker exec $container_id bash -c "cat ~/.vnc/*.log"
-          echo "::endgroup::"
-
-          docker stop $container_id > /dev/null
-          cat output.txt | grep --quiet RFB
-
-      - name: Test vncserver with netcat (outside container)
-        run: |
-          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined jupyter-remote-desktop-proxy vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5902)
-          sleep 3
 
           echo "::group::Testing vncserver with netcat (outside container)"
-          nc -v -w1 localhost 5901 2>&1 | tee output.txt
+          nc -w 1 localhost 5901 2>&1 | tee output-outside.txt
+          cat output-outside.txt | grep --quiet RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
           echo "::endgroup::"
 
           echo "::group::vncserver logs"
@@ -110,15 +87,35 @@ jobs:
           echo "::endgroup::"
 
           docker stop $container_id > /dev/null
-          cat output.txt | grep --quiet RFB
+          if [ "$TEST_OK" == "false" ]; then
+              echo "One or more tests failed!"
+              exit 1
+          fi
 
-      - name: Test websockify'ed vncserver with websocat (outside container)
+      - name: Test websockify'ed vncserver with websocat
+        if: always()
         run: |
-          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined jupyter-remote-desktop-proxy websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -localhost -fg -geometry 1680x1050 -SecurityTypes None)
+          container_id=$(docker run -d --security-opt seccomp=unconfined ${{ matrix.image }} websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
+          # echo "::group::Installing websocat (inside container)"
+          # docker exec --user root $container_id bash -c '
+          #   wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+          #     -O /usr/local/bin/websocat
+          #   chmod +x /usr/local/bin/websocat
+          # '
+          # echo "::endgroup::"
+
+          echo "::group::Testing websockify'ed vncserver with websocat (inside container)"
+          docker exec $container_id bash -c 'websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | tee output-inside.txt
           sleep 3
+          docker exec $container_id bash -c 'websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | tee -a output-inside.txt
+          cat output-inside.txt  | grep RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
+          echo "::endgroup::"
 
           echo "::group::Testing websockify'ed vncserver with websocat (outside container)"
-          websocat -v --no-async-stdio --binary --one-message --exit-on-eof 'ws://localhost:5901/' 2>&1 | tee output.txt
+          websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | tee output-outside.txt
+          sleep 3
+          websocat -vv --no-async-stdio --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | tee -a output-outside.txt
+          cat output-outside.txt | grep RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
           echo "::endgroup::"
 
           echo "::group::websockify logs"
@@ -130,11 +127,15 @@ jobs:
           echo "::endgroup::"
 
           docker stop $container_id > /dev/null
-          cat output.txt | grep --quiet RFB
+          if [ "$TEST_OK" == "false" ]; then
+              echo "One or more tests failed!"
+              exit 1
+          fi
 
       - name: Test jupyter-server-proxy starting and proxying to websockify'ed vncserver with websocat
+        if: always()
         run: |
-          container_id=$(docker run -d -p 8888:8888 --security-opt seccomp=unconfined -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy)
+          container_id=$(docker run -d -p 8888:8888 --security-opt seccomp=unconfined -e JUPYTER_TOKEN=secret ${{ matrix.image }})
           sleep 3
           TEST_OK=true
 
@@ -170,8 +171,8 @@ jobs:
 
           if [ "$TEST_OK" == "false" ]; then
               echo "One or more tests failed!"
-          fi
               exit 1
+          fi
 
       # TODO: Check VNC desktop works, e.g. by comparing Playwright screenshots
       # https://playwright.dev/docs/test-snapshots
