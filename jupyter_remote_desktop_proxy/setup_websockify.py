@@ -61,7 +61,7 @@ def setup_websockify():
             '--verbose',
             '--log-file=/tmp/websockify.log',
             '--heartbeat=30',
-            'localhost:{port}',
+            '127.0.0.1:{port}',
         ]
         + websockify_args
         + ['--', '/bin/sh', '-c', f'cd {os.getcwd()} && {vnc_command}'],
