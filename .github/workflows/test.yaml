@@ -16,6 +16,7 @@ jobs:
   dummy:
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v4
       - name: "1"
         run: |
           # container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined quay.io/consideratio/test:turbo vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
