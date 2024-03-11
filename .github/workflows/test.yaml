@@ -63,7 +63,7 @@ jobs:
       - name: Test vncserver
         if: always()
         run: |
-          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined ${{ matrix.image }} vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None)
+          container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined ${{ matrix.image }} vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
           sleep 5
 
           # echo "::group::Installing netcat (inside container)"
@@ -156,7 +156,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::websockify logs"
-          docker exec $container_id bash -c "cat /tmp/websockify-*.log"
+          docker exec $container_id bash -c "cat /tmp/websockify.log"
           echo "::endgroup::"
 
           echo "::group::vncserver logs"
