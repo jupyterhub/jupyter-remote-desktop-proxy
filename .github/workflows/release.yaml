@@ -5,11 +5,11 @@ name: Release
 
 # Always tests wheel building, but only publish to PyPI on pushed tags.
 on:
-  pull_request:
-    paths-ignore:
-      - "docs/**"
-      - ".github/workflows/*.yaml"
-      - "!.github/workflows/release.yaml"
+  # pull_request:
+  #   paths-ignore:
+  #     - "docs/**"
+  #     - ".github/workflows/*.yaml"
+  #     - "!.github/workflows/release.yaml"
   push:
     paths-ignore:
       - "docs/**"
