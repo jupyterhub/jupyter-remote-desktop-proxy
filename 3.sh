@@ -10,9 +10,10 @@ curl --silent --fail 'http://localhost:8888/desktop/static/dist/viewer.js?token=
 # echo "::endgroup::"
 
 # echo "::group::Testing /desktop-websockify/ to return a vncserver typical response, accepting one initial test failure"
-websocat --binary --one-message --exit-on-eof 'ws://localhost:8888/desktop-websockify/?token=secret' | grep --quiet RFB && echo "Passed initial websocket test" || { \
+websocat --binary --one-message --exit-on-eof 'ws://localhost:8888/desktop-websockify/?token=secret' | \
+  grep --quiet RFB && echo "Passed initial websocket test" || { \
     echo "Failed initial websocket test" && sleep 3 && websocat --binary --one-message --exit-on-eof 'ws://localhost:8888/desktop-websockify/?token=secret' | grep --quiet RFB && echo "Passed second websocket test" || { echo "Failed second websocket test" && TEST_OK=false; } \
-}
+  }
 # echo "::endgroup::"
 
 # echo "::group::jupyter_server logs"

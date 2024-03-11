@@ -17,6 +17,12 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+      - name: Install test requirements (websocat)
+        run: |
+          wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+            -O /usr/local/bin/websocat
+          chmod +x /usr/local/bin/websocat
+          websocat --help=long
       - name: "1"
         if: always()
         run: |
