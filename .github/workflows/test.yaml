@@ -115,6 +115,11 @@ jobs:
           docker exec $container_id bash -c "cat ~/.vnc/*.log"
           echo "::endgroup::"
 
+          echo "netstat inside container"
+          docker exec $container_id netstat -na --tcp | grep -E "(:5901|:5902)"
+          echo "netstat outside container"
+          netstat -na --tcp | grep -E "(:5901|:5902)"
+
           docker stop $container_id > /dev/null
           if [ "$TEST_OK" == "false" ]; then
               echo "One or more tests failed!"
