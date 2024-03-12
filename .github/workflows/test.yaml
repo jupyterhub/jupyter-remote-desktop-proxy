@@ -23,6 +23,9 @@ jobs:
             -O /usr/local/bin/websocat
           chmod +x /usr/local/bin/websocat
           websocat --help=long
+      - name: "pull"
+        run: |
+          docker pull quay.io/consideratio/test:turbo
       - name: "1"
         if: always()
         run: |
