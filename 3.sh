@@ -1,4 +1,4 @@
-container_id=$(docker run -d -p 8888:8888 --security-opt seccomp=unconfined -e JUPYTER_TOKEN=secret quay.io/consideratio/test:turbo)
+container_id=$(docker run -d -p 8888:8888 -e JUPYTER_TOKEN=secret quay.io/consideratio/test:turbo)
 sleep 5
 
 curl --silent --fail 'http://localhost:8888/desktop/?token=secret' | grep --quiet 'Jupyter Remote Desktop Proxy' && echo "Passed get index.html test" || { echo "Failed" && TEST_OK=false; }
