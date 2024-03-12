@@ -9,10 +9,10 @@ sleep 3
 # '
 # echo "::endgroup::"
 
-docker exec $container_id bash -c 'timeout --preserve-status 1 nc -v 127.0.0.1 5901' 2>&1 | \
+docker exec $container_id bash -c 'timeout --preserve-status 1 nc -v localhost 5901' 2>&1 | \
   grep --quiet RFB && echo "Passed inside test" || { echo "Failed inside test" && TEST_OK=false; }
 
-timeout --preserve-status 1 nc -v 127.0.0.1 5901 2>&1 | \
+timeout --preserve-status 1 nc -v localhost 5901 2>&1 | \
   grep --quiet RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
 
 echo "netstat inside container"

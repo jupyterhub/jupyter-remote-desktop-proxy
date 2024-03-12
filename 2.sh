@@ -10,10 +10,10 @@ sleep 3
 # '
 # echo "::endgroup::"
 
-docker exec $container_id bash -c 'websocat --binary --one-message --exit-on-eof "ws://127.0.0.1:5901/"' 2>&1 | \
+docker exec $container_id bash -c 'websocat --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | \
   grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
 
-websocat --binary --one-message --exit-on-eof "ws://127.0.0.1:5901/" 2>&1 | \
+websocat --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | \
   grep --quiet RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
 
 echo "netstat inside container"
