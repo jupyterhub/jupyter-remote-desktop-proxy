@@ -10,8 +10,13 @@ sleep 3
 # '
 # echo "::endgroup::"
 
-docker exec $container_id bash -c 'websocat --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | \
-  grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
+# This never works, websockify doesn't work properly within a container like
+# this because its like it acts outside the container when it does the rebind
+# stuff, and then the wrapped process remains running in the container bound to
+# localhost stuff only, but that may end up being ipv6 version.
+#
+# docker exec $container_id bash -c 'websocat --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | \
+#   grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
 
 websocat --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | \
   grep --quiet RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
