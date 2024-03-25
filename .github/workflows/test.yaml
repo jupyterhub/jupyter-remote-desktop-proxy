@@ -17,7 +17,7 @@ defaults:
     # GitHub Actions run without a TTY device. This is a workaround to have one,
     # as required for our tests, based on
     # https://github.com/actions/runner/issues/241#issuecomment-842566950.
-    shell: 'script -q -e -c "bash --noprofile --norc -eo pipefail {0}"'
+    shell: script -q -e -c "bash --noprofile --norc -e {0}"
 
 jobs:
   dummy:
