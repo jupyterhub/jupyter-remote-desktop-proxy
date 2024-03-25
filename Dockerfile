@@ -12,6 +12,8 @@ RUN apt-get -y -qq update \
         xorg \
         xubuntu-icon-theme \
         fonts-dejavu \
+        netcat \
+        net-tools \
     # Disable the automatic screenlock since the account password is unknown
  && apt-get -y -qq remove xfce4-screensaver \
     # chown $HOME to workaround that the xorg installation creates a
@@ -20,6 +22,10 @@ RUN apt-get -y -qq update \
  && mkdir -p /opt/install \
  && chown -R $NB_UID:$NB_GID $HOME /opt/install \
  && rm -rf /var/lib/apt/lists/*
+
+RUN wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+        -O /usr/local/bin/websocat \
+ && chmod +x /usr/local/bin/websocat
 
 # Install a VNC server, either TigerVNC (default) or TurboVNC
 ARG vncserver=tigervnc
@@ -56,4 +62,5 @@ RUN . /opt/conda/bin/activate && \
 COPY --chown=$NB_UID:$NB_GID . /opt/install
 RUN . /opt/conda/bin/activate && \
     pip install -e /opt/install && \
+    pip install https://github.com/jupyterhub/jupyter-server-proxy/archive/main.zip && \
     jupyter server extension enable jupyter_remote_desktop_proxy
