@@ -1,5 +1,5 @@
-# container_id=$(docker run -d -p 5901:5901 --security-opt seccomp=unconfined quay.io/consideratio/test:turbo websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
-container_id=$(docker run -d -p 0.0.0.0:5901:5901 -v $(pwd):/mnt/test quay.io/consideratio/test:turbo websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 0.0.0.0:5901 -- python /mnt/test/dummy-tcp-server.py)
+container_id=$(docker run -d -p 5901:5901 quay.io/consideratio/test:turbo websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
+# container_id=$(docker run -d -p 5901:5901 -v $(pwd):/mnt/test quay.io/consideratio/test:turbo websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- python /mnt/test/dummy-tcp-server.py)
 sleep 3
 
 # echo "::group::Installing websocat (inside container)"
@@ -10,15 +10,10 @@ sleep 3
 # '
 # echo "::endgroup::"
 
-# This never works, websockify doesn't work properly within a container like
-# this because its like it acts outside the container when it does the rebind
-# stuff, and then the wrapped process remains running in the container bound to
-# localhost stuff only, but that may end up being ipv6 version.
-#
-docker exec $container_id bash -c 'websocat --binary --one-message --exit-on-eof "ws://127.0.0.1:5901/"' 2>&1 | \
+docker exec -it $container_id bash -c 'websocat --binary --one-message --exit-on-eof "ws://localhost:5901/"' 2>&1 | \
   grep --quiet RFB && echo "Passed inside test"  || { echo "Failed inside test" && TEST_OK=false; }
 
-websocat --binary --one-message --exit-on-eof "ws://127.0.0.1:5901/" 2>&1 | \
+websocat --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | \
   grep --quiet RFB && echo "Passed outside test" || { echo "Failed outside test" && TEST_OK=false; }
 
 echo "netstat inside container"
