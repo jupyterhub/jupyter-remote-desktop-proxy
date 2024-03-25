@@ -48,6 +48,7 @@ def container(container_image) -> tuple[str, str]:
         "run",
         "--publish-all",
         "--rm",
+        "--shm-size=512m",
         "--name",
         container_name,
         "--security-opt",
