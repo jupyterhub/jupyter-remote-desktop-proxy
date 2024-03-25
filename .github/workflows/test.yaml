@@ -32,12 +32,14 @@ jobs:
           bash 1.sh
       - name: "2"
         if: always()
+        shell: 'script -q -e -c "bash {0}"'
         run: |
-          script -e -q -O /dev/null -c 'bash 2.sh'
+          bash 2.sh
       - name: "3"
         if: always()
+        shell: 'script -q -e -c "bash {0}"'
         run: |
-          script -e -q -O /dev/null -c 'bash 3.sh'
+          bash 3.sh
 
 
 
@@ -101,74 +103,71 @@ jobs:
 
       - name: Test websockify'ed vncserver
         if: always()
+        shell: 'script -q -e -c "bash {0}"'
         run: |
-          script -e -q -O /dev/null -c '
-              container_id=$(docker run -d -p 5901:5901 ${{ matrix.image }} websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
-              sleep 3
+          container_id=$(docker run -d -p 5901:5901 ${{ matrix.image }} websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
+          sleep 3
 
-              echo "::group::Testing websockify-ed vncserver with websocat"
-              websocat --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | tee output.txt
-              cat output.txt | grep --quiet RFB && echo "Passed test" || { echo "Failed test" && TEST_OK=false; }
-              echo "::endgroup::"
+          echo "::group::Testing websockify'ed vncserver with websocat"
+          websocat --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | tee output.txt
+          cat output.txt | grep --quiet RFB && echo "Passed test" || { echo "Failed test" && TEST_OK=false; }
+          echo "::endgroup::"
 
-              echo "::group::websockify logs"
-              docker exec $container_id bash -c "cat /tmp/websockify.log"
-              echo "::endgroup::"
+          echo "::group::websockify logs"
+          docker exec $container_id bash -c "cat /tmp/websockify.log"
+          echo "::endgroup::"
 
-              echo "::group::vncserver logs"
-              docker exec $container_id bash -c "cat ~/.vnc/*.log"
-              echo "::endgroup::"
+          echo "::group::vncserver logs"
+          docker exec $container_id bash -c "cat ~/.vnc/*.log"
+          echo "::endgroup::"
 
-              docker stop $container_id > /dev/null
-              if [ "$TEST_OK" == "false" ]; then
-                  echo "One or more tests failed!"
-                  exit 1
-              fi
-          '
+          docker stop $container_id > /dev/null
+          if [ "$TEST_OK" == "false" ]; then
+              echo "One or more tests failed!"
+              exit 1
+          fi
 
       - name: Test project's proxy to websockify'ed vncserver
         if: always()
         run: |
-          script -e -q -O /dev/null -c '
-              container_id=$(docker run -d -p 8888:8888 --security-opt seccomp=unconfined -e JUPYTER_TOKEN=secret ${{ matrix.image }})
-              sleep 5
+          container_id=$(docker run -d -p 8888:8888 --security-opt seccomp=unconfined -e JUPYTER_TOKEN=secret ${{ matrix.image }})
+          sleep 5
 
-              echo "::group::Testing /desktop/ to return rendered index.html template"
-              curl --silent --fail "http://localhost:8888/desktop/?token=secret" | grep --quiet "Jupyter Remote Desktop Proxy" && echo "Passed" || { echo "Failed" && TEST_OK=false; }
-              echo "::endgroup::"
+          echo "::group::Testing /desktop/ to return rendered index.html template"
+          curl --silent --fail "http://localhost:8888/desktop/?token=secret" | grep --quiet "Jupyter Remote Desktop Proxy" && echo "Passed" || { echo "Failed" && TEST_OK=false; }
+          echo "::endgroup::"
 
-              echo "::group::Testing /desktop/ to provide pre-built viewer.js"
-              curl --silent --fail "http://localhost:8888/desktop/static/dist/viewer.js?token=secret" > /dev/null && echo "Passed" || { echo "Failed" && TEST_OK=false; }
-              echo "::endgroup::"
+          echo "::group::Testing /desktop/ to provide pre-built viewer.js"
+          curl --silent --fail "http://localhost:8888/desktop/static/dist/viewer.js?token=secret" > /dev/null && echo "Passed" || { echo "Failed" && TEST_OK=false; }
+          echo "::endgroup::"
 
-              echo "::group::Testing /desktop-websockify/ to return a vncserver typical response, accepting one initial test failure"
-              websocat --binary --one-message --exit-on-eof "ws://localhost:8888/desktop-websockify/?token=secret" | \
-                  grep --quiet RFB && echo "Passed initial websocket test" || { \
-                      echo "Failed initial websocket test" && sleep 3 && websocat --binary --one-message --exit-on-eof "ws://localhost:8888/desktop-websockify/?token=secret" | grep --quiet RFB && echo "Passed second websocket test" || { echo "Failed second websocket test" && TEST_OK=false; } \
-                  }
-              echo "::endgroup::"
+          echo "::group::Testing /desktop-websockify/ to return a vncserver typical response, accepting one initial test failure"
+          websocat --binary --one-message --exit-on-eof "ws://localhost:8888/desktop-websockify/?token=secret" | \
+              grep --quiet RFB && echo "Passed initial websocket test" || { \
+                  echo "Failed initial websocket test" && sleep 3 && websocat --binary --one-message --exit-on-eof "ws://localhost:8888/desktop-websockify/?token=secret" | grep --quiet RFB && echo "Passed second websocket test" || { echo "Failed second websocket test" && TEST_OK=false; } \
+              }
+          echo "::endgroup::"
 
-              echo "::group::jupyter_server logs"
-              docker logs $container_id
-              echo "::endgroup::"
+          echo "::group::jupyter_server logs"
+          docker logs $container_id
+          echo "::endgroup::"
 
-              echo "::group::websockify logs"
-              docker exec $container_id bash -c "cat /tmp/websockify.log"
-              echo "::endgroup::"
+          echo "::group::websockify logs"
+          docker exec $container_id bash -c "cat /tmp/websockify.log"
+          echo "::endgroup::"
 
-              echo "::group::vncserver logs"
-              docker exec $container_id bash -c "cat ~/.vnc/*.log"
-              echo "::endgroup::"
+          echo "::group::vncserver logs"
+          docker exec $container_id bash -c "cat ~/.vnc/*.log"
+          echo "::endgroup::"
 
-              echo "::group::Testing container-s ability to terminate via SIGTERM"
-              timeout 5 docker stop $container_id > /dev/null && echo "Passed" || { echo "Failed" && TEST_OK=false; }
-              echo "::endgroup::"
+          echo "::group::Testing container's ability to terminate via SIGTERM"
+          timeout 5 docker stop $container_id > /dev/null && echo "Passed" || { echo "Failed" && TEST_OK=false; }
+          echo "::endgroup::"
 
-              if [ "$TEST_OK" == "false" ]; then
-                  echo "One or more tests failed!"
-                  exit 1
-              fi
-          '
+          if [ "$TEST_OK" == "false" ]; then
+              echo "One or more tests failed!"
+              exit 1
+          fi
 
       # TODO: Check VNC desktop works, e.g. by comparing Playwright screenshots
       # https://playwright.dev/docs/test-snapshots
