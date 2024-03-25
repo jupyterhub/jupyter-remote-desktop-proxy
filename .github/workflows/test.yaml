@@ -97,7 +97,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::vncserver logs"
-          docker exec $container_id bash -c "cat ~/.vnc/*.log"
+          docker exec $container_id bash -c 'cat ~/.vnc/*.log'
           echo "::endgroup::"
 
           docker stop $container_id > /dev/null
@@ -122,7 +122,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::vncserver logs"
-          docker exec $container_id bash -c "cat ~/.vnc/*.log"
+          docker exec $container_id bash -c 'cat ~/.vnc/*.log'
           echo "::endgroup::"
 
           docker stop $container_id > /dev/null
@@ -161,7 +161,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::vncserver logs"
-          docker exec $container_id bash -c "cat ~/.vnc/*.log"
+          docker exec $container_id bash -c 'cat ~/.vnc/*.log'
           echo "::endgroup::"
 
           echo "::group::Testing container's ability to terminate via SIGTERM"
