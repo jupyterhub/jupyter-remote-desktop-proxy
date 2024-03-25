@@ -12,6 +12,13 @@ on:
     tags: ["**"]
   workflow_dispatch:
 
+defaults:
+  run:
+    # GitHub Actions run without a TTY device. This is a workaround to have one,
+    # as required for our tests, based on
+    # https://github.com/actions/runner/issues/241#issuecomment-842566950.
+    shell: 'script -q -e -c "bash --noprofile --norc -eo pipefail {0}"'
+
 jobs:
   dummy:
     runs-on: ubuntu-22.04
@@ -32,12 +39,10 @@ jobs:
           bash 1.sh
       - name: "2"
         if: always()
-        shell: 'script -q -e -c "bash {0}"'
         run: |
           bash 2.sh
       - name: "3"
         if: always()
-        shell: 'script -q -e -c "bash {0}"'
         run: |
           bash 3.sh
 
@@ -103,7 +108,6 @@ jobs:
 
       - name: Test websockify'ed vncserver
         if: always()
-        shell: 'script -q -e -c "bash {0}"'
         run: |
           container_id=$(docker run -d -p 5901:5901 ${{ matrix.image }} websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
           sleep 3
