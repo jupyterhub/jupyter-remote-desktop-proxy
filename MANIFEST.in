@@ -1,2 +1,3 @@
 graft jupyter_remote_desktop_proxy/share
 graft jupyter_remote_desktop_proxy/static
+graft jupyter_remote_desktop_proxy/templates
