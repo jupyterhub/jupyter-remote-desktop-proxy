@@ -38,7 +38,7 @@ def setup_websockify():
         vnc_args = [vncserver, '-rfbunixpath', sockets_path]
     else:
         websockify_args = []
-        vnc_args = [vncserver, '-rfbport', '{port}']
+        vnc_args = [vncserver, '-localhost', '-rfbport', '{port}']
 
     if not os.path.exists(os.path.expanduser('~/.vnc/xstartup')):
         vnc_args.extend(['-xstartup', os.path.join(HERE, 'share/xstartup')])
