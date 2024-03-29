@@ -47,20 +47,19 @@ def setup_websockify():
         vnc_args
         + [
             '-verbose',
+            '-fg',
             '-geometry',
             '1680x1050',
             '-SecurityTypes',
             'None',
-            '-fg',
         ]
     )
 
     return {
         'command': [
             'websockify',
-            '-v',
-            '--heartbeat',
-            '30',
+            '--verbose',
+            '--heartbeat=30',
             '{port}',
         ]
         + websockify_args
