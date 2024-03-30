@@ -128,7 +128,8 @@ jobs:
           # This could be related to jupyter-server-proxy's issue
           # https://github.com/jupyterhub/jupyter-server-proxy/issues/459
           # because the client/proxy websocket handshake completes before the
-          # proxy/server handshake.
+          # proxy/server handshake. This issue is tracked for this project by
+          # https://github.com/jupyterhub/jupyter-remote-desktop-proxy/issues/105.
           #
           websocat --binary --one-message --exit-on-eof 'ws://localhost:8888/desktop-websockify/?token=secret' 2>&1 \
             | tee -a /dev/stderr \
