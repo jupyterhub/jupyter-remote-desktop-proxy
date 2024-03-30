@@ -12,6 +12,8 @@ def setup_websockify():
         raise RuntimeError(
             "vncserver executable not found, please install a VNC server"
         )
+    if not which('websockify'):
+        raise RuntimeError("websockify executable not found, please install websockify")
 
     # TurboVNC and TigerVNC share the same origin and both use a Perl script
     # as the executable vncserver. We can determine if vncserver is TigerVNC
