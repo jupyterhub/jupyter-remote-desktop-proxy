@@ -12,8 +12,18 @@ on:
     tags: ["**"]
   workflow_dispatch:
 
+defaults:
+  run:
+    # Both TigerVNC and TurboVNC reports "the input device is not a TTY" if
+    # started without a TTY. GitHub Actions environments doesn't come with one,
+    # so this provides one.
+    #
+    # ref: https://github.com/actions/runner/issues/241#issuecomment-842566950
+    #
+    shell: script --quiet --return --log-out /dev/null --command "bash -e {0}"
+
 jobs:
-  container:
+  image-test:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     strategy:
@@ -28,21 +38,127 @@ jobs:
 
       - name: Build image
         run: |
-          docker build --build-arg vncserver=${{ matrix.vncserver }} -t jupyter-remote-desktop-proxy .
+          docker build --progress=plain --build-arg vncserver=${{ matrix.vncserver }} -t test .
 
-      - name: Smoke test image
+      - name: (inside container) websockify --help
         run: |
-          container_id=$(docker run -d -p 8888:8888 -e JUPYTER_TOKEN=secret jupyter-remote-desktop-proxy)
+          docker run test websockify --help
 
-          # -help flag is only available for TigerVNC, where TurboVNC can't
-          # print info without returning an error code.
-          docker exec $container_id vncserver -help || true
-          docker exec $container_id vncserver -list
+      - name: (inside container) vncserver -help
+        run: |
+          # -help flag is not available for TurboVNC, but it emits the -help
+          # equivalent information anyhow if passed -help, but also errors. Due
+          # to this, we fallback to use the errorcode of vncsrever -list.
+          docker run test bash -c "vncserver -help || vncserver -list > /dev/null"
 
-          sleep 10
-          curl 'http://localhost:8888/desktop/?token=secret' | grep 'Jupyter Remote Desktop Proxy'
-          # Test if the built JS file is present in the image
-          curl 'http://localhost:8888/desktop/dist/viewer.js?token=secret' > /dev/null
+      - name: Install websocat, a test dependency"
+        run: |
+          wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+              -O /usr/local/bin/websocat
+          chmod +x /usr/local/bin/websocat
+
+      - name: Test vncserver
+        if: always()
+        run: |
+          container_id=$(docker run -d -it -p 5901:5901 test vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
+          sleep 1
+
+          echo "::group::Install netcat, a test dependency"
+          docker exec --user root $container_id bash -c '
+              apt update
+              apt install -y netcat
+          '
+          echo "::endgroup::"
+
+          docker exec -it $container_id timeout --preserve-status 1 nc -v localhost 5901 2>&1 | tee -a /dev/stderr | \
+              grep --quiet RFB && echo "Passed test" || { echo "Failed test" && TEST_OK=false; }
+
+          echo "::group::vncserver logs"
+          docker exec $container_id bash -c 'cat ~/.vnc/*.log'
+          echo "::endgroup::"
+
+          docker stop $container_id > /dev/null
+          if [ "$TEST_OK" == "false" ]; then
+              echo "One or more tests failed!"
+              exit 1
+          fi
+
+      - name: Test websockify'ed vncserver
+        if: always()
+        run: |
+          container_id=$(docker run -d -it -p 5901:5901 test websockify --verbose --log-file=/tmp/websockify.log --heartbeat=30 5901 -- vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
+          sleep 1
+
+          echo "::group::Install websocat, a test dependency"
+          docker exec --user root $container_id bash -c '
+              wget -q https://github.com/vi/websocat/releases/download/v1.12.0/websocat.x86_64-unknown-linux-musl \
+                  -O /usr/local/bin/websocat
+              chmod +x /usr/local/bin/websocat
+          '
+          echo "::endgroup::"
+
+          docker exec -it $container_id websocat --binary --one-message --exit-on-eof "ws://localhost:5901/" 2>&1 | tee -a /dev/stderr | \
+              grep --quiet RFB && echo "Passed test" || { echo "Failed test" && TEST_OK=false; }
+
+          echo "::group::websockify logs"
+          docker exec $container_id bash -c "cat /tmp/websockify.log"
+          echo "::endgroup::"
+
+          echo "::group::vncserver logs"
+          docker exec $container_id bash -c 'cat ~/.vnc/*.log'
+          echo "::endgroup::"
+
+          docker stop $container_id > /dev/null
+          if [ "$TEST_OK" == "false" ]; then
+              echo "One or more tests failed!"
+              exit 1
+          fi
+
+      - name: Test project's proxy to websockify'ed vncserver
+        if: always()
+        run: |
+          container_id=$(docker run -d -it -p 8888:8888 -e JUPYTER_TOKEN=secret test)
+          sleep 3
+
+          curl --silent --fail 'http://localhost:8888/desktop/?token=secret' | grep --quiet 'Jupyter Remote Desktop Proxy' && echo "Passed get index.html test" || { echo "Failed get index.html test" && TEST_OK=false; }
+          curl --silent --fail 'http://localhost:8888/desktop/static/dist/viewer.js?token=secret' > /dev/null && echo "Passed get viewer.js test" || { echo "Failed get viewer.js test" && TEST_OK=false; }
+
+          # The first attempt often fails, but the second always(?) succeeds.
+          #
+          # This could be related to jupyter-server-proxy's issue
+          # https://github.com/jupyterhub/jupyter-server-proxy/issues/459
+          # because the client/proxy websocket handshake completes before the
+          # proxy/server handshake. This issue is tracked for this project by
+          # https://github.com/jupyterhub/jupyter-remote-desktop-proxy/issues/105.
+          #
+          websocat --binary --one-message --exit-on-eof 'ws://localhost:8888/desktop-websockify/?token=secret' 2>&1 \
+            | tee -a /dev/stderr \
+            | grep --quiet RFB \
+           && echo "Passed initial websocket test" \
+           || { \
+                  echo "Failed initial websocket test" \
+               && sleep 1 \
+               && websocat --binary --one-message --exit-on-eof 'ws://localhost:8888/desktop-websockify/?token=secret' 2>&1 \
+                    | tee -a /dev/stderr \
+                    | grep --quiet RFB \
+                  && echo "Passed second websocket test" \
+                  || { echo "Failed second websocket test" && TEST_OK=false; } \
+              }
+
+          echo "::group::jupyter_server logs"
+          docker logs $container_id
+          echo "::endgroup::"
+
+          echo "::group::vncserver logs"
+          docker exec $container_id bash -c 'cat ~/.vnc/*.log'
+          echo "::endgroup::"
+
+          timeout 5 docker stop $container_id > /dev/null && echo "Passed SIGTERM test" || { echo "Failed SIGTERM test" && TEST_OK=false; }
+
+          if [ "$TEST_OK" == "false" ]; then
+              echo "One or more tests failed!"
+              exit 1
+          fi
 
       # TODO: Check VNC desktop works, e.g. by comparing Playwright screenshots
       # https://playwright.dev/docs/test-snapshots
