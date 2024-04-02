@@ -66,19 +66,6 @@ This is tracked by [this GitHub issue].
 
 - Fix typo in README.md [#72](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/72) ([@nthiery](https://github.com/nthiery), [@yuvipanda](https://github.com/yuvipanda))
 
-#### Continuous integration improvements
-
-- Bump manics/action-binderbadge from 2.0.0 to 3.0.0 [#97](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/97) ([@consideRatio](https://github.com/consideRatio))
-- [pre-commit.ci] pre-commit autoupdate [#82](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/82) ([@yuvipanda](https://github.com/yuvipanda))
-- Bump actions/setup-python from 4 to 5 [#74](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/74) ([@consideRatio](https://github.com/consideRatio))
-- [pre-commit.ci] pre-commit autoupdate [#67](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/67) ([@consideRatio](https://github.com/consideRatio))
-- Bump actions/checkout from 3 to 4 [#66](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/66) ([@consideRatio](https://github.com/consideRatio))
-
-#### Other merged PRs
-
-- [pre-commit.ci] pre-commit autoupdate [#73](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/73) ([@consideRatio](https://github.com/consideRatio))
-- [pre-commit.ci] pre-commit autoupdate [#71](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/71) ([@consideRatio](https://github.com/consideRatio))
-
 #### Contributors to this release
 
 The following people contributed discussions, new ideas, code and documentation contributions, and review.
