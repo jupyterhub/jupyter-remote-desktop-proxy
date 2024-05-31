@@ -12,7 +12,7 @@ import RFB from "@novnc/novnc/core/rfb";
 import { setupTooltip } from "./tooltip.js";
 
 const maxRetryCount = 5;
-const retryInterval = 3;  // seconds
+const retryInterval = 3; // seconds
 
 // When this function is called we have successfully connected to a server
 function connectedToServer() {
@@ -57,23 +57,23 @@ function connect() {
     websockifyUrl.toString(),
     {},
   );
-  
+
   // Add listeners to important events from the RFB module
   rfb.addEventListener("connect", connectedToServer);
   rfb.addEventListener("disconnect", disconnectedFromServer);
-  
+
   // Scale our viewport so the user doesn't have to scroll
   rfb.scaleViewport = true;
-  
+
   // Use a CSS variable to set background color
   rfb.background = "var(--jupyter-medium-dark-grey)";
-  
+
   // Clipboard
   function clipboardReceive(e) {
     document.getElementById("clipboard-text").value = e.detail.text;
   }
   rfb.addEventListener("clipboard", clipboardReceive);
-  
+
   function clipboardSend() {
     const text = document.getElementById("clipboard-text").value;
     rfb.clipboardPasteFrom(text);
@@ -81,7 +81,7 @@ function connect() {
   document
     .getElementById("clipboard-text")
     .addEventListener("change", clipboardSend);
-  
+
   setupTooltip(
     document.getElementById("clipboard-button"),
     document.getElementById("clipboard-container"),
