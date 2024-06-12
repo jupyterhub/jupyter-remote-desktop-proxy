@@ -11,6 +11,9 @@ import RFB from "@novnc/novnc/core/rfb";
 
 import { setupTooltip } from "./tooltip.js";
 
+const maxRetryCount = 5;
+const retryInterval = 3; // seconds
+
 // When this function is called we have successfully connected to a server
 function connectedToServer() {
   status("Connected");
@@ -22,6 +25,15 @@ function disconnectedFromServer(e) {
     status("Disconnected");
   } else {
     status("Something went wrong, connection is closed");
+    if (retryCount < maxRetryCount) {
+      status(`Reconnecting in ${retryInterval} seconds`);
+      setTimeout(() => {
+        connect();
+        retryCount++;
+      }, retryInterval * 1000);
+    } else {
+      status("Failed to connect, giving up");
+    }
   }
 }
 
@@ -36,38 +48,45 @@ function status(text) {
 let websockifyUrl = new URL("../desktop-websockify/", window.location);
 websockifyUrl.protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
-// Creating a new RFB object will start a new connection
-const rfb = new RFB(
-  document.getElementById("screen"),
-  websockifyUrl.toString(),
-  {},
-);
+let retryCount = 0;
 
-// Add listeners to important events from the RFB module
-rfb.addEventListener("connect", connectedToServer);
-rfb.addEventListener("disconnect", disconnectedFromServer);
+function connect() {
+  // Creating a new RFB object will start a new connection
+  let rfb = new RFB(
+    document.getElementById("screen"),
+    websockifyUrl.toString(),
+    {},
+  );
 
-// Scale our viewport so the user doesn't have to scroll
-rfb.scaleViewport = true;
+  // Add listeners to important events from the RFB module
+  rfb.addEventListener("connect", connectedToServer);
+  rfb.addEventListener("disconnect", disconnectedFromServer);
 
-// Use a CSS variable to set background color
-rfb.background = "var(--jupyter-medium-dark-grey)";
+  // Scale our viewport so the user doesn't have to scroll
+  rfb.scaleViewport = true;
 
-// Clipboard
-function clipboardReceive(e) {
-  document.getElementById("clipboard-text").value = e.detail.text;
+  // Use a CSS variable to set background color
+  rfb.background = "var(--jupyter-medium-dark-grey)";
+
+  // Clipboard
+  function clipboardReceive(e) {
+    document.getElementById("clipboard-text").value = e.detail.text;
+  }
+  rfb.addEventListener("clipboard", clipboardReceive);
+
+  function clipboardSend() {
+    const text = document.getElementById("clipboard-text").value;
+    rfb.clipboardPasteFrom(text);
+  }
+  document
+    .getElementById("clipboard-text")
+    .addEventListener("change", clipboardSend);
+
+  setupTooltip(
+    document.getElementById("clipboard-button"),
+    document.getElementById("clipboard-container"),
+  );
 }
-rfb.addEventListener("clipboard", clipboardReceive);
 
-function clipboardSend() {
-  const text = document.getElementById("clipboard-text").value;
-  rfb.clipboardPasteFrom(text);
-}
-document
-  .getElementById("clipboard-text")
-  .addEventListener("change", clipboardSend);
-
-setupTooltip(
-  document.getElementById("clipboard-button"),
-  document.getElementById("clipboard-container"),
-);
+// Start the connection
+connect();
