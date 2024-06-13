@@ -1,5 +1,26 @@
 # Changelog
 
+## v2.0.1
+
+([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v2.0.0...bec995c03f719fad2a37aa950842bc977eaae12e))
+
+### Bugs fixed
+
+- Retry a few times when the initial connection fails [#112](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/112) ([@sunu](https://github.com/sunu), [@yuvipanda](https://github.com/yuvipanda))
+
+### Other merged PRs
+
+- [pre-commit.ci] pre-commit autoupdate [#111](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/111) ([@consideRatio](https://github.com/consideRatio))
+
+### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/graphs/contributors?from=2024-04-02&to=2024-06-13&type=c))
+
+@consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3AconsideRatio+updated%3A2024-04-02..2024-06-13&type=Issues)) | @sunu ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Asunu+updated%3A2024-04-02..2024-06-13&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Ayuvipanda+updated%3A2024-04-02..2024-06-13&type=Issues))
+
 ## v2.0
 
 ### v2.0.0 - 2024-04-02
