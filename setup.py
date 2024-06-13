@@ -46,7 +46,7 @@ with open("README.md") as f:
 setup(
     name="jupyter-remote-desktop-proxy",
     packages=find_packages(),
-    version='2.0.1.dev',
+    version='2.0.1',
     author="Jupyter Development Team",
     author_email="jupyter@googlegroups.com",
     classifiers=[
