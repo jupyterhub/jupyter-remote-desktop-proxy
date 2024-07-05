@@ -4,5 +4,3 @@ dependencies:
   - jupyter-server-proxy>=4.3.0
   - jupyterhub-singleuser
   - pip
-  # TODO: remove when test.yaml is updated
-  - websockify
