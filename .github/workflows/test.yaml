@@ -36,6 +36,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache playwright binaries
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright
+
       - name: Build image
         run: |
           docker build --progress=plain --build-arg vncserver=${{ matrix.vncserver }} -t test .
