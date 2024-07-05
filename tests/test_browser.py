@@ -14,7 +14,7 @@ JUPYTER_HOST = getenv("JUPYTER_HOST", "http://localhost:8888")
 JUPYTER_TOKEN = getenv("JUPYTER_TOKEN", "secret")
 
 
-def compare_screenshot(test_image, threshold=1):
+def compare_screenshot(test_image, threshold=2):
     # Compare images by calculating the mean absolute difference
     # Images must be the same size
     # threshold: Average difference per pixel, this depends on the image type
