@@ -101,3 +101,11 @@ jobs:
               echo "One or more tests failed!"
               exit 1
           fi
+
+      - name: Upload screenshot
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots-${{ matrix.vncserver }}
+          path: screenshots/*
+          if-no-files-found: error

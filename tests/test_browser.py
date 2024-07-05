@@ -51,8 +51,8 @@ def test_desktop(browser):
     # Screenshot the desktop element only
     # May take a few seconds to load
     page1.wait_for_timeout(5000)
-    # Use a nontemp folder so we can check it manually if necessary
-    screenshot = "screenshots/desktop.png"
+    # Use a non temporary folder so we can check it manually if necessary
+    screenshot = Path("screenshots") / "desktop.png"
     page1.locator("canvas").screenshot(path=screenshot)
 
     # Open clipboard, enter random text, close clipboard
