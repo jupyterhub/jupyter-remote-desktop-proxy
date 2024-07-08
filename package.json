@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@floating-ui/dom": "^1.6.1",
-    "@novnc/novnc": "^1.4.0",
+    "@novnc/novnc": "~1.4.0",
     "reset-css": "^5.0.2"
   },
   "scripts": {
