@@ -3,7 +3,7 @@ from os import getenv
 import pytest
 from playwright.sync_api import sync_playwright
 
-HEADLESS = getenv("HEADLESS", "1").lower() == "1"
+HEADLESS = getenv("HEADLESS", "1") == "1"
 
 
 @pytest.fixture()
