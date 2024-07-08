@@ -5,6 +5,7 @@ USER root
 RUN apt-get -y -qq update \
  && apt-get -y -qq install \
         dbus-x11 \
+        # xclip is added as jupyter-remote-desktop-proxy's tests requires it
         xclip \
         xfce4 \
         xfce4-panel \
