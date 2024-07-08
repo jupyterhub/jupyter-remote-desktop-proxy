@@ -1,12 +1,6 @@
-# Unfortunately the version of websockify on PyPI doesn't include the [compiled
-# wrapper library](https://github.com/novnc/websockify#wrap-a-program) which is
-# used by this extension, so either you'd have to manually compile it after pip
-# installing websockify, or use the conda package.
-#
 channels:
   - conda-forge
 dependencies:
-  - jupyter-server-proxy>=1.4
+  - jupyter-server-proxy>=4.3.0
   - jupyterhub-singleuser
   - pip
-  - websockify

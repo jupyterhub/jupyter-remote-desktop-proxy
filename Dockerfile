@@ -5,6 +5,8 @@ USER root
 RUN apt-get -y -qq update \
  && apt-get -y -qq install \
         dbus-x11 \
+        # xclip is added as jupyter-remote-desktop-proxy's tests requires it
+        xclip \
         xfce4 \
         xfce4-panel \
         xfce4-session \
@@ -55,5 +57,4 @@ RUN . /opt/conda/bin/activate && \
 
 COPY --chown=$NB_UID:$NB_GID . /opt/install
 RUN . /opt/conda/bin/activate && \
-    pip install -e /opt/install && \
-    jupyter server extension enable jupyter_remote_desktop_proxy
+    pip install /opt/install
