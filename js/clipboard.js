@@ -53,7 +53,6 @@ export function setupClipboard(trigger, clipboard, canvas) {
     trigger.classList.toggle("active");
     updatePosition();
     e.preventDefault();
-    e.stopPropagation();
   });
 
   // If the clipboard is clicked this should not be passed to the desktop
