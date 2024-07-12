@@ -2,7 +2,7 @@
   display: none !important;
 }
 
-.tooltip-container {
+.clipboard-container {
   overflow: visible; /* Needed for the arrow to show up */
   width: max-content;
   position: absolute;
