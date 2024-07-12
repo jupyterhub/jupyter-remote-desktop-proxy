@@ -9,7 +9,7 @@ import "./index.css";
 // RFB holds the API to connect and communicate with a VNC server
 import RFB from "@novnc/novnc/core/rfb";
 
-import { setupTooltip } from "./tooltip.js";
+import { setupClipboard } from "./clipboard.js";
 
 const maxRetryCount = 5;
 const retryInterval = 3; // seconds
@@ -82,7 +82,7 @@ function connect() {
     .getElementById("clipboard-text")
     .addEventListener("change", clipboardSend);
 
-  setupTooltip(
+  setupClipboard(
     document.getElementById("clipboard-button"),
     document.getElementById("clipboard-container"),
   );
