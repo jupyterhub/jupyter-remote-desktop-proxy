@@ -11,7 +11,7 @@ import "./clipboard.css";
  * @param {Element} trigger
  * @param {Element} clipboard
  */
-export function setupClipboard(trigger, clipboard, canvas) {
+export function setupClipboard(trigger, clipboard, parent) {
   const arrowElement = clipboard.querySelector(".arrow");
   function updatePosition() {
     computePosition(trigger, clipboard, {
@@ -53,6 +53,7 @@ export function setupClipboard(trigger, clipboard, canvas) {
     trigger.classList.toggle("active");
     updatePosition();
     e.preventDefault();
+    e.stopPropagation();
   });
 
   // If the clipboard is clicked this should not be passed to the desktop
@@ -60,7 +61,7 @@ export function setupClipboard(trigger, clipboard, canvas) {
     e.stopPropagation();
   });
   // Close the popup if we click outside it
-  canvas.addEventListener("click", () => {
+  parent.addEventListener("click", () => {
     if (trigger.classList.contains("active")) {
       clipboard.classList.toggle("hidden");
       trigger.classList.toggle("active");
