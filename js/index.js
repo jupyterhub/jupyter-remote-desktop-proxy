@@ -62,8 +62,8 @@ function connect() {
   rfb.addEventListener("connect", connectedToServer);
   rfb.addEventListener("disconnect", disconnectedFromServer);
 
-  // Scale our viewport so the user doesn't have to scroll
-  rfb.scaleViewport = true;
+  // Resize our viewport so the user doesn't have to scroll
+  rfb.resizeSession = true;
 
   // Use a CSS variable to set background color
   rfb.background = "var(--jupyter-medium-dark-grey)";
