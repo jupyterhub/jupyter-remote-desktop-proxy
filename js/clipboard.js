@@ -10,8 +10,9 @@ import "./clipboard.css";
  * Setup trigger element to toggle showing / hiding clipboard element
  * @param {Element} trigger
  * @param {Element} clipboard
+ * @param {Array[Element]} closers array of elements that should close the clipboard if clicked
  */
-export function setupClipboard(trigger, clipboard) {
+export function setupClipboard(trigger, clipboard, closers) {
   const arrowElement = clipboard.querySelector(".arrow");
   function updatePosition() {
     computePosition(trigger, clipboard, {
@@ -53,5 +54,20 @@ export function setupClipboard(trigger, clipboard) {
     trigger.classList.toggle("active");
     updatePosition();
     e.preventDefault();
+    e.stopPropagation();
+  });
+
+  // If the clipboard is clicked this should not be passed to the desktop
+  clipboard.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+  // Close the popup if we click outside it
+  closers.forEach((el) => {
+    el.addEventListener("click", () => {
+      if (trigger.classList.contains("active")) {
+        clipboard.classList.toggle("hidden");
+        trigger.classList.toggle("active");
+      }
+    });
   });
 }

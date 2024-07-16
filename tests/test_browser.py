@@ -58,10 +58,12 @@ def test_desktop(browser):
     # Open clipboard, enter random text, close clipboard
     clipboard_text = str(uuid4())
     page1.get_by_role("link", name="Remote Clipboard").click()
-    page1.wait_for_selector("#clipboard-text")
+    expect(page1.locator("#clipboard-text")).to_be_visible()
     page1.locator("#clipboard-text").click()
     page1.locator("#clipboard-text").fill(clipboard_text)
-    page1.get_by_role("link", name="Remote Clipboard").click()
+    # Click outside clipboard, it should be closed
+    page1.locator("canvas").click(position={"x": 969, "y": 273})
+    expect(page1.locator("#clipboard-text")).not_to_be_visible()
 
     # Exec into container to check clipboard contents
     for engine in ["docker", "podman"]:

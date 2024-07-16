@@ -85,6 +85,7 @@ function connect() {
   setupClipboard(
     document.getElementById("clipboard-button"),
     document.getElementById("clipboard-container"),
+    [document.body, document.getElementsByTagName("canvas")[0]],
   );
 }
 
