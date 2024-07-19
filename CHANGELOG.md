@@ -1,5 +1,44 @@
 # Changelog
 
+## v3.0.0
+
+Major change is that [websockify](https://github.com/novnc/websockify)
+is no longer required!
+
+([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v2.0.1...30e67ebda5f4e442636e1532b39602850bcff418))
+
+### Enhancements made
+
+- Resize desktop to window, instead of scaling [#124](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/124) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
+- Close clipboard if clicked outside [#122](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/122) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
+- Remove websockify, add Playwright test [#119](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/119) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+### Bugs fixed
+
+- Pin @novnc/novnc 1.4.x pending 1.5.x compatibility [#120](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/120) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+### Maintenance and upkeep improvements
+
+- Rename tooltip to clipboard [#121](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/121) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+### Continuous integration improvements
+
+- Bump docker/build-push-action from 5 to 6 [#118](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/118) ([@consideRatio](https://github.com/consideRatio))
+
+### Other merged PRs
+
+- Update to use novnc 1.5.0 [#123](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/123) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
+- [pre-commit.ci] pre-commit autoupdate [#113](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/113) ([@consideRatio](https://github.com/consideRatio))
+
+### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/graphs/contributors?from=2024-06-13&to=2024-07-19&type=c))
+
+@benz0li ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Abenz0li+updated%3A2024-06-13..2024-07-19&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3AconsideRatio+updated%3A2024-06-13..2024-07-19&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Amanics+updated%3A2024-06-13..2024-07-19&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Ayuvipanda+updated%3A2024-06-13..2024-07-19&type=Issues))
+
 ## v2.0.1
 
 ([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v2.0.0...bec995c03f719fad2a37aa950842bc977eaae12e))
