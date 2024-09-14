@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/base-notebook:latest
+FROM quay.io/jupyter/base-notebook@sha256:876e3c3e40c4f0a25d3a16223a158a2d582b1ad77ac94269d43a5f6256eb4eec
 
 USER root
 
