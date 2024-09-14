@@ -15,15 +15,18 @@ JUPYTER_TOKEN = getenv("JUPYTER_TOKEN", "secret")
 VNCSERVER = getenv("VNCSERVER")
 
 
-def compare_screenshot(test_image, threshold=2):
+def compare_screenshot(test_image):
     # Compare images by calculating the mean absolute difference
     # Images must be the same size
     # threshold: Average difference per pixel, this depends on the image type
     # e.g. for 24 bit images (8 bit RGB pixels) threshold=1 means a maximum
     # difference of 1 bit per pixel per channel
     reference = Image.open(HERE / "reference" / "desktop.png")
+    threshold = 2
     if VNCSERVER == "turbovnc":
         reference = Image.open(HERE / "reference" / "desktop-turbovnc.png")
+        # The TurboVNC screenshot varies a lot more than TigerVNC
+        threshold = 6
     test = Image.open(test_image)
 
     # Absolute difference
