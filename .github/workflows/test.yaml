@@ -95,6 +95,7 @@ jobs:
           export CONTAINER_ID=$container_id
           export JUPYTER_HOST=http://localhost:8888
           export JUPYTER_TOKEN=secret
+          export VNCSERVER=${{ matrix.vncserver }}
 
           python -mpytest -vs
 
