@@ -12,6 +12,8 @@ This is based on https://github.com/ryanlovett/nbnovnc.
 
 When this extension is launched it will run a Linux desktop on the Jupyter single-user server, and proxy it to your browser using VNC via Jupyter.
 
+![Screenshot of jupyter-remote-desktop-proxy XFCE desktop](https://raw.githubusercontent.com/jupyterhub/jupyter-remote-desktop-proxy/main/tests/reference/desktop.png)
+
 ## VNC Server
 
 This extension requires a [VNC Server](https://en.wikipedia.org/wiki/Virtual_Network_Computing)

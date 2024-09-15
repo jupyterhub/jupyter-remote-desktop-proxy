@@ -12,15 +12,21 @@ HERE = Path(__file__).absolute().parent
 CONTAINER_ID = getenv("CONTAINER_ID", "test")
 JUPYTER_HOST = getenv("JUPYTER_HOST", "http://localhost:8888")
 JUPYTER_TOKEN = getenv("JUPYTER_TOKEN", "secret")
+VNCSERVER = getenv("VNCSERVER")
 
 
-def compare_screenshot(test_image, threshold=2):
+def compare_screenshot(test_image):
     # Compare images by calculating the mean absolute difference
     # Images must be the same size
     # threshold: Average difference per pixel, this depends on the image type
     # e.g. for 24 bit images (8 bit RGB pixels) threshold=1 means a maximum
     # difference of 1 bit per pixel per channel
     reference = Image.open(HERE / "reference" / "desktop.png")
+    threshold = 2
+    if VNCSERVER == "turbovnc":
+        reference = Image.open(HERE / "reference" / "desktop-turbovnc.png")
+        # The TurboVNC screenshot varies a lot more than TigerVNC
+        threshold = 6
     test = Image.open(test_image)
 
     # Absolute difference
@@ -53,7 +59,7 @@ def test_desktop(browser):
     page1.wait_for_timeout(5000)
     # Use a non temporary folder so we can check it manually if necessary
     screenshot = Path("screenshots") / "desktop.png"
-    page1.locator("canvas").screenshot(path=screenshot)
+    page1.locator("body").screenshot(path=screenshot)
 
     # Open clipboard, enter random text, close clipboard
     clipboard_text = str(uuid4())
