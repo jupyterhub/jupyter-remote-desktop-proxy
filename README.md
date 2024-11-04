@@ -90,6 +90,12 @@ to start daemons (such as dbus, pulseaudio, etc) necessary for linux desktop
 to work. This is the option kubernetes runs with by default, so most kubernetes
 based JupyterHubs will not need any modifications for this to work.
 
+## Configuration
+
+The VNC server will default to launching `~/.vnc/xstartup`.
+If this file does not exist jupyter-remote-desktop-proxy will use a bundled `xstartup` file that launches `dbus-launch xfce4-session`.
+You can specify a custom script by setting the environment variable `JUPYTER_REMOTE_DESKTOP_PROXY_XSTARTUP`.
+
 ## Limitations
 
 1. Desktop applications that require access to OpenGL are currently unsupported.
