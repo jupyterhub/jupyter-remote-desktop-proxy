@@ -33,8 +33,11 @@ def setup_websockify():
         unix_socket = False
         vnc_args = [vncserver, '-localhost', '-rfbport', '{port}']
 
-    if not os.path.exists(os.path.expanduser('~/.vnc/xstartup')):
-        vnc_args.extend(['-xstartup', os.path.join(HERE, 'share/xstartup')])
+    xstartup = os.getenv("JUPYTER_REMOTE_DESKTOP_PROXY_XSTARTUP")
+    if not xstartup and not os.path.exists(os.path.expanduser('~/.vnc/xstartup')):
+        xstartup = os.path.join(HERE, 'share/xstartup')
+    if xstartup:
+        vnc_args.extend(['-xstartup', xstartup])
 
     vnc_command = shlex.join(
         vnc_args
