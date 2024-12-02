@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/base-notebook@sha256:116c6982d52b25e5cdd459c93bb624718ecb2f13c603e72001a6bf8b85468a00
+FROM quay.io/jupyter/base-notebook:2024-12-02
 
 USER root
 
@@ -56,4 +56,5 @@ RUN . /opt/conda/bin/activate && \
 
 COPY --chown=$NB_UID:$NB_GID . /opt/install
 RUN . /opt/conda/bin/activate && \
+    mamba install -y -q "nodejs>=22" && \
     pip install /opt/install
