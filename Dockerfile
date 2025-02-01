@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/base-notebook:2024-12-31
+FROM quay.io/jupyter/base-notebook:2025-01-28
 
 USER root
 
