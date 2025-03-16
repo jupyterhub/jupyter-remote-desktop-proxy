@@ -12,26 +12,8 @@ def setup_websockify():
             "vncserver executable not found, please install a VNC server"
         )
 
-    # TurboVNC and TigerVNC share the same origin and both use a Perl script
-    # as the executable vncserver. We can determine if vncserver is TigerVNC
-    # by searching tigervnc string in the Perl script.
-    #
-    # The content of the vncserver executable can differ depending on how
-    # TigerVNC and TurboVNC has been distributed. Below are files known to be
-    # read in some situations:
-    #
-    # - https://github.com/TigerVNC/tigervnc/blob/v1.13.1/unix/vncserver/vncserver.in
-    # - https://github.com/TurboVNC/turbovnc/blob/3.1.1/unix/vncserver.in
-    #
-    with open(vncserver) as vncserver_file:
-        is_tigervnc = "tigervnc" in vncserver_file.read().casefold()
-
-    if is_tigervnc:
-        unix_socket = True
-        vnc_args = [vncserver, '-rfbunixpath', "{unix_socket}"]
-    else:
-        unix_socket = False
-        vnc_args = [vncserver, '-localhost', '-rfbport', '{port}']
+    # {unix_socket} is expanded by jupyter-server-proxy
+    vnc_args = [vncserver, '-rfbunixpath', '{unix_socket}']
 
     xstartup = os.getenv("JUPYTER_REMOTE_DESKTOP_PROXY_XSTARTUP")
     if not xstartup and not os.path.exists(os.path.expanduser('~/.vnc/xstartup')):
@@ -59,6 +41,6 @@ def setup_websockify():
         # /desktop/ is the user facing URL, while /desktop-websockify/ now *only* serves
         # websockets.
         "launcher_entry": {"title": "Desktop", "path_info": "desktop"},
-        "unix_socket": unix_socket,
+        "unix_socket": True,
         "raw_socket_proxy": True,
     }
