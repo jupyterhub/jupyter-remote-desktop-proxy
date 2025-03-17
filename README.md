@@ -42,7 +42,7 @@ installs either TigerVNC or TurboVNC together with XFCE4.
 
 2. Install the packages needed to provide a VNC server and the actual Linux Desktop environment.
    You need to pick a desktop environment (there are many!) - here are the packages
-   to use TigerVNC and the light-weight [XFCE4](https://www.xfce.org/) desktop environment on Ubuntu 22.04:
+   to use TigerVNC and the light-weight [XFCE4] desktop environment on Ubuntu 24.04:
 
    ```
    dbus-x11
@@ -53,7 +53,6 @@ installs either TigerVNC or TurboVNC together with XFCE4.
    xorg
    xubuntu-icon-theme
    tigervnc-standalone-server
-   tigervnc-xorg-extension
    ```
 
    The recommended way to install these is from your Linux system package manager
