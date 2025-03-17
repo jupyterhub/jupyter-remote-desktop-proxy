@@ -6,7 +6,7 @@
   },
   "scripts": {
     "webpack": "webpack",
-    "webpack:watch": "webpack --watch"
+    "webpack:watch": "webpack --watch --mode development"
   },
   "devDependencies": {
     "babel-loader": "^9.1.3",
