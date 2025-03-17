@@ -55,7 +55,7 @@ jobs:
         run: |
           # -help flag is not available for TurboVNC, but it emits the -help
           # equivalent information anyhow if passed -help, but also errors. Due
-          # to this, we fallback to use the errorcode of vncsrever -list.
+          # to this, we fallback to use the errorcode of vncserver -list.
           docker run test bash -c "vncserver -help || vncserver -list > /dev/null"
 
       - name: Test vncserver

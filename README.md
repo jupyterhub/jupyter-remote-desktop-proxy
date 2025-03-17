@@ -16,14 +16,21 @@ When this extension is launched it will run a Linux desktop on the Jupyter singl
 
 ## VNC Server
 
-This extension requires a [VNC Server](https://en.wikipedia.org/wiki/Virtual_Network_Computing)
-to be installed on the system (likely, in the container image). The
-most tested VNC server is [TigerVNC](https://tigervnc.org/), while
-[TurboVNC](https://www.turbovnc.org/) also works. Any VNC server available
-in `$PATH` as `vncserver` will be used, but no real testing outside of
-these servers has been performed.
+This extension requires installing a [VNC server] on the system (likely in a
+container image). Compatibility with the latest version of [TigerVNC] and
+[TurboVNC] is maintained and verified with tests, but other VNC servers
+available in `$PATH` as `vncserver` could also work. The `vncserver` binary
+needs to accept the [flags seen passed here], such as `-rfbunixpath` and a few
+others.
 
-For an example, see the [`Dockerfile`](./Dockerfile) in this repository which installs TigerVNC and XFCE4.
+For an example, see the [`Dockerfile`](./Dockerfile) in this repository which
+installs either TigerVNC or TurboVNC together with XFCE4.
+
+[vnc server]: https://en.wikipedia.org/wiki/Virtual_Network_Computing
+[tigervnc]: https://tigervnc.org/
+[turbovnc]: https://www.turbovnc.org/
+[flags seen passed here]: https://github.com/jupyterhub/jupyter-remote-desktop-proxy/blob/main/jupyter_remote_desktop_proxy/setup_websockify.py
+[xfce4]: https://www.xfce.org/
 
 ## Installation
 
@@ -35,7 +42,7 @@ For an example, see the [`Dockerfile`](./Dockerfile) in this repository which in
 
 2. Install the packages needed to provide a VNC server and the actual Linux Desktop environment.
    You need to pick a desktop environment (there are many!) - here are the packages
-   to use TigerVNC and the light-weight [XFCE4](https://www.xfce.org/) desktop environment on Ubuntu 22.04:
+   to use TigerVNC and the light-weight [XFCE4] desktop environment on Ubuntu 24.04:
 
    ```
    dbus-x11
@@ -46,7 +53,6 @@ For an example, see the [`Dockerfile`](./Dockerfile) in this repository which in
    xorg
    xubuntu-icon-theme
    tigervnc-standalone-server
-   tigervnc-xorg-extension
    ```
 
    The recommended way to install these is from your Linux system package manager
