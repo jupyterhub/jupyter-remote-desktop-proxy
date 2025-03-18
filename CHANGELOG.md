@@ -1,18 +1,73 @@
 # Changelog
 
-## v2.0.1
+## v3.0
 
-([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v2.0.0...bec995c03f719fad2a37aa950842bc977eaae12e))
+### v3.0.0 - 2025-03-19
 
-### Bugs fixed
+#### Breaking changes
+
+- TurboVNC version 3.1 or higher is now required ([#145](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/145)).
+- This project no longer relies on `websockify` ([#119](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/119)).
+
+#### New features added
+
+- Override xstartup with environment variable `JUPYTER_REMOTE_DESKTOP_PROXY_XSTARTUP` [#134](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/134) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Enhancements made
+
+- Access TurboVNC via a unix socket instead of a port [#145](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/145) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+- Resize desktop to window, instead of scaling [#124](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/124) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
+- Close clipboard if clicked outside [#122](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/122) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
+- Remove websockify, add Playwright test [#119](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/119) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Bugs fixed
+
+- Build and package JS built with webpack --mode production [#147](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/147) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+- Pin @novnc/novnc 1.4.x pending 1.5.x compatibility [#120](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/120) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance and upkeep improvements
+
+- Pin js dependency novnc to 1.5.0 until we support 1.6.0 [#142](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/142) ([@consideRatio](https://github.com/consideRatio))
+- Switch to date tag for base image, install nodejs [#136](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/136) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+- Remove tigervnc-xorg-extension [#132](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/132) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+- Update to use novnc 1.5.0 [#123](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/123) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
+- Rename tooltip to clipboard [#121](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/121) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Continuous integration improvements
+
+- Pin dockerfile SHA, bump monthly with dependabot [#130](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/130) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+- Install netcat-openbsd in tests and update screenshots for ubuntu 24.04 [#129](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/129) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Other merged PRs
+
+This changelog entry omits automated PRs, for example those updating
+dependencies in: images, github actions, pre-commit hooks. For a full list of
+changes, see the [full comparison](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v2.0.1...v3.0.0).
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/graphs/contributors?from=2024-06-13&to=2025-03-19&type=c))
+
+@benz0li ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Abenz0li+updated%3A2024-06-13..2025-03-19&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3AconsideRatio+updated%3A2024-06-13..2025-03-19&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Amanics+updated%3A2024-06-13..2025-03-19&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Ayuvipanda+updated%3A2024-06-13..2025-03-19&type=Issues))
+
+## v2.0
+
+### v2.0.1
+
+([full changelog](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v2.0.0...v2.0.1))
+
+#### Bugs fixed
 
 - Retry a few times when the initial connection fails [#112](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/112) ([@sunu](https://github.com/sunu), [@yuvipanda](https://github.com/yuvipanda))
 
-### Other merged PRs
+#### Other merged PRs
 
 - [pre-commit.ci] pre-commit autoupdate [#111](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/111) ([@consideRatio](https://github.com/consideRatio))
 
-### Contributors to this release
+#### Contributors to this release
 
 The following people contributed discussions, new ideas, code and documentation contributions, and review.
 See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
@@ -20,8 +75,6 @@ See [our definition of contributors](https://github-activity.readthedocs.io/en/l
 ([GitHub contributors page for this release](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/graphs/contributors?from=2024-04-02&to=2024-06-13&type=c))
 
 @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3AconsideRatio+updated%3A2024-04-02..2024-06-13&type=Issues)) | @sunu ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Asunu+updated%3A2024-04-02..2024-06-13&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fjupyter-remote-desktop-proxy+involves%3Ayuvipanda+updated%3A2024-04-02..2024-06-13&type=Issues))
-
-## v2.0
 
 ### v2.0.0 - 2024-04-02
 
