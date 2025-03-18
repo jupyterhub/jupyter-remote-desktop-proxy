@@ -23,15 +23,18 @@
 #### Bugs fixed
 
 - Build and package JS built with webpack --mode production [#147](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/147) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
-- Pin @novnc/novnc 1.4.x pending 1.5.x compatibility [#120](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/120) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
 
 #### Maintenance and upkeep improvements
 
-- Pin js dependency novnc to 1.5.0 until we support 1.6.0 [#142](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/142) ([@consideRatio](https://github.com/consideRatio))
 - Switch to date tag for base image, install nodejs [#136](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/136) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
 - Remove tigervnc-xorg-extension [#132](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/132) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
-- Update to use novnc 1.5.0 [#123](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/123) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
 - Rename tooltip to clipboard [#121](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/121) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Dependency updates
+
+- Pin js dependency novnc to 1.5.0 until we support 1.6.0 [#142](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/142) ([@consideRatio](https://github.com/consideRatio))
+- Update to use novnc 1.5.0 [#123](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/123) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
+- Pin @novnc/novnc 1.4.x pending 1.5.x compatibility [#120](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/120) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
 
 #### Continuous integration improvements
 
