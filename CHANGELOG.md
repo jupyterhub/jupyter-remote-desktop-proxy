@@ -4,9 +4,15 @@
 
 ### v3.0.0 - 2025-03-19
 
+VNC servers' accessed via this project are now consistently accessed via a unix
+socket instead of a TCP port. Previously only TigerVNC was accessed via a unix
+socket. With this change, any VNC server is suitable for use in environments
+where different users share access to TCP ports.
+
 #### Breaking changes
 
 - TurboVNC version 3.1 or higher is now required ([#145](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/145)).
+- VNC servers needs to support the `-rfbunixpath` flag (TigerVNC and TurboVNC does) ([#145](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/145)).
 - This project no longer relies on `websockify` ([#119](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/119)).
 
 #### New features added
