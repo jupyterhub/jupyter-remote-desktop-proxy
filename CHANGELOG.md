@@ -4,10 +4,11 @@
 
 ### v3.0.0 - 2025-03-19
 
-VNC servers' accessed via this project are now consistently accessed via a unix
+VNC servers' accessed via this project must be accessed via a unix
 socket instead of a TCP port. Previously only TigerVNC was accessed via a unix
-socket. With this change, any VNC server is suitable for use in environments
-where different users share access to TCP ports.
+socket. This change means jupyter-remote-desktop-proxy can be used in shared
+environments as long as the file permissions on the unix socket restrict access
+to a single user. TCP connections to the VNC server are no longer supported.
 
 #### Breaking changes
 
