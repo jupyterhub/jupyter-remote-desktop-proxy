@@ -2,7 +2,7 @@
 
 ## v3.0
 
-### v3.0.0 - 2025-03-19
+### v3.0.0 - 2025-03-22
 
 VNC servers' accessed via this project must be accessed via a unix
 socket instead of a TCP port. Previously only TigerVNC was accessed via a unix
