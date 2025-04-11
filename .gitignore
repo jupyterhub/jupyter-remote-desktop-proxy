@@ -1,6 +1,7 @@
 # Extra ignore patterns specific to this project
 # Installed JS libraries
 node_modules/
+package-lock.json
 # Built JS files
 jupyter_remote_desktop_proxy/static/dist
 
