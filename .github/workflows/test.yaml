@@ -60,7 +60,13 @@ jobs:
 
       - name: Test vncserver
         run: |
-          container_id=$(docker run -d -it test vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbunixpath /tmp/vncserver.socket)
+          # TigerVNC needs to be configured with -rfbport -1 to not open a TCP
+          # port, while TurboVNC doesn't support being passed -1 and won't open
+          # a TCP port anyhow.
+          rfbport_arg="-rfbport -1"
+          if [ "${{ matrix.vncserver }}" == "turbovnc" ]; then rfbport_arg=""; fi
+
+          container_id=$(docker run -d -it test vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbunixpath /tmp/vncserver.socket $rfbport_arg)
           sleep 1
 
           echo "::group::Install netcat, a test dependency"
