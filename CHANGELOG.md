@@ -2,6 +2,23 @@
 
 ## v3.0
 
+### v3.0.1 - 2025-04-11
+
+This is a security release for [GHSA-vrq4-9hc3-cgp7] impacting users of this
+project together with TigerVNC.
+
+[ghsa-vrq4-9hc3-cgp7]: https://github.com/jupyterhub/jupyter-remote-desktop-proxy/security/advisories/GHSA-vrq4-9hc3-cgp7
+
+#### Bugs fixed
+
+- Ensure TigerVNC isn't accessible via the network [#151](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/pull/151) ([@consideRatio](https://github.com/consideRatio), [@minrk](https://github.com/minrk))
+
+#### Other merged PRs
+
+This changelog entry omits automated PRs, for example those updating
+dependencies in: images, github actions, pre-commit hooks. For a full list of
+changes, see the [full comparison](https://github.com/jupyterhub/jupyter-remote-desktop-proxy/compare/v2.0.1...v3.0.0).
+
 ### v3.0.0 - 2025-03-22
 
 VNC servers' accessed via this project must be accessed via a unix
