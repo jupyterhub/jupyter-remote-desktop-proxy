@@ -60,7 +60,7 @@ jobs:
 
       - name: Test vncserver
         run: |
-          container_id=$(docker run -d -it -p 5901:5901 test vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbport 5901)
+          container_id=$(docker run -d -it test vncserver -xstartup /opt/install/jupyter_remote_desktop_proxy/share/xstartup -verbose -fg -geometry 1680x1050 -SecurityTypes None -rfbunixpath /tmp/vncserver.socket)
           sleep 1
 
           echo "::group::Install netcat, a test dependency"
@@ -70,8 +70,17 @@ jobs:
           '
           echo "::endgroup::"
 
-          docker exec -it $container_id timeout --preserve-status 1 nc -v localhost 5901 2>&1 | tee -a /dev/stderr | \
+          docker exec -it $container_id timeout --preserve-status 1 nc -vU /tmp/vncserver.socket 2>&1 | tee -a /dev/stderr | \
               grep --quiet RFB && echo "Passed test" || { echo "Failed test" && TEST_OK=false; }
+
+          echo "::group::Security - Verify TCP ports wasn't opened"
+          ports=(5800 5801 5900 5901)
+          for port in "${ports[@]}"
+          do
+              docker exec -it $container_id timeout --preserve-status 1 nc -vz localhost $port | tee -a /dev/stderr | \
+                  grep --quiet succeeded && { echo "Failed security check - port $port open" && SECURITY_OK=false; } || echo "Passed security check - port $port not opened"
+          done
+          echo "::endgroup::"
 
           echo "::group::vncserver logs"
           docker exec $container_id bash -c 'cat ~/.vnc/*.log'
@@ -80,6 +89,10 @@ jobs:
           docker stop $container_id > /dev/null
           if [ "$TEST_OK" == "false" ]; then
               echo "Test failed!"
+              exit 1
+          fi
+          if [ "$SECURITY_OK" == "false" ]; then
+              echo "Security check failed!"
               exit 1
           fi
 
