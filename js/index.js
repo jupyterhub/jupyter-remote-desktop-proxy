@@ -45,7 +45,7 @@ function status(text) {
 // This page is served under the /desktopvnc/, and the websockify websocket is served
 // under /desktop/ with the same base url as /desktopvnc/. We resolve it relatively
 // this way.
-let websockifyUrl = new URL("../desktop/", window.location);
+let websockifyUrl = new URL(window.location.pathname.replace(/vnc\/+$/, "/"), window.location);
 websockifyUrl.protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
 let retryCount = 0;
