@@ -49,7 +49,7 @@ def test_desktop(browser):
     with page.expect_popup() as page1_info:
         page.get_by_text("Desktop [↗]").click()
     page1 = page1_info.value
-    page1.wait_for_url(f"{JUPYTER_HOST}/desktop/")
+    page1.wait_for_url(f"{JUPYTER_HOST}/desktopvnc/")
 
     expect(page1.get_by_text("Status: Connected")).to_be_visible()
     expect(page1.locator("canvas")).to_be_visible()

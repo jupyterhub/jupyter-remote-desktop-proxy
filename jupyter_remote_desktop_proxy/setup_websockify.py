@@ -56,10 +56,10 @@ def setup_websockify():
         'command': ['/bin/sh', '-c', f'cd {os.getcwd()} && {vnc_command}'],
         'timeout': 30,
         'new_browser_window': True,
-        # We want the launcher entry to point to /desktop/, not to /desktop-websockify/
-        # /desktop/ is the user facing URL, while /desktop-websockify/ now *only* serves
+        # We want the launcher entry to point to /desktopvnc/, not to /desktop/
+        # /desktop/ is the user facing URL, while /desktop/ now *only* serves
         # websockets.
-        "launcher_entry": {"title": "Desktop", "path_info": "desktop"},
+        "launcher_entry": {"title": "Desktop", "path_info": "desktopvnc"},
         "unix_socket": True,
         "raw_socket_proxy": True,
     }

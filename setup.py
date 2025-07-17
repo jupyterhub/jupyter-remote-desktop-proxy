@@ -60,7 +60,7 @@ setup(
     description="Run a desktop environments on Jupyter",
     entry_points={
         'jupyter_serverproxy_servers': [
-            'desktop-websockify = jupyter_remote_desktop_proxy.setup_websockify:setup_websockify',
+            'desktop = jupyter_remote_desktop_proxy.setup_websockify:setup_websockify',
         ]
     },
     install_requires=[
