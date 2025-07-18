@@ -17,22 +17,22 @@ def load_jupyter_server_extension(server_app):
     base_url = server_app.web_app.settings["base_url"]
 
     jupyter_remote_desktop_endpoints = os.getenv(
-        'JUPYTER_REMOTE_DESKTOP_ENDPOINTS', 'desktopvnc'
+        'JUPYTER_REMOTE_DESKTOP_ENDPOINTS', ''
     )
-    endpoints = jupyter_remote_desktop_endpoints.split(',')
+    endpoints = ['desktop'] + jupyter_remote_desktop_endpoints.split(',')
     for endpoint in endpoints:
         server_app.web_app.add_handlers(
             ".*",
             [
                 # Serve our own static files
                 (
-                    url_path_join(base_url, f"/{endpoint}/static/(.*)"),
+                    url_path_join(base_url, f"/{endpoint}vnc/static/(.*)"),
                     AuthenticatedFileHandler,
                     {"path": (str(HERE / "static"))},
                 ),
                 # To simplify URL mapping, we make sure that /desktop/ always
                 # has a trailing slash
-                (url_path_join(base_url, f"/{endpoint}"), AddSlashHandler),
-                (url_path_join(base_url, f"/{endpoint}/"), DesktopHandler),
+                (url_path_join(base_url, f"/{endpoint}vnc"), AddSlashHandler),
+                (url_path_join(base_url, f"/{endpoint}vnc/"), DesktopHandler),
             ],
         )
