@@ -16,8 +16,11 @@ def load_jupyter_server_extension(server_app):
     """
     base_url = server_app.web_app.settings["base_url"]
 
+    endpoints = ['desktop']
     jupyter_remote_desktop_endpoints = os.getenv('JUPYTER_REMOTE_DESKTOP_ENDPOINTS', '')
-    endpoints = ['desktop'] + jupyter_remote_desktop_endpoints.split(',')
+    if jupyter_remote_desktop_endpoints:
+        endpoints.extend(jupyter_remote_desktop_endpoints.split(','))
+
     for endpoint in endpoints:
         server_app.web_app.add_handlers(
             ".*",
