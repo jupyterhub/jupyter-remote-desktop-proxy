@@ -1,7 +1,7 @@
 import os
 from subprocess import check_call
 
-from setuptools import find_packages, setup
+from setuptools import setup
 from setuptools.command.build_py import build_py
 from setuptools.command.sdist import sdist
 
@@ -45,15 +45,14 @@ with open("README.md") as f:
 
 setup(
     name="jupyter-remote-desktop-proxy",
-    packages=find_packages(),
-    version='3.0.2.dev',
+    packages=["jupyter_remote_desktop_proxy"],
+    version='3.0.2.dev0',
     author="Jupyter Development Team",
     author_email="jupyter@googlegroups.com",
     classifiers=[
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
         "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: BSD License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
     ],
@@ -66,9 +65,16 @@ setup(
     install_requires=[
         'jupyter-server-proxy>=4.3.0',
     ],
-    include_package_data=True,
+    package_data={
+        "jupyter_remote_desktop_proxy": [
+            "share/*",
+            "static/*",
+            "static/dist/*",
+            "templates/*",
+        ],
+    },
     keywords=["Interactive", "Desktop", "Jupyter"],
-    license="BSD",
+    license="BSD-3-Clause",
     long_description=readme,
     long_description_content_type="text/markdown",
     platforms="Linux",
