@@ -103,7 +103,7 @@ jobs:
       #
       - name: Get image tags
         id: tags
-        uses: jupyterhub/action-major-minor-tag-calculator@v3
+        uses: jupyterhub/action-major-minor-tag-calculator@v4
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           prefix: "quay.io/jupyterhub/jupyter-remote-desktop-proxy:"
