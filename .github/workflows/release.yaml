@@ -75,7 +75,7 @@ jobs:
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx (for multi-arch builds)
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Make decisions on pushing and suffix (based on vnc server chosen)
         id: decisions
