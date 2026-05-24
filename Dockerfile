@@ -56,5 +56,5 @@ RUN . /opt/conda/bin/activate && \
 
 COPY --chown=$NB_UID:$NB_GID . /opt/install
 RUN . /opt/conda/bin/activate && \
-    mamba install -y -q "nodejs>=22" && \
+    mamba install -y -q "nodejs>=24" && \
     pip install /opt/install
