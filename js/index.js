@@ -45,7 +45,10 @@ function status(text) {
 // This page is served under the /desktop/, and the websockify websocket is served
 // under /desktop-websockify/ with the same base url as /desktop/. We resolve it relatively
 // this way.
-let websockifyUrl = new URL("../desktop-websockify/", window.location);
+let websockifyUrl = new URL(
+  window.location.pathname.replace(/\/+$/, "") + "-websockify/",
+  window.location,
+);
 websockifyUrl.protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
 let retryCount = 0;
