@@ -89,7 +89,7 @@ Executing the command: jupyter notebook
 *snip*
 ```
 
-Now head to the URL shown and you will be greated with a XFCE desktop.
+Now head to the URL shown and you will be greeted with a XFCE desktop.
 
 Note the `--security-opt seccomp=unconfined` parameter - this is necessary
 to start daemons (such as dbus, pulseaudio, etc) necessary for linux desktop
